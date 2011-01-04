@@ -5,7 +5,7 @@
  *  Description: Replacement software for model radio:
  *               FS-TH9X / Turnigy 9X / Eurgle 9X / iMax 9X.
  *
- *  Based on various projects for this radion:
+ *  Based on various projects for this radio:
  *   - RadioClone v 0.01  - Copyright (C) 2010 Rafal Tomczak <rafit <at> m2p.pl>
  *   - er9x -> http://code.google.com/p/er9x/
  *  
@@ -29,6 +29,7 @@
 #include "gui.h"
 #include "adc.h"
 #include "menu.h"
+#include "mixer.h"
 #include "globals.h"
 #include <avr\interrupt.h>
 #include <string.h>
@@ -133,6 +134,9 @@ int main(void)
 	// ADC
 	adc_init();
 
+	// MIXER
+	mixer_init();
+
 	// Start everything...that needs IRQs...
 	init_main_tick();
 	ppm_init();
@@ -168,6 +172,9 @@ int main(void)
 			g_RadioRuntime.doKeys = 0;
 			gui_handle_keys(KEY_EVERY_TICK);
 		}
+
+		// MIXER
+		mixer_mix();
 
 		// Export PPM data to PPM ISR
 		ppm_export();
