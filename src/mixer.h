@@ -26,6 +26,119 @@
 #ifndef _MIXER_H_
 #define _MIXER_H_
 
+#include <stdint.h>
+
+typedef enum
+{
+	// Analog inputs
+	MIX_IN_AIL = 0x0,
+	MIX_IN_THR,
+	MIX_IN_ELE,
+	MIX_IN_RUD,
+	MIX_IN_POT1,
+	MIX_IN_POT2,
+	MIX_IN_POT3,
+
+	// Other MIXERS (LEVEL 1)
+	MIX_IN_MIXER_1 = 0x20,
+	MIX_IN_MIXER_2,
+	MIX_IN_MIXER_3,
+	MIX_IN_MIXER_4,
+	MIX_IN_MIXER_5,
+	MIX_IN_MIXER_6,
+	MIX_IN_MIXER_7,
+	MIX_IN_MIXER_8,
+
+	// Constants
+	MIX_IN_MAX_VALUE = 0x30,
+	MIX_IN_MIN_VALUE = 0x30
+
+} MIX_INPUT;
+
+typedef enum
+{
+	// Servo ouputs
+	MIX_OUT_SRV1 = 0x0,
+	MIX_OUT_SRV2,
+	MIX_OUT_SRV3,
+	MIX_OUT_SRV4,
+	MIX_OUT_SRV5,
+	MIX_OUT_SRV6,
+	MIX_OUT_SRV7,
+	MIX_OUT_SRV8,
+
+	// Other MIXERS (LEVEL 2)
+	MIX_OUT_MIXER_21 = 0x20,
+	MIX_OUT_MIXER_22,
+	MIX_OUT_MIXER_23,
+	MIX_OUT_MIXER_24,
+	MIX_OUT_MIXER_25,
+	MIX_OUT_MIXER_26,
+	MIX_OUT_MIXER_27,
+	MIX_OUT_MIXER_28,
+
+} MIX_OUTPUT;
+
+
+typedef enum
+{
+	MIX_DIRECT = 0x00,	// output = scale*input
+	MIX_CURVE,			// output = scale*curve[input]
+
+} MIX_TYPE;
+
+typedef enum
+{
+	MIX_ADD = 0x00,	
+	MIX_MULTIPLY,
+	MIX_REPLACE,
+
+} MIX_MULTIPLEX;
+
+
+typedef enum
+{
+	MIX_COND_TRUE = 0x00,
+
+	// Switches
+	MIX_COND_THR,
+	MIX_COND_NOT_THR,
+	MIX_COND_RUDDR,
+	MIX_COND_NOT_RUDDR,
+	MIX_COND_ELEDR,
+	MIX_COND_NOT_ELEDR,
+	MIX_COND_AILDR,
+	MIX_COND_NOT_AILDR,
+	MIX_COND_GEAR,
+	MIX_COND_NOT_GEAR,
+	MIX_COND_ID0,
+	MIX_COND_NOT_ID0,
+	MIX_COND_ID1,
+	MIX_COND_NOT_ID1,
+	MIX_COND_ID2,
+	MIX_COND_NOT_ID2,
+
+	MIX_COND_FALSE
+} MIX_CONDITION;
+
+
+typedef struct
+{
+	// Input
+	MIX_INPUT input;
+
+	// Output
+	MIX_OUTPUT output;
+
+	uint8_t scale;		// -100...+100 %
+
+	MIX_CONDITION	condition; // Switch position?
+
+	MIX_MULTIPLEX multiplex;
+
+} SMixer;
+
+
 extern void mixer_init(); 
 extern void mixer_mix();
 

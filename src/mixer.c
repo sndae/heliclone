@@ -25,6 +25,8 @@
 
 #include "mixer.h"
 
+#include "globals.h"
+
 
 /*--------------------------------------------------------------------------------
  * mixer_init
@@ -34,9 +36,70 @@ void mixer_init()
 }
 
 /*--------------------------------------------------------------------------------
+ * mixer_input
+ *--------------------------------------------------------------------------------*/
+int8_t mixer_input(MIX_INPUT source)
+{
+	uint8_t index;
+	switch (source)
+	{
+		case MIX_IN_AIL:
+		case MIX_IN_THR:
+		case MIX_IN_ELE:
+		case MIX_IN_RUD:
+		case MIX_IN_POT1:
+		case MIX_IN_POT2:
+		case MIX_IN_POT3:
+			index = source - MIX_IN_AIL;
+			return g_RadioRuntime.adc_s[index];
+
+		default:
+			return 0;
+	}
+}
+
+/*--------------------------------------------------------------------------------
+ * mixer_output
+ *--------------------------------------------------------------------------------*/
+void mixer_output(MIX_OUTPUT destination, int8_t value)
+{
+	uint8_t index;
+	switch (destination)
+	{
+		// Servo ouputs
+		case MIX_OUT_SRV1:
+		case MIX_OUT_SRV2:
+		case MIX_OUT_SRV3:
+		case MIX_OUT_SRV4:
+		case MIX_OUT_SRV5:
+		case MIX_OUT_SRV6:
+		case MIX_OUT_SRV7:
+		case MIX_OUT_SRV8:
+			index = destination - MIX_OUT_SRV1;
+			g_RadioRuntime.srv_s[index] = value;
+
+		default:
+			return;
+	}
+}
+
+
+/*--------------------------------------------------------------------------------
  * mixer_mix
  *--------------------------------------------------------------------------------*/
 void mixer_mix()
 {
+	uint8_t i,l;
+	SMixer* mixer;
+
+	for (l=0; l<2; l++)
+	{
+		for (i=0; i<MDL_MAX_MIXERS; i++)
+		{
+			mixer = &g_Model.mixers[l][i];
+
+
+		}
+	}
 }
 

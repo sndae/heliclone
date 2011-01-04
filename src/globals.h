@@ -27,10 +27,10 @@
 #define _GLOBALS_H_
 
 #include <stdint.h>
-
+#include "mixer.h"
 
 #define MDL_MAX_CHANNELS	(8)
-
+#define MDL_MAX_MIXERS (8)
 
 typedef struct
 {
@@ -81,6 +81,10 @@ typedef struct
 
 	// subtrims
 	int8_t subTrim[MDL_MAX_CHANNELS];
+
+	// Mixers (level 1 and level 2)
+	SMixer mixers[2][MDL_MAX_MIXERS];
+
 
 } SModel;
 
