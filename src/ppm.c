@@ -114,9 +114,9 @@ ISR(TIMER1_COMPA_vect)
 	// Change to next channel
 	ppm_current_ch++;
 
-	// Make a PWM wave on the PIN by going up/down...
+	// Make a PPM on the PIN by going up/down...
 	// Always set "next time" in OCR1A reg 
-	// to get timing of the PWMs
+	// to get timing of the PPM
 
     if (ppm_current_ch & 0x01) 
 	{ 
