@@ -66,6 +66,9 @@ typedef struct
 	uint8_t  	adc_store_end; 	 // ADC auto calibration mode
 	uint8_t  	adc_store_mid; 	 // ADC auto calibration mode
 
+	// Servos output values (from mixing stage)
+	int16_t srv_s[MDL_MAX_CHANNELS];  	// current calculated servos  <-100,100>
+
 } SRadioRuntime;
 
 

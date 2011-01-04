@@ -83,6 +83,15 @@
 #define  devBacklightPORT  PORTB
 #define  devBacklightPin   7 
 
+// PRESCALER
+#define devPrescale_1     0x01
+#define devPrescale_8     0x02
+#define devPrescale_32    0x03
+#define devPrescale_64    0x04
+#define devPrescale_128   0x05
+#define devPrescale_256   0x06
+#define devPrescale_1024  0x07
+
 
 /*--------------------------------------------------------------------------------
  * External interface

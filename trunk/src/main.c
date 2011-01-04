@@ -25,6 +25,7 @@
 
 #include "lcd.h"
 #include "hal_io.h"
+#include "ppm.h"
 #include "gui.h"
 #include "adc.h"
 #include "menu.h"
@@ -132,8 +133,9 @@ int main(void)
 	// ADC
 	adc_init();
 
-	// Start everything...
+	// Start everything...that needs IRQs...
 	init_main_tick();
+	ppm_init();
 	sei();
 
 	// gui
@@ -166,6 +168,9 @@ int main(void)
 			g_RadioRuntime.doKeys = 0;
 			gui_handle_keys(KEY_EVERY_TICK);
 		}
+
+		// Export PPM data to PPM ISR
+		ppm_export();
 		
 	}
 
