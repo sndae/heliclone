@@ -359,20 +359,42 @@ void menu_main_draw_battey(uint8_t x, uint8_t y)
 
 // Local stuff for main screen
 // 0 - Mixer output (analog)
-// 1 - Mixer output (deciaml)
+// 1 - Servo output (deciaml)
 // 2 - Analog input (decimal)
 // 3 - Analog input (raw)
-int8_t mainDisplayMode = 2;
+int8_t mainDisplayMode = 1;
 
-char MNU_MAIN_MODE_2[] 	PROGMEM = "Analog inputs:";
-char MNU_MAIN_MODE_3[] 	PROGMEM = "ADC Raw inputs:";
+char MNU_MAIN_MODE_1[] 	PROGMEM = "Servo output:";
+char MNU_MAIN_MODE_2[] 	PROGMEM = "Stick input:";
+char MNU_MAIN_MODE_3[] 	PROGMEM = "ADC Raw input:";
 
+char MNU_MAIN_CH1[] 	PROGMEM = "C1";
+char MNU_MAIN_CH2[] 	PROGMEM = "C2";
+char MNU_MAIN_CH3[] 	PROGMEM = "C3";
+char MNU_MAIN_CH4[] 	PROGMEM = "C4";
+char MNU_MAIN_CH5[] 	PROGMEM = "C5";
+char MNU_MAIN_CH6[] 	PROGMEM = "C6";
+char MNU_MAIN_CH7[] 	PROGMEM = "C7";
+char MNU_MAIN_CH8[] 	PROGMEM = "C8";
+char* channelTable[] PROGMEM = 
+{
+	MNU_MAIN_CH1,
+	MNU_MAIN_CH2,
+	MNU_MAIN_CH3,
+	MNU_MAIN_CH4,
+	MNU_MAIN_CH5,
+	MNU_MAIN_CH6,
+	MNU_MAIN_CH7,
+	MNU_MAIN_CH8
+};
 
 uint8_t menu_main_screen(GUI_EVENT event, uint8_t elapsedTime)
 {
 	int16_t adcValue = 0;
 	uint8_t a;
 	uint8_t x,y;
+	uint8_t txtOffset;
+	uint8_t numOffset;
 
 	switch (event)
 	{
@@ -415,6 +437,41 @@ uint8_t menu_main_screen(GUI_EVENT event, uint8_t elapsedTime)
 
 	switch (mainDisplayMode)
 	{
+		case 1:
+			//lcd_putsAtt(4*LCD_FONT_WIDTH,  1*LCD_FONT_HEIGHT+5, MNU_MAIN_MODE_1, LCD_NO_INV);
+			x = 6;
+			y = 1;
+			for (a=0; a<MDL_MAX_CHANNELS; a++)
+			{
+				if ((a == 0) || (a == 3) || (a == 6))
+				{
+					txtOffset = 2;
+					numOffset = 0;
+				}
+				else if ((a == 2) || (a == 5))
+				{
+					txtOffset = -3;
+					numOffset = -5;
+				}
+				else
+				{
+					txtOffset = -2;
+					numOffset = -4;
+				}
+
+				adcValue = g_RadioRuntime.srv_s[a];
+				lcd_putsAtt((x-5)*LCD_FONT_WIDTH+txtOffset,  y*LCD_FONT_HEIGHT,  (char*)pgm_read_word(&channelTable[a]), LCD_NO_INV);
+				lcd_outdezAtt((x+1)*LCD_FONT_WIDTH+numOffset, y*LCD_FONT_HEIGHT, adcValue, LCD_NO_INV);
+
+				x = x + 7;
+				if ((a == 2) || (a == 5))
+				{
+					// New line...
+					y = y + 2;
+					x = 6;
+				}
+			}	
+			break;
 		case 2:
 			lcd_putsAtt(4*LCD_FONT_WIDTH,  1*LCD_FONT_HEIGHT+5, MNU_MAIN_MODE_2, LCD_NO_INV);
 			x = 5;
