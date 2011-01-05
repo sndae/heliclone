@@ -384,6 +384,7 @@ void main_draw_servo(uint8_t x, uint8_t y, uint8_t servo)
 // 1 - Servo output (deciaml)
 // 2 - Analog input (decimal)
 // 3 - Analog input (raw)
+// 4 - Timer mode 
 int8_t mainDisplayMode = 0;
 
 char MNU_MAIN_MODE_1[] 	PROGMEM = "Servo output:";
