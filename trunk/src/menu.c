@@ -356,13 +356,35 @@ void menu_main_draw_battey(uint8_t x, uint8_t y)
 
 }
 
+void main_draw_servo(uint8_t x, uint8_t y, uint8_t servo)
+{
+	uint8_t pos;
+	int16_t servoValue = 0;
+
+	// Draw the "outline" of the servo
+	lcd_hline(x, y,  20);
+	lcd_hline(x, y+2,20);
+	lcd_vline(x, y, 3);
+	lcd_vline(x+20, y, 3);
+
+	// Value is <-100.100> => converted to 0-20
+	servoValue = (g_RadioRuntime.srv_s[servo] + 100)/10;
+
+	// Horizontal ADC
+	for (pos=0; pos<(uint8_t)servoValue; pos++)
+	{
+		lcd_plot(x+1+pos, y+1);
+	}
+
+}
+
 
 // Local stuff for main screen
-// 0 - Mixer output (analog)
+// 0 - Servo output (analog)
 // 1 - Servo output (deciaml)
 // 2 - Analog input (decimal)
 // 3 - Analog input (raw)
-int8_t mainDisplayMode = 1;
+int8_t mainDisplayMode = 0;
 
 char MNU_MAIN_MODE_1[] 	PROGMEM = "Servo output:";
 char MNU_MAIN_MODE_2[] 	PROGMEM = "Stick input:";
@@ -437,6 +459,18 @@ uint8_t menu_main_screen(GUI_EVENT event, uint8_t elapsedTime)
 
 	switch (mainDisplayMode)
 	{
+		case 0:
+			main_draw_servo(20, 20, 0);
+			main_draw_servo(54, 20, 1);
+			main_draw_servo(88, 20, 2);
+			main_draw_servo(20, 30, 3);
+			main_draw_servo(54, 30, 4);
+			main_draw_servo(88, 30, 5);
+			main_draw_servo(20, 40, 6);
+			main_draw_servo(54, 40, 7);
+
+			break;
+
 		case 1:
 			//lcd_putsAtt(4*LCD_FONT_WIDTH,  1*LCD_FONT_HEIGHT+5, MNU_MAIN_MODE_1, LCD_NO_INV);
 			x = 6;
@@ -510,7 +544,6 @@ uint8_t menu_main_screen(GUI_EVENT event, uint8_t elapsedTime)
 			}	
 			break;
 		
-		case 0:
 		default:
 			break;
 	}
