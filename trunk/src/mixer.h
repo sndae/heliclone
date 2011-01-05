@@ -124,6 +124,9 @@ typedef enum
 
 typedef struct
 {
+	// Type
+	MIX_TYPE type;
+
 	// Input
 	MIX_INPUT input;
 
