@@ -187,7 +187,7 @@ void ppm_export()
 			{
 				tempV = g_RadioRuntime.srv_s[i]*((int32_t)PPM_SIGNAL_MED - (int32_t)PPM_SIGNAL_MIN);
 				tempV = tempV / 100;
-				nextValue = (uint16_t)PPM_SIGNAL_MIN + (uint16_t)tempV;
+				nextValue = (uint16_t)PPM_SIGNAL_MED + (uint16_t)tempV;
 			}
 		}
 		else

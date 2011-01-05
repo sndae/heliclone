@@ -31,6 +31,7 @@
 #include "menu.h"
 #include "mixer.h"
 #include "globals.h"
+#include "template.h"
 #include <avr\interrupt.h>
 #include <string.h>
 
@@ -63,6 +64,19 @@ void init_main_tick()
 	TCCR0  = (7 << CS00);//  Norm mode, clk/1024
   	OCR0   = TMR0_TICK;
   	TIMSK |= (1<<OCIE0) ;
+}
+
+/*--------------------------------------------------------------------------------
+ * load_model_defaults
+ *--------------------------------------------------------------------------------*/
+void load_model_defaults()
+{
+
+	// Load current model
+	memset(&g_Model, 0, sizeof(g_Model));
+
+	// Use a template to create defaults
+	template_simulator();
 }
 
 /*--------------------------------------------------------------------------------
@@ -105,10 +119,6 @@ void load_defaults()
 	g_RadioConfig.voltageWarning = 70;
 	g_RadioConfig.backlight = 1;
 
-	// Load current model
-	memset(&g_Model, 0, sizeof(g_Model));
-	strncpy(&(g_Model.name[0]), "Model 1", 10);
-
 }
 
 /*--------------------------------------------------------------------------------
@@ -130,6 +140,7 @@ int main(void)
 
 	// Load defalt settings...
 	load_defaults();
+	load_model_defaults();
 	
 	// ADC
 	adc_init();
