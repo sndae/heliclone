@@ -47,6 +47,21 @@ typedef enum
 
 #define TRIM_STEP (4)
 
+
+typedef enum
+{
+	SW_ID0,
+	SW_ID1,
+	SW_ID2,
+	SW_AILDR,
+	SW_ELEDR,
+	SW_RUDDR,
+	SW_TRN,
+	SW_GEAR,
+	SW_THR,
+} SW_IDS;
+
+
 /*--------------------------------------------------------------------------------
  * LOCALS
  *--------------------------------------------------------------------------------*/
@@ -97,6 +112,37 @@ void hal_io_init(void)
 
 }
 
+/*--------------------------------------------------------------------------------
+ * hal_io_get_sw()
+ *--------------------------------------------------------------------------------*/
+uint8_t hal_io_get_sw(uint8_t swId)
+{
+	uint8_t sw;
+	uint8_t button;
+
+
+	// Sample the ports and merge the results into sw
+	sw = (~devSwitches1PIN) & devSwitches1Mask;
+	button = (~devSwitches2PIN);
+	sw |= (button & 0x08)<<4;
+	sw |= (button & 0x01)<<3;
+
+	switch (swId)
+	{
+		case SW_ID0:
+		case SW_ID1:
+		case SW_ID2:
+		case SW_AILDR:
+		case SW_ELEDR:
+		case SW_RUDDR:
+		case SW_TRN:
+		case SW_GEAR:
+		case SW_THR:
+		default:
+			return 0;
+			break;
+	}
+}
 
 /*--------------------------------------------------------------------------------
  * hal_io_trim_pressed
@@ -230,10 +276,5 @@ void hal_io_handle(uint8_t elapsedTime)
 				break;
 		}
 	}
-
-
-	//
-	// SWITCHES
-	//
 
 }
