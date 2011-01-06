@@ -112,6 +112,23 @@ void mixer_set_output(MIX_OUTPUT destination, int16_t value)
 		case MIX_OUT_MIXER_28:
 			index = destination - MIX_OUT_MIXER_21;
 			mixerOutput[index] = value;
+			break;
+		// Functional output
+		case MIX_OUT_AILERON:
+		case MIX_OUT_THROTTLE:
+		case MIX_OUT_ELEVATOR:
+		case MIX_OUT_RUDDER:
+		case MIX_OUT_GYRO_GAIN:
+		case MIX_OUT_PITCH:
+		case MIX_OUT_AUX1:
+		case MIX_OUT_AUX2:
+			index = destination - MIX_OUT_AILERON;
+			// Lookup where the function is mapped...
+			index = g_Model.functionToServoTable[index];
+			// Now set the wanted servo to the output.
+			g_RadioRuntime.srv_s[index] = value;
+			servoChanged[index] = 1;
+			break;
 		default:
 			return;
 	}

@@ -34,33 +34,45 @@ void template_simulator()
 	// 1-1 mixers...for simulator etc...
 	g_Model.mixers[0][0].type = MIX_DIRECT;
 	g_Model.mixers[0][0].input = MIX_IN_AIL;
-	g_Model.mixers[0][0].output = MIX_OUT_SRV1;
+	g_Model.mixers[0][0].output = MIX_OUT_AILERON;
 	g_Model.mixers[0][0].scale = 100;
 	g_Model.mixers[0][0].condition = MIX_COND_TRUE;
 	g_Model.mixers[0][0].multiplex = MIX_REPLACE;
 
 	g_Model.mixers[0][1].type = MIX_DIRECT;
 	g_Model.mixers[0][1].input = MIX_IN_THR;
-	g_Model.mixers[0][1].output = MIX_OUT_SRV2;
+	g_Model.mixers[0][1].output = MIX_OUT_THROTTLE;
 	g_Model.mixers[0][1].scale = 100;
 	g_Model.mixers[0][1].condition = MIX_COND_TRUE;
 	g_Model.mixers[0][1].multiplex = MIX_REPLACE;
 
 	g_Model.mixers[0][2].type = MIX_DIRECT;
 	g_Model.mixers[0][2].input = MIX_IN_ELE;
-	g_Model.mixers[0][2].output = MIX_OUT_SRV3;
+	g_Model.mixers[0][2].output = MIX_OUT_ELEVATOR;
 	g_Model.mixers[0][2].scale = 100;
 	g_Model.mixers[0][2].condition = MIX_COND_TRUE;
 	g_Model.mixers[0][2].multiplex = MIX_REPLACE;
 
 	g_Model.mixers[0][3].type = MIX_DIRECT;
 	g_Model.mixers[0][3].input = MIX_IN_RUD;
-	g_Model.mixers[0][3].output = MIX_OUT_SRV4;
+	g_Model.mixers[0][3].output = MIX_OUT_RUDDER;
 	g_Model.mixers[0][3].scale = 100;
 	g_Model.mixers[0][3].condition = MIX_COND_TRUE;
 	g_Model.mixers[0][3].multiplex = MIX_REPLACE;
 
 	// All servos NORMAL direction
 	g_Model.servoDirection = 0x00;
+
+	// FlySky original mapping...
+	g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_AILERON)] = SERVO_CHANNEL(1);
+	g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_ELEVATOR)] = SERVO_CHANNEL(2);
+	g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_THROTTLE)] = SERVO_CHANNEL(3);
+	g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_RUDDER)] = SERVO_CHANNEL(4);
+	g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_GYRO_GAIN)] = SERVO_CHANNEL(5);
+	g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_PITCH)] = SERVO_CHANNEL(6);
+	g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_AUX1)] = SERVO_CHANNEL(7);
+	g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_AUX2)] = SERVO_CHANNEL(8);
+
+
 }
 
