@@ -38,7 +38,11 @@ uint8_t menu_adc_calibrate(GUI_EVENT event, uint8_t elapsedTime);
 uint8_t menu_main_screen(GUI_EVENT event, uint8_t elapsedTime);
 uint8_t menu_main_menu(GUI_EVENT event, uint8_t elapsedTime);
 
+uint8_t menu_get_setting(uint8_t parameterId);
+void menu_set_setting(uint8_t parameterId, uint8_t newValue);
+
 // Menus
+uint8_t menu_model_config(GUI_EVENT event, uint8_t elapsedTime);
 uint8_t menu_radio_config(GUI_EVENT event, uint8_t elapsedTime);
 uint8_t menu_radio_install(GUI_EVENT event, uint8_t elapsedTime);
 
@@ -46,6 +50,23 @@ uint8_t menu_radio_install(GUI_EVENT event, uint8_t elapsedTime);
 /*--------------------------------------------------------------------------------
  * LOCALS
  *--------------------------------------------------------------------------------*/
+
+typedef enum
+{
+	RC_SET_VOLTAGE,
+	RC_SET_BACKLIGHT,
+	RC_SET_BEEP_KEYS,
+	RC_SET_BEEP_ALARMS,
+
+	MC_SET_DIR_CH1,
+	MC_SET_DIR_CH2,
+	MC_SET_DIR_CH3,
+	MC_SET_DIR_CH4,
+	MC_SET_DIR_CH5,
+	MC_SET_DIR_CH6,
+	MC_SET_DIR_CH7,
+	MC_SET_DIR_CH8
+} PARAMETER_ID;
 
 
 /*--------------------------------------------------------------------------------
@@ -178,6 +199,115 @@ void menu_show_messagebox(char *title, char *row1, char *row2, char* row3, char*
 	// invoke the msgbox on the stack
 
 	gui_screen_push(&menu_message_box);
+}
+
+
+/*--------------------------------------------------------------------------------
+ * menu_model_servo_direction
+ *--------------------------------------------------------------------------------*/
+char MNU_MODEL_SERVO_TITLE[] 		PROGMEM = "Servo Direction";
+char MNU_MODEL_SERVO_CH[] 			PROGMEM = "CH";
+char MNU_MODEL_SERVO_CH_NORM[] 		PROGMEM = "NOR";
+char MNU_MODEL_SERVO_CH_INV[] 		PROGMEM = "INV";
+
+int8_t servoSelected;
+
+uint8_t menu_model_servo_direction(GUI_EVENT event, uint8_t elapsedTime)
+{
+	uint8_t dirty = 1;
+	uint8_t x,y,s,v;
+	uint8_t drawingMode;
+
+
+	switch (event)
+	{
+		case GUI_EVT_SHOW:
+			servoSelected = 0;
+			break;
+		case GUI_EVT_HIDE:
+			break;
+		case GUI_EVT_TICK:
+			break;
+		case GUI_EVT_KEY_EXIT:
+			// We are done...remove us on any key-event
+			gui_screen_pop();
+			break;
+		case GUI_EVT_KEY_RIGHT:
+			servoSelected++;
+			break;
+		case GUI_EVT_KEY_LEFT:
+			servoSelected--;
+			break;
+		case GUI_EVT_KEY_DOWN:
+			servoSelected += 3;
+			break;
+		case GUI_EVT_KEY_UP:
+			servoSelected -= 3;
+			break;
+		case GUI_EVT_KEY_MENU:
+			v = menu_get_setting(servoSelected + MC_SET_DIR_CH1);
+			if (v == 0)
+			{
+				v = 1;
+			}
+			else
+			{
+				v = 0;
+			}
+			menu_set_setting(servoSelected + MC_SET_DIR_CH1, v);
+			break;
+		default:
+			break;
+	}
+
+	if (servoSelected > 7)
+	{
+		servoSelected = servoSelected - 8;
+	}
+	if (servoSelected < 0)
+	{
+		servoSelected = servoSelected + 8;
+	}
+
+
+	// Draw the calibration screen.
+	lcd_clear();
+	lcd_puts_P( 0, 0, MNU_MODEL_SERVO_TITLE);
+	s = 0;
+
+	for(y=0; ((y<3) && (s<MDL_MAX_CHANNELS)); y++)
+	{
+		for(x=0; ((x<3) && (s<MDL_MAX_CHANNELS)); x++)
+		{
+			// "CHn"
+			lcd_putsAtt((x*7)*LCD_FONT_WIDTH, (y*2 + 2)*LCD_FONT_HEIGHT, MNU_MODEL_SERVO_CH, LCD_NO_INV);
+			lcd_outdezAtt((x*7 + 3)*LCD_FONT_WIDTH, (y*2 + 2)*LCD_FONT_HEIGHT, s+1, LCD_NO_INV);
+
+			if (s == servoSelected)
+			{
+				drawingMode = LCD_INVERS;
+			}
+			else
+			{
+				drawingMode = LCD_NO_INV;
+			}
+
+			// The value...
+			v = menu_get_setting(s + MC_SET_DIR_CH1);
+			if (v)
+			{
+				lcd_putsAtt((x*7+3)*LCD_FONT_WIDTH+2, (y*2 + 2)*LCD_FONT_HEIGHT, MNU_MODEL_SERVO_CH_INV, drawingMode);
+			}
+			else
+			{
+				lcd_putsAtt((x*7+3)*LCD_FONT_WIDTH+2, (y*2 + 2)*LCD_FONT_HEIGHT, MNU_MODEL_SERVO_CH_NORM, drawingMode);
+			}
+
+			s++;
+		}
+	}
+
+	return dirty;
 }
 
 
@@ -599,7 +729,7 @@ SMenu ModelSelection PROGMEM =
 SMenu ModelConfiguration PROGMEM = 
 {
 	MNU_MODEL_CONFIG_NAME,
-	0,
+	&menu_model_config,
 	(void*)&ModelSelection,
 	(void*)&ModelManagement,
 };
@@ -635,14 +765,6 @@ SMenu* currentMenu = (SMenu*)&ModelSelection;
 // menus...if 0, the menu-screen has ownership
 uint8_t menuNavigation = 1;
 
-typedef enum
-{
-	RC_SET_VOLTAGE,
-	RC_SET_BACKLIGHT,
-	RC_SET_BEEP_KEYS,
-	RC_SET_BEEP_ALARMS
-} PARAMETER_ID;
-
 
 typedef struct 
 {
@@ -673,6 +795,19 @@ uint8_t menu_get_setting(uint8_t parameterId)
 			break;
 		case RC_SET_BEEP_ALARMS:
 			break;
+
+		case MC_SET_DIR_CH1:
+		case MC_SET_DIR_CH2:
+		case MC_SET_DIR_CH3:
+		case MC_SET_DIR_CH4:
+		case MC_SET_DIR_CH5:
+		case MC_SET_DIR_CH6:
+		case MC_SET_DIR_CH7:
+		case MC_SET_DIR_CH8:
+			parameterId = parameterId - MC_SET_DIR_CH1;
+			return ((g_Model.servoDirection & (1 << parameterId)) & (1 << parameterId));
+			break;
+
 		default:
 			break;
 	}
@@ -708,6 +843,26 @@ void menu_set_setting(uint8_t parameterId, uint8_t newValue)
 		case RC_SET_BEEP_KEYS:
 			break;
 		case RC_SET_BEEP_ALARMS:
+			break;
+
+
+		case MC_SET_DIR_CH1:
+		case MC_SET_DIR_CH2:
+		case MC_SET_DIR_CH3:
+		case MC_SET_DIR_CH4:
+		case MC_SET_DIR_CH5:
+		case MC_SET_DIR_CH6:
+		case MC_SET_DIR_CH7:
+		case MC_SET_DIR_CH8:
+			parameterId = parameterId - MC_SET_DIR_CH1;
+			if (newValue == 1)
+			{
+				g_Model.servoDirection |= (1 << parameterId);
+			}
+			else
+			{
+				g_Model.servoDirection &= ~(1 << parameterId);
+			}
 			break;
 		default:
 			break;
@@ -857,6 +1012,37 @@ uint8_t menu_settings(GUI_EVENT event, uint8_t elapsedTime)
 	return dirty;
 }
 
+//
+// Model Config
+//
+char MNU_MODEL_CONFIG_DIRECTION[] 		PROGMEM = "Servo Direction";
+
+
+SSelection modelConfig[1] PROGMEM = 
+{
+	{
+		MNU_MODEL_CONFIG_DIRECTION,
+		0,
+		0,
+		&menu_model_servo_direction
+	}
+};
+
+
+uint8_t menu_model_config(GUI_EVENT event, uint8_t elapsedTime)
+{
+	switch (event)
+	{
+		case GUI_EVT_SHOW:
+			numSettings = 1;
+			currentSettings = (SSelection*)&modelConfig[0];
+			break;
+		default:
+			break;
+	}
+
+	return menu_settings(event, elapsedTime);
+}
 
 //
 // Radio Config Settings
