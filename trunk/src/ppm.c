@@ -153,15 +153,12 @@ ISR(TIMER1_COMPA_vect)
 void ppm_export() 
 {
 	uint8_t i;
+	int16_t currentServo;
 	uint16_t nextValue;
 	int32_t tempV;
 
 	for (i=0; i<MDL_MAX_CHANNELS; i++) 
 	{
-
-		// Subtrim...
-		g_RadioRuntime.srv_s[i] += g_Model.subTrim[i];
-
 		// NOTE: The srv_s[] table holds the wanted output for each servo channel.
 		// This value is [-100...+100]
 		// The ppm_table[] will (after this function is called) hold the pulse-times
@@ -173,19 +170,30 @@ void ppm_export()
 		//       srv_s[]=+100  =>  ppm_table[]=1500*2
 		// This is what this function will try to calculate... :)
 
-		if (g_RadioRuntime.srv_s[i] < 0)
+		currentServo = g_RadioRuntime.srv_s[i];
+
+		// Apply wanted Subtrims
+		currentServo += g_Model.subTrim[i];
+
+		// Direction INVERSED?
+		if ((g_Model.servoDirection & (1 << i)) == (1 << i))
+		{
+			currentServo = -currentServo;	
+		}
+
+		if (currentServo < 0)
 		{
 			// Range: [-100...0]
 
 			// No overdrive...clip to min value
-			if (g_RadioRuntime.srv_s[i] < -100) 
+			if (currentServo < -100) 
 			{
-				g_RadioRuntime.srv_s[i] = -100;
+				currentServo = -100;
 				nextValue = PPM_SIGNAL_MIN;
 			} 
 			else
 			{
-				tempV = g_RadioRuntime.srv_s[i]*((int32_t)PPM_SIGNAL_MED - (int32_t)PPM_SIGNAL_MIN);
+				tempV = currentServo*((int32_t)PPM_SIGNAL_MED - (int32_t)PPM_SIGNAL_MIN);
 				tempV = tempV / 100;
 				nextValue = (uint16_t)PPM_SIGNAL_MED + (uint16_t)tempV;
 			}
@@ -195,14 +203,14 @@ void ppm_export()
 			// Range: [0...+100]
 
 			// No overdrive...clip to max value
-			if (g_RadioRuntime.srv_s[i] > 100) 
+			if (currentServo > 100) 
 			{
-				g_RadioRuntime.srv_s[i] = 100;
+				currentServo = 100;
 				nextValue = PPM_SIGNAL_MAX;
 			} 
 			else
 			{
-				tempV = g_RadioRuntime.srv_s[i]*((int32_t)PPM_SIGNAL_MAX - (int32_t)PPM_SIGNAL_MED);
+				tempV = currentServo*((int32_t)PPM_SIGNAL_MAX - (int32_t)PPM_SIGNAL_MED);
 				tempV = tempV / 100;
 				nextValue = (uint16_t)PPM_SIGNAL_MED + (uint16_t)tempV;
 			}

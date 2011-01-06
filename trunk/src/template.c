@@ -60,5 +60,7 @@ void template_simulator()
 	g_Model.mixers[0][3].condition = MIX_COND_TRUE;
 	g_Model.mixers[0][3].multiplex = MIX_REPLACE;
 
+	// All servos NORMAL direction
+	g_Model.servoDirection = 0x00;
 }
 

@@ -85,6 +85,9 @@ typedef struct
 	// Mixers (level 1 and level 2)
 	SMixer mixers[2][MDL_MAX_MIXERS];
 
+	// Servo reverse // 0- Normal, 1-Reverse, 
+	// BIT-field. [BIT 0 => servo 0 etc]
+	uint8_t servoDirection;
 
 } SModel;
 
