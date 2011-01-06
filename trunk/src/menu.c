@@ -53,11 +53,17 @@ uint8_t menu_radio_install(GUI_EVENT event, uint8_t elapsedTime);
 
 typedef enum
 {
+	//
+	// Radio params
+	//
 	RC_SET_VOLTAGE,
 	RC_SET_BACKLIGHT,
 	RC_SET_BEEP_KEYS,
 	RC_SET_BEEP_ALARMS,
 
+	//
+	// Model params
+	//
 	MC_SET_DIR_CH1,
 	MC_SET_DIR_CH2,
 	MC_SET_DIR_CH3,
@@ -65,7 +71,16 @@ typedef enum
 	MC_SET_DIR_CH5,
 	MC_SET_DIR_CH6,
 	MC_SET_DIR_CH7,
-	MC_SET_DIR_CH8
+	MC_SET_DIR_CH8,
+
+	MC_SET_SUBT_CH1,
+	MC_SET_SUBT_CH2,
+	MC_SET_SUBT_CH3,
+	MC_SET_SUBT_CH4,
+	MC_SET_SUBT_CH5,
+	MC_SET_SUBT_CH6,
+	MC_SET_SUBT_CH7,
+	MC_SET_SUBT_CH8
 } PARAMETER_ID;
 
 
@@ -269,8 +284,6 @@ uint8_t menu_model_servo_direction(GUI_EVENT event, uint8_t elapsedTime)
 		servoSelected = servoSelected + 8;
 	}
 
-
-	// Draw the calibration screen.
 	lcd_clear();
 	lcd_puts_P( 0, 0, MNU_MODEL_SERVO_TITLE);
 	s = 0;
@@ -302,6 +315,94 @@ uint8_t menu_model_servo_direction(GUI_EVENT event, uint8_t elapsedTime)
 			{
 				lcd_putsAtt((x*7+3)*LCD_FONT_WIDTH+2, (y*2 + 2)*LCD_FONT_HEIGHT, MNU_MODEL_SERVO_CH_NORM, drawingMode);
 			}
+
+			s++;
+		}
+	}
+
+	return dirty;
+}
+
+/*--------------------------------------------------------------------------------
+ * menu_model_servo_subtrim
+ *--------------------------------------------------------------------------------*/
+char MNU_MODEL_SERVO_SUBTRIM_TITLE[]	PROGMEM = "Subtrims";
+
+uint8_t menu_model_servo_subtrim(GUI_EVENT event, uint8_t elapsedTime)
+{
+	uint8_t dirty = 1;
+	uint8_t x,y,s;
+	uint8_t drawingMode;
+	int8_t v;
+
+
+	switch (event)
+	{
+		case GUI_EVT_SHOW:
+			servoSelected = 0;
+			break;
+		case GUI_EVT_HIDE:
+			break;
+		case GUI_EVT_TICK:
+			break;
+		case GUI_EVT_KEY_EXIT:
+			// We are done...remove us on any key-event
+			gui_screen_pop();
+			break;
+		case GUI_EVT_KEY_DOWN:
+			servoSelected += 3;
+			break;
+		case GUI_EVT_KEY_UP:
+			servoSelected -= 3;
+			break;
+		case GUI_EVT_KEY_RIGHT:
+			v = menu_get_setting(servoSelected + MC_SET_SUBT_CH1);
+			v += 1;
+			menu_set_setting(servoSelected + MC_SET_SUBT_CH1, v);
+			break;
+		case GUI_EVT_KEY_LEFT:
+			v = menu_get_setting(servoSelected + MC_SET_SUBT_CH1);
+			v -= 1;
+			menu_set_setting(servoSelected + MC_SET_SUBT_CH1, v);
+			break;
+		default:
+			break;
+	}
+
+	if (servoSelected > 7)
+	{
+		servoSelected = servoSelected - 8;
+	}
+	if (servoSelected < 0)
+	{
+		servoSelected = servoSelected + 8;
+	}
+
+
+	lcd_clear();
+	lcd_puts_P( 0, 0, MNU_MODEL_SERVO_SUBTRIM_TITLE);
+	s = 0;
+
+	for(y=0; ((y<3) && (s<MDL_MAX_CHANNELS)); y++)
+	{
+		for(x=0; ((x<3) && (s<MDL_MAX_CHANNELS)); x++)
+		{
+			// "CHn"
+			lcd_putsAtt((x*7)*LCD_FONT_WIDTH, (y*2 + 2)*LCD_FONT_HEIGHT, MNU_MODEL_SERVO_CH, LCD_NO_INV);
+			lcd_outdezAtt((x*7 + 3)*LCD_FONT_WIDTH, (y*2 + 2)*LCD_FONT_HEIGHT, s+1, LCD_NO_INV);
+
+			if (s == servoSelected)
+			{
+				drawingMode = LCD_INVERS;
+			}
+			else
+			{
+				drawingMode = LCD_NO_INV;
+			}
+
+			// The value...
+			v = menu_get_setting(s + MC_SET_SUBT_CH1);
+			lcd_outdezAtt((x*7+6)*LCD_FONT_WIDTH, (y*2 + 2)*LCD_FONT_HEIGHT, v, drawingMode);
 
 			s++;
 		}
@@ -808,6 +909,17 @@ uint8_t menu_get_setting(uint8_t parameterId)
 			return ((g_Model.servoDirection & (1 << parameterId)) & (1 << parameterId));
 			break;
 
+		case MC_SET_SUBT_CH1:
+		case MC_SET_SUBT_CH2:
+		case MC_SET_SUBT_CH3:
+		case MC_SET_SUBT_CH4:
+		case MC_SET_SUBT_CH5:
+		case MC_SET_SUBT_CH6:
+		case MC_SET_SUBT_CH7:
+		case MC_SET_SUBT_CH8:
+			parameterId = parameterId - MC_SET_SUBT_CH1;
+			return g_Model.subTrim[parameterId];
+			break;
 		default:
 			break;
 	}
@@ -863,6 +975,18 @@ void menu_set_setting(uint8_t parameterId, uint8_t newValue)
 			{
 				g_Model.servoDirection &= ~(1 << parameterId);
 			}
+			break;
+
+		case MC_SET_SUBT_CH1:
+		case MC_SET_SUBT_CH2:
+		case MC_SET_SUBT_CH3:
+		case MC_SET_SUBT_CH4:
+		case MC_SET_SUBT_CH5:
+		case MC_SET_SUBT_CH6:
+		case MC_SET_SUBT_CH7:
+		case MC_SET_SUBT_CH8:
+			parameterId = parameterId - MC_SET_SUBT_CH1;
+			g_Model.subTrim[parameterId] = newValue;
 			break;
 		default:
 			break;
@@ -1015,17 +1139,22 @@ uint8_t menu_settings(GUI_EVENT event, uint8_t elapsedTime)
 //
 // Model Config
 //
-char MNU_MODEL_CONFIG_DIRECTION[] 		PROGMEM = "Servo Direction";
 
-
-SSelection modelConfig[1] PROGMEM = 
+SSelection modelConfig[2] PROGMEM = 
 {
 	{
-		MNU_MODEL_CONFIG_DIRECTION,
+		MNU_MODEL_SERVO_TITLE,
 		0,
 		0,
 		&menu_model_servo_direction
+	},
+	{
+		MNU_MODEL_SERVO_SUBTRIM_TITLE,
+		0,
+		0,
+		&menu_model_servo_subtrim
 	}
+	
 };
 
 
@@ -1034,7 +1163,7 @@ uint8_t menu_model_config(GUI_EVENT event, uint8_t elapsedTime)
 	switch (event)
 	{
 		case GUI_EVT_SHOW:
-			numSettings = 1;
+			numSettings = 2;
 			currentSettings = (SSelection*)&modelConfig[0];
 			break;
 		default:
