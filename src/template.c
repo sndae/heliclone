@@ -73,6 +73,61 @@ void template_simulator()
 	g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_AUX1)] = SERVO_CHANNEL(7);
 	g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_AUX2)] = SERVO_CHANNEL(8);
 
+	// Throttle Curve ID0
+	g_Model.curve[MDL_CURVE_THR_ID0][0] = -100;
+	g_Model.curve[MDL_CURVE_THR_ID0][1] = -50;
+	g_Model.curve[MDL_CURVE_THR_ID0][2] = 0;
+	g_Model.curve[MDL_CURVE_THR_ID0][3] = 50;
+	g_Model.curve[MDL_CURVE_THR_ID0][4] = 100;
+
+	// Throttle Curve ID1
+	g_Model.curve[MDL_CURVE_THR_ID1][0] = 100;
+	g_Model.curve[MDL_CURVE_THR_ID1][1] = 75;
+	g_Model.curve[MDL_CURVE_THR_ID1][2] = 50;
+	g_Model.curve[MDL_CURVE_THR_ID1][3] = 75;
+	g_Model.curve[MDL_CURVE_THR_ID1][4] = 100;
+
+	// Throttle Curve ID2
+	g_Model.curve[MDL_CURVE_THR_ID2][0] = 90;
+	g_Model.curve[MDL_CURVE_THR_ID2][1] = 90;
+	g_Model.curve[MDL_CURVE_THR_ID2][2] = 90;
+	g_Model.curve[MDL_CURVE_THR_ID2][3] = 90;
+	g_Model.curve[MDL_CURVE_THR_ID2][4] = 90;
+
+	// Throttle Curve HOLD
+	g_Model.curve[MDL_CURVE_THR_HOLD][0] = -100;
+	g_Model.curve[MDL_CURVE_THR_HOLD][1] = -100;
+	g_Model.curve[MDL_CURVE_THR_HOLD][2] = -100;
+	g_Model.curve[MDL_CURVE_THR_HOLD][3] = -100;
+	g_Model.curve[MDL_CURVE_THR_HOLD][4] = -100;
+
+	// Pitch Curve ID0
+	g_Model.curve[MDL_CURVE_PIT_ID0][0] = -15;
+	g_Model.curve[MDL_CURVE_PIT_ID0][1] = -7;
+	g_Model.curve[MDL_CURVE_PIT_ID0][2] = 0;
+	g_Model.curve[MDL_CURVE_PIT_ID0][3] = 50;
+	g_Model.curve[MDL_CURVE_PIT_ID0][4] = 100;
+
+	// Pitch Curve ID1
+	g_Model.curve[MDL_CURVE_PIT_ID1][0] = -100;
+	g_Model.curve[MDL_CURVE_PIT_ID1][1] = -50;
+	g_Model.curve[MDL_CURVE_PIT_ID1][2] = 0;
+	g_Model.curve[MDL_CURVE_PIT_ID1][3] = 50;
+	g_Model.curve[MDL_CURVE_PIT_ID1][4] = 100;
+
+	// Pitch Curve ID2
+	g_Model.curve[MDL_CURVE_PIT_ID2][0] = -100;
+	g_Model.curve[MDL_CURVE_PIT_ID2][1] = -50;
+	g_Model.curve[MDL_CURVE_PIT_ID2][2] = 0;
+	g_Model.curve[MDL_CURVE_PIT_ID2][3] = 50;
+	g_Model.curve[MDL_CURVE_PIT_ID2][4] = 100;
+
+	// Pitch Curve HOLD
+	g_Model.curve[MDL_CURVE_PIT_HOLD][0] = -100;
+	g_Model.curve[MDL_CURVE_PIT_HOLD][1] = -50;
+	g_Model.curve[MDL_CURVE_PIT_HOLD][2] = 0;
+	g_Model.curve[MDL_CURVE_PIT_HOLD][3] = 50;
+	g_Model.curve[MDL_CURVE_PIT_HOLD][4] = 100;
 
 }
 

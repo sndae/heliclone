@@ -31,9 +31,29 @@
 
 #define MDL_MAX_CHANNELS	(8)
 #define MDL_MAX_MIXERS (8)
+#define MDL_MAX_CURVE_POINTS (5)
 
 #define SERVO_CHANNEL(N) (N-1)
 #define FUNCTION_INDEX(N) (N-MIX_OUT_AILERON)
+
+
+typedef enum
+{
+	// Throttle curves
+	MDL_CURVE_THR_ID0,
+	MDL_CURVE_THR_ID1,
+	MDL_CURVE_THR_ID2,
+	MDL_CURVE_THR_HOLD,
+
+	// Pitch curves
+	MDL_CURVE_PIT_ID0,
+	MDL_CURVE_PIT_ID1,
+	MDL_CURVE_PIT_ID2,
+	MDL_CURVE_PIT_HOLD,
+
+	MDL_MAX_CURVES
+} MDL_CURVES;
+
 
 typedef struct
 {
@@ -95,6 +115,9 @@ typedef struct
 	// Servo vs channel table...
 	// Used to select if CH1 is AIL etc...
 	uint8_t functionToServoTable[MDL_MAX_CHANNELS];
+
+	// Curves
+	int8_t curve[MDL_MAX_CURVES][MDL_MAX_CURVE_POINTS];
 
 } SModel;
 
