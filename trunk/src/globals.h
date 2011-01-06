@@ -32,6 +32,9 @@
 #define MDL_MAX_CHANNELS	(8)
 #define MDL_MAX_MIXERS (8)
 
+#define SERVO_CHANNEL(N) (N-1)
+#define FUNCTION_INDEX(N) (N-MIX_OUT_AILERON)
+
 typedef struct
 {
 	// LCD
@@ -88,6 +91,10 @@ typedef struct
 	// Servo reverse // 0- Normal, 1-Reverse, 
 	// BIT-field. [BIT 0 => servo 0 etc]
 	uint8_t servoDirection;
+
+	// Servo vs channel table...
+	// Used to select if CH1 is AIL etc...
+	uint8_t functionToServoTable[MDL_MAX_CHANNELS];
 
 } SModel;
 
