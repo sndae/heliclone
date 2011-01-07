@@ -149,6 +149,9 @@ typedef struct
 	MIX_CONDITION	condition; // Switch position?
 
 	MIX_MULTIPLEX multiplex;
+	
+	// What curve are we using?
+	uint8_t curve;
 
 } SMixer;
 

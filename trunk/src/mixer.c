@@ -26,6 +26,10 @@
 #include "mixer.h"
 
 #include "globals.h"
+#include "hal_io.h"
+
+
+#define CURVE(P, N) g_Model.curve[N][P]
 
 
 /*--------------------------------------------------------------------------------
@@ -153,6 +157,22 @@ int16_t mixer_get_output(MIX_OUTPUT destination)
 		case MIX_OUT_SRV8:
 			index = destination - MIX_OUT_SRV1;
 			return g_RadioRuntime.srv_s[index];
+
+		// Functional output
+		case MIX_OUT_AILERON:
+		case MIX_OUT_THROTTLE:
+		case MIX_OUT_ELEVATOR:
+		case MIX_OUT_RUDDER:
+		case MIX_OUT_GYRO_GAIN:
+		case MIX_OUT_PITCH:
+		case MIX_OUT_AUX1:
+		case MIX_OUT_AUX2:
+			index = destination - MIX_OUT_AILERON;
+			// Lookup where the function is mapped...
+			index = g_Model.functionToServoTable[index];
+			return g_RadioRuntime.srv_s[index];
+			break;
+
 		default:
 			return 0;
 	}
@@ -171,22 +191,38 @@ int8_t mixer_get_condition(MIX_CONDITION cond)
 
 		// Switches
 		case MIX_COND_THR:
+			return (hal_io_get_sw(SW_THR));
 		case MIX_COND_NOT_THR:
+			return (1 - hal_io_get_sw(SW_THR));
 		case MIX_COND_RUDDR:
+			return (hal_io_get_sw(SW_RUDDR));
 		case MIX_COND_NOT_RUDDR:
+			return (1 - hal_io_get_sw(SW_RUDDR));
 		case MIX_COND_ELEDR:
+			return (hal_io_get_sw(SW_ELEDR));
 		case MIX_COND_NOT_ELEDR:
+			return (1 - hal_io_get_sw(SW_ELEDR));
 		case MIX_COND_AILDR:
+			return (hal_io_get_sw(SW_AILDR));
 		case MIX_COND_NOT_AILDR:
+			return (1 - hal_io_get_sw(SW_AILDR));
 		case MIX_COND_GEAR:
+			return (hal_io_get_sw(SW_GEAR));
 		case MIX_COND_NOT_GEAR:
+			return (1 - hal_io_get_sw(SW_GEAR));
 		case MIX_COND_ID0:
+			return (hal_io_get_sw(SW_ID0));
 		case MIX_COND_NOT_ID0:
+			return (1 - hal_io_get_sw(SW_ID0));
 		case MIX_COND_ID1:
+			return (hal_io_get_sw(SW_ID1));
 		case MIX_COND_NOT_ID1:
+			return (1 - hal_io_get_sw(SW_ID1));
 		case MIX_COND_ID2:
+			return (hal_io_get_sw(SW_ID2));
 		case MIX_COND_NOT_ID2:
-			return 0;
+			return (1 - hal_io_get_sw(SW_ID2));
+
 
 		case MIX_COND_FALSE:
 			return 0;
@@ -198,16 +234,81 @@ int8_t mixer_get_condition(MIX_CONDITION cond)
 
 
 /*--------------------------------------------------------------------------------
- * mixer_mix
+ * mixer_get_curve_val
  *--------------------------------------------------------------------------------*/
 
+
+int16_t mixer_get_curve_val(uint8_t curve, int16_t input)
+{
+	int16_t xa, xb;
+	int16_t ya, yb;
+	int32_t y;
+
+	// Limit...
+	if (input < -100)
+	{
+		input = -100;
+	}
+	if (input > 100)
+	{
+		input = 100;
+	}
+
+	// What segment	of the curve?
+	if (input <= -50)
+	{
+		// [-100..-50]
+		ya = CURVE(0, curve);
+		yb = CURVE(1, curve);
+		xa = -100;
+		xb = -50;
+	}
+	else if ((input > -50) && (input <= 0))
+	{
+		// [-50..0]
+		ya = CURVE(1, curve);
+		yb = CURVE(2, curve);
+		xa = -50;
+		xb = 0;
+	}
+	else if ((input > 0) && (input <= 50))
+	{
+		// [0..50]
+		ya = CURVE(2, curve);
+		yb = CURVE(3, curve);
+		xa = 0;
+		xb = 50;
+	}
+	else if ((input > 50) && (input <= 100))
+	{
+		// [50..100]
+		ya = CURVE(3, curve);
+		yb = CURVE(4, curve);
+		xa = 50;
+		xb = 1000;
+	}
+	else
+	{
+		// invalid...
+		return 0;
+	}
+
+	// Interpolate between the points...
+	y = ya + (yb - ya)*(input - xa)/(xb - xa);
+
+	return (int16_t)y;
+}
+
+/*--------------------------------------------------------------------------------
+ * mixer_mix
+ *--------------------------------------------------------------------------------*/
 void mixer_mix()
 {
 	uint8_t i,l;
-	SMixer* mixer;
 	int16_t output;
 	int16_t input;
 	int16_t tempV;
+	SMixer* mixer;
 
 	for (i=0; i<MDL_MAX_CHANNELS; i++)
 	{
@@ -235,6 +336,12 @@ void mixer_mix()
 						// Output = Input*Scale;
 						input = mixer_get_input(mixer->input);
 						output = (input*mixer->scale)/100;
+						break;
+					case MIX_CURVE:
+						// Output = curve[Input]*Scale;
+						input = mixer_get_input(mixer->input);
+						output = mixer_get_curve_val(mixer->curve, input);
+						output = (output*mixer->scale)/100;
 						break;
 					default:
 						output = 0;

@@ -40,12 +40,11 @@ extern char debugLine2[20];
 
 
 #define MDL_MAX_CHANNELS	(8)
-#define MDL_MAX_MIXERS (8)
+#define MDL_MAX_MIXERS (16)
 #define MDL_MAX_CURVE_POINTS (5)
 
 #define SERVO_CHANNEL(N) (N-1)
 #define FUNCTION_INDEX(N) (N-MIX_OUT_AILERON)
-
 
 typedef enum
 {
