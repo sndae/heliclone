@@ -285,7 +285,7 @@ int16_t mixer_get_curve_val(uint8_t curve, int16_t input)
 		ya = CURVE(3, curve);
 		yb = CURVE(4, curve);
 		xa = 50;
-		xb = 1000;
+		xb = 100;
 	}
 	else
 	{
