@@ -172,7 +172,8 @@ uint8_t hal_io_get_sw(uint8_t swId)
 			break;
 		case SW_THR:
 			temp = switchState & 0x01;
-			return (temp == 0x01);
+			// THR sw is reversed...
+			return (temp == 0x00);
 			break;
 		default:
 			return 0;
