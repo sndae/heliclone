@@ -100,12 +100,30 @@ void load_defaults()
 	}
 
 	// DEBUG (Precalibrated)
-	for (i=0; i<8; i++)
+	// Gryffys radio calib data... ;)
+	g_RadioConfig.adc_c[0][0] = 0x0053;
+	g_RadioConfig.adc_c[0][1] = 0x0209;
+	g_RadioConfig.adc_c[0][2] = 0x03C1;
+
+	g_RadioConfig.adc_c[1][0] = 0x003B;
+	g_RadioConfig.adc_c[1][1] = 0x01E6;
+	g_RadioConfig.adc_c[1][2] = 0x03BF;
+
+	g_RadioConfig.adc_c[2][0] = 0x0011;
+	g_RadioConfig.adc_c[2][1] = 0x01CE;
+	g_RadioConfig.adc_c[2][2] = 0x036C;
+
+	g_RadioConfig.adc_c[3][0] = 0x004C;
+	g_RadioConfig.adc_c[3][1] = 0x0203;
+	g_RadioConfig.adc_c[3][2] = 0x03C3;
+
+	for (i=4; i<8; i++)
 	{
-		g_RadioConfig.adc_c[i][0] = 0x0001;
-		g_RadioConfig.adc_c[i][1] = 0x0200;
+		g_RadioConfig.adc_c[i][0] = 0x0013;
+		g_RadioConfig.adc_c[i][1] = 0x0203;
 		g_RadioConfig.adc_c[i][2] = 0x03FF;
 	}
+
 
 	// Default BATTERY readings.
 	g_RadioConfig.adc_c[7][0]=385; // 5V
