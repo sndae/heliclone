@@ -31,6 +31,7 @@
 #include <avr/pgmspace.h>
 #include <string.h>
 
+
 /*--------------------------------------------------------------------------------
  * Prototypes
  *--------------------------------------------------------------------------------*/
@@ -616,11 +617,19 @@ void main_draw_servo(uint8_t x, uint8_t y, uint8_t servo)
 // 2 - Analog input (decimal)
 // 3 - Analog input (raw)
 // 4 - Timer mode 
+// 10 - Debug mode...
 int8_t mainDisplayMode = 0;
 
 char MNU_MAIN_MODE_1[] 	PROGMEM = "Servo output:";
 char MNU_MAIN_MODE_2[] 	PROGMEM = "Stick input:";
 char MNU_MAIN_MODE_3[] 	PROGMEM = "ADC Raw input:";
+
+#ifdef USE_DEBUG_MODE
+char MNU_MAIN_MODE_10[] PROGMEM = "-- DEBUG MODE --";
+
+char debugLine1[20] = {0};
+char debugLine2[20] = {0};
+#endif
 
 char MNU_MAIN_CH1[] 	PROGMEM = "C1";
 char MNU_MAIN_CH2[] 	PROGMEM = "C2";
@@ -675,7 +684,12 @@ uint8_t menu_main_screen(GUI_EVENT event, uint8_t elapsedTime)
 		case GUI_EVT_KEY_MENU_LONG:
 			gui_screen_push(&menu_main_menu);
 			return 0;
+#ifdef USE_DEBUG_MODE
+		// Hidden debug mode...
+		case GUI_EVT_KEY_LEFT_LONG:
+			mainDisplayMode = 10;
 			break;
+#endif
 		default:
 			break;
 	}
@@ -775,7 +789,13 @@ uint8_t menu_main_screen(GUI_EVENT event, uint8_t elapsedTime)
 				}
 			}	
 			break;
-		
+#ifdef USE_DEBUG_MODE
+		case 10:
+			lcd_putsAtt(4*LCD_FONT_WIDTH,  1*LCD_FONT_HEIGHT+5, MNU_MAIN_MODE_10, LCD_NO_INV);
+			lcd_putsAtt(4*LCD_FONT_WIDTH,  3*LCD_FONT_HEIGHT+5, debugLine1, LCD_BSS_NO_INV);
+			lcd_putsAtt(4*LCD_FONT_WIDTH,  4*LCD_FONT_HEIGHT+5, debugLine2, LCD_BSS_NO_INV);
+			break;
+#endif		
 		default:
 			break;
 	}
