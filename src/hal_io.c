@@ -26,6 +26,14 @@
 #include "hal_io.h"
 #include "globals.h"
 
+#define DEBUG_SWITCHES
+
+#ifdef DEBUG_SWITCHES
+#ifdef USE_DEBUG_MODE
+#include <string.h>
+#endif
+#endif
+
 /*--------------------------------------------------------------------------------
  * Defines & Macros
  *--------------------------------------------------------------------------------*/
@@ -48,26 +56,15 @@ typedef enum
 #define TRIM_STEP (4)
 
 
-typedef enum
-{
-	SW_ID0,
-	SW_ID1,
-	SW_ID2,
-	SW_AILDR,
-	SW_ELEDR,
-	SW_RUDDR,
-	SW_TRN,
-	SW_GEAR,
-	SW_THR,
-} SW_IDS;
-
-
 /*--------------------------------------------------------------------------------
  * LOCALS
  *--------------------------------------------------------------------------------*/
 // 8 trim keys
 TRIM_KEY_STATE trimKeyState[TRIM_NUM_KEYS];
 uint16_t trimKeyTicks[TRIM_NUM_KEYS];
+
+// Holds a BIT-field of all switches
+uint8_t switchState;
 
 
 /*--------------------------------------------------------------------------------
@@ -117,27 +114,66 @@ void hal_io_init(void)
  *--------------------------------------------------------------------------------*/
 uint8_t hal_io_get_sw(uint8_t swId)
 {
-	uint8_t sw;
-	uint8_t button;
-
-
-	// Sample the ports and merge the results into sw
-	sw = (~devSwitches1PIN) & devSwitches1Mask;
-	button = (~devSwitches2PIN);
-	sw |= (button & 0x08)<<4;
-	sw |= (button & 0x01)<<3;
-
+	uint8_t temp;
 	switch (swId)
 	{
 		case SW_ID0:
+			temp = switchState & 0xC0;
+			if (temp == 0x80)
+			{
+				return 1;
+			}
+			else
+			{
+				return 0;
+			}
+			break;
 		case SW_ID1:
+			temp = switchState & 0xC0;
+			if (temp == 0x00)
+			{
+				return 1;
+			}
+			else
+			{
+				return 0;
+			}
+			break;
 		case SW_ID2:
+			temp = switchState & 0xC0;
+			if (temp == 0x40)
+			{
+				return 1;
+			}
+			else
+			{
+				return 0;
+			}
+			break;
 		case SW_AILDR:
+			temp = switchState & 0x02;
+			return (temp == 0x02);
+			break;
 		case SW_ELEDR:
+			temp = switchState & 0x04;
+			return (temp == 0x04);
+			break;
 		case SW_RUDDR:
+			temp = switchState & 0x08;
+			return (temp == 0x08);
+			break;
 		case SW_TRN:
+			temp = switchState & 0x20;
+			return (temp == 0x20);
+			break;
 		case SW_GEAR:
+			temp = switchState & 0x10;
+			return (temp == 0x10);
+			break;
 		case SW_THR:
+			temp = switchState & 0x01;
+			return (temp == 0x01);
+			break;
 		default:
 			return 0;
 			break;
@@ -198,6 +234,7 @@ void hal_io_handle(uint8_t elapsedTime)
 	uint8_t t = 0;
 	uint8_t tstatus = 0;
 	uint8_t mask = 0;
+	uint8_t button;
 
 	//
 	// TRIMS
@@ -276,5 +313,33 @@ void hal_io_handle(uint8_t elapsedTime)
 				break;
 		}
 	}
+
+	//
+	// SWITCHES
+	//
+
+	// Sample the ports and merge the results into sw
+	switchState = (~devSwitches1PIN) & devSwitches1Mask;
+	button = (~devSwitches2PIN);
+	switchState |= (button & 0x08)<<4;
+	switchState |= (button & 0x01)<<3;
+
+#ifdef DEBUG_SWITCHES
+#ifdef USE_DEBUG_MODE
+	strcpy(debugLine1, "SW: ");
+	for (uint8_t i=0; i<8; i++)
+	{
+		if ((switchState & (1 << i)) == (1 << i))
+		{
+			strcat(debugLine1, "1");
+		}
+		else
+		{
+			strcat(debugLine1, "0");
+		}
+	}
+#endif	
+#endif
+
 
 }

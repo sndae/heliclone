@@ -29,6 +29,16 @@
 #include <stdint.h>
 #include "mixer.h"
 
+
+// This eats a little RAM...remove me!
+#define USE_DEBUG_MODE
+
+#ifdef USE_DEBUG_MODE
+extern char debugLine1[20];
+extern char debugLine2[20];
+#endif
+
+
 #define MDL_MAX_CHANNELS	(8)
 #define MDL_MAX_MIXERS (8)
 #define MDL_MAX_CURVE_POINTS (5)

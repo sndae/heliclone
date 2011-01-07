@@ -93,6 +93,20 @@
 #define devPrescale_1024  0x07
 
 
+typedef enum
+{
+	SW_ID0,
+	SW_ID1,
+	SW_ID2,
+	SW_AILDR,
+	SW_ELEDR,
+	SW_RUDDR,
+	SW_TRN,
+	SW_GEAR,
+	SW_THR,
+} SW_IDS;
+
+
 /*--------------------------------------------------------------------------------
  * External interface
  *--------------------------------------------------------------------------------*/
