@@ -40,7 +40,7 @@ extern char debugLine2[20];
 
 
 #define MDL_MAX_CHANNELS	(8)
-#define MDL_MAX_MIXERS (16)
+#define MDL_MAX_MIXERS (12)
 #define MDL_MAX_CURVE_POINTS (5)
 
 #define SERVO_CHANNEL(N) (N-1)
@@ -49,7 +49,7 @@ extern char debugLine2[20];
 typedef enum
 {
 	// Throttle curves
-	MDL_CURVE_THR_ID0,
+	MDL_CURVE_THR_ID0 = 0x00,
 	MDL_CURVE_THR_ID1,
 	MDL_CURVE_THR_ID2,
 	MDL_CURVE_THR_HOLD,
@@ -64,11 +64,27 @@ typedef enum
 } MDL_CURVES;
 
 
+typedef enum
+{
+	MDL_TYPE_GENERAL = 0x0,
+	MDL_TYPE_HELI_SIM = 0x10,
+	MDL_TYPE_HELI_FBL,
+	MDL_TYPE_HELI_ECCPM_120,
+	MDL_TYPE_HELI_ECCPM_140,
+	MDL_MAX_TYPES
+} MDL_TYPE;
+
+
+
 typedef struct
 {
 	// LCD
 	uint8_t contrast;
 	uint8_t backlight;	// 0=ON, 1=OFF, 2=5s, 3=10s, 4=15s, 5=20s";
+
+	// BEEP
+	uint8_t keyBeep;
+	uint8_t alarmBeep;
 
 	// ADC
 	uint16_t 	adc_c[8][3]; // mins, max, cent
@@ -79,7 +95,10 @@ typedef struct
 	// VOLTAGE
 	uint8_t		voltageWarning; 
 
-} SRadioConfig;
+	// Selected model number
+	uint8_t 	selectedModel;
+
+} __attribute__((packed)) SRadioConfig;
 
 typedef struct
 {
@@ -106,29 +125,36 @@ typedef struct
 
 typedef struct
 {
-	char name[10];
+	// Model name
+	char name[10];												// 10/10
+
+	// Model type.
+	MDL_TYPE type;												// 1/11
 
 	// The trims...
-	int8_t trim[4];
+	int8_t trim[4];												// 4/15
 
 	// subtrims
-	int8_t subTrim[MDL_MAX_CHANNELS];
+	int8_t subTrim[MDL_MAX_CHANNELS];							// 8/23
 
 	// Mixers (level 1 and level 2)
-	SMixer mixers[2][MDL_MAX_MIXERS];
+	SMixer mixers[2][MDL_MAX_MIXERS];							// 24*7=
 
 	// Servo reverse // 0- Normal, 1-Reverse, 
 	// BIT-field. [BIT 0 => servo 0 etc]
-	uint8_t servoDirection;
+	uint8_t servoDirection;										// 8/
 
 	// Servo vs channel table...
 	// Used to select if CH1 is AIL etc...
-	uint8_t functionToServoTable[MDL_MAX_CHANNELS];
+	uint8_t functionToServoTable[MDL_MAX_CHANNELS];				// 8/
 
 	// Curves
-	int8_t curve[MDL_MAX_CURVES][MDL_MAX_CURVE_POINTS];
+	int8_t curve[MDL_MAX_CURVES][MDL_MAX_CURVE_POINTS];			// 8*5=30/
 
-} SModel;
+	// EXPO
+	int8_t expo[4][2];											// 8
+
+} __attribute__((packed)) SModel;
 
 // Exported here...but created  in main.c
 extern SRadioConfig g_RadioConfig;

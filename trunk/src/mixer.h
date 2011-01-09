@@ -136,7 +136,7 @@ typedef enum
 typedef struct
 {
 	// Type
-	MIX_TYPE type;
+	MIX_TYPE type:3;
 
 	// Input
 	MIX_INPUT input;
@@ -146,14 +146,14 @@ typedef struct
 
 	uint8_t scale;		// -100...+100 %
 
-	MIX_CONDITION	condition; // Switch position?
+	MIX_CONDITION	condition:5; // Switch position?
 
-	MIX_MULTIPLEX multiplex;
+	MIX_MULTIPLEX multiplex:2;
 	
 	// What curve are we using?
-	uint8_t curve;
+	uint8_t curve:3;
 
-} SMixer;
+} __attribute__((packed)) SMixer;						// Size = 7
 
 
 extern void mixer_init(); 
