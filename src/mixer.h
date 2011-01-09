@@ -139,10 +139,10 @@ typedef struct
 	MIX_TYPE type:3;
 
 	// Input
-	MIX_INPUT input;
+	MIX_INPUT input:6;
 
 	// Output
-	MIX_OUTPUT output;
+	MIX_OUTPUT output:6;
 
 	uint8_t scale;		// -100...+100 %
 
@@ -152,6 +152,9 @@ typedef struct
 	
 	// What curve are we using?
 	uint8_t curve:3;
+
+	// Level (0 or 1)
+	uint8_t level:1;
 
 } __attribute__((packed)) SMixer;						// Size = 7
 

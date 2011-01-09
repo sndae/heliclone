@@ -300,14 +300,68 @@ int16_t mixer_get_curve_val(uint8_t curve, int16_t input)
 }
 
 /*--------------------------------------------------------------------------------
+ * mixer_single_mix()
+ *--------------------------------------------------------------------------------*/
+void mixer_single_mix(SMixer* mixer)
+{
+	int16_t output;
+	int16_t input;
+	int16_t tempV;
+
+	// Only if the mixer is enabled by its condition...
+	if (mixer_get_condition(mixer->condition))
+	{
+		// Get the output
+		switch (mixer->type)
+		{
+			case MIX_DIRECT:
+				// Output = Input*Scale;
+				input = mixer_get_input(mixer->input);
+				output = (input*mixer->scale)/100;
+				break;
+			case MIX_CURVE:
+				// Output = curve[Input]*Scale;
+				input = mixer_get_input(mixer->input);
+				output = mixer_get_curve_val(mixer->curve, input);
+				output = (output*mixer->scale)/100;
+				break;
+			default:
+				output = 0;
+				break;
+		
+		}
+
+
+		// Multiplexing?
+		switch (mixer->multiplex)
+		{
+			case MIX_ADD:
+				tempV = mixer_get_output(mixer->output);
+				output = tempV + output;
+				break;
+			case MIX_MULTIPLY:
+				tempV = mixer_get_output(mixer->output);
+				output = tempV * output;
+				break;
+			case MIX_REPLACE:
+				// Nothing to do as we want: output = output;
+				break;
+			default:
+				break;
+		}
+		// Now set the output from this mixer...
+		mixer_set_output(mixer->output, output);
+	}
+
+}
+
+/*--------------------------------------------------------------------------------
  * mixer_mix
  *--------------------------------------------------------------------------------*/
 void mixer_mix()
 {
-	uint8_t i,l;
-	int16_t output;
-	int16_t input;
-	int16_t tempV;
+	uint8_t i, m;
+	uint8_t level;
 	SMixer* mixer;
 
 	for (i=0; i<MDL_MAX_CHANNELS; i++)
@@ -320,56 +374,27 @@ void mixer_mix()
 		g_RadioRuntime.srv_s[i] = 0;
 	}
 
-	for (l=0; l<2; l++)
+	// Level 0
+	level = 0;
+	for (m=0; m<MDL_MAX_MIXERS; m++)
 	{
-		for (i=0; i<MDL_MAX_MIXERS; i++)
+		mixer = &g_Model.mixers[m];
+
+		if (mixer->level == level)
 		{
-			mixer = &g_Model.mixers[l][i];
+			mixer_single_mix(mixer);
+		}
+	}
 
-			// Only if the mixer is enabled by its condition...
-			if (mixer_get_condition(mixer->condition))
-			{
-				// Get the output
-				switch (mixer->type)
-				{
-					case MIX_DIRECT:
-						// Output = Input*Scale;
-						input = mixer_get_input(mixer->input);
-						output = (input*mixer->scale)/100;
-						break;
-					case MIX_CURVE:
-						// Output = curve[Input]*Scale;
-						input = mixer_get_input(mixer->input);
-						output = mixer_get_curve_val(mixer->curve, input);
-						output = (output*mixer->scale)/100;
-						break;
-					default:
-						output = 0;
-						break;
-				
-				}
+	// Level 1
+	level = 1;
+	for (m=0; m<MDL_MAX_MIXERS; m++)
+	{
+		mixer = &g_Model.mixers[m];
 
-
-				// Multiplexing?
-				switch (mixer->multiplex)
-				{
-					case MIX_ADD:
-						tempV = mixer_get_output(mixer->output);
-						output = tempV + output;
-						break;
-					case MIX_MULTIPLY:
-						tempV = mixer_get_output(mixer->output);
-						output = tempV * output;
-						break;
-					case MIX_REPLACE:
-						// Nothing to do as we want: output = output;
-						break;
-					default:
-						break;
-				}
-				// Now set the output from this mixer...
-				mixer_set_output(mixer->output, output);
-			}
+		if (mixer->level == level)
+		{
+			mixer_single_mix(mixer);
 		}
 	}
 
