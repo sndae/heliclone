@@ -913,8 +913,10 @@ uint8_t menu_get_setting(uint8_t parameterId)
 			return g_RadioConfig.backlight;
 			break;
 		case RC_SET_BEEP_KEYS:
+			return g_RadioConfig.keyBeep;
 			break;
 		case RC_SET_BEEP_ALARMS:
+			return g_RadioConfig.alarmBeep;
 			break;
 
 		case MC_SET_DIR_CH1:
@@ -973,8 +975,27 @@ void menu_set_setting(uint8_t parameterId, uint8_t newValue)
 			}
 			break;
 		case RC_SET_BEEP_KEYS:
+			g_RadioConfig.keyBeep = newValue;
+			if (g_RadioConfig.keyBeep == 0xFF)
+			{
+				g_RadioConfig.keyBeep = 0;
+			}
+			if (g_RadioConfig.keyBeep > 1)
+			{
+				g_RadioConfig.keyBeep = 1;
+			}
+		
 			break;
 		case RC_SET_BEEP_ALARMS:
+			g_RadioConfig.alarmBeep = newValue;
+			if (g_RadioConfig.alarmBeep == 0xFF)
+			{
+				g_RadioConfig.alarmBeep = 0;
+			}
+			if (g_RadioConfig.alarmBeep > 3)
+			{
+				g_RadioConfig.alarmBeep = 3;
+			}
 			break;
 
 
