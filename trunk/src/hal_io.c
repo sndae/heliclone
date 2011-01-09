@@ -26,7 +26,7 @@
 #include "hal_io.h"
 #include "globals.h"
 
-#define DEBUG_SWITCHES
+//#define DEBUG_SWITCHES
 
 #ifdef DEBUG_SWITCHES
 #ifdef USE_DEBUG_MODE

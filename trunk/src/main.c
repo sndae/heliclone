@@ -32,9 +32,10 @@
 #include "mixer.h"
 #include "globals.h"
 #include "template.h"
+#include "eeprom.h"
 #include <avr\interrupt.h>
 #include <string.h>
-
+#include <stdio.h>
 
 /*--------------------------------------------------------------------------------
  * GLOBALS
@@ -53,6 +54,13 @@ SModel g_Model;
 #define GUI_EVERY_TICK (100)
 #define KEY_EVERY_TICK (100)
 #define IO_EVERY_TICK (100)
+
+
+char EEPROM_INFO_T[] 	PROGMEM = " EEPROM Needs Init ";
+char EEPROM_INFO_1[] 	PROGMEM = "                   ";
+char EEPROM_INFO_2[] 	PROGMEM = "  Please wait for  ";
+char EEPROM_INFO_3[] 	PROGMEM = "  EEPROM to be     ";
+char EEPROM_INFO_4[] 	PROGMEM = "  initialized!!!   ";
 
 /*--------------------------------------------------------------------------------
  * init_main_tick
@@ -150,6 +158,9 @@ int main(void)
     // Init stuff..
     hal_io_init();
 
+	// Eeprom
+	eeprom_init();
+
     // LCD
     lcd_init();
     lcd_contrast(25);
@@ -174,6 +185,33 @@ int main(void)
 	// gui
 	gui_init();
 	menu_init();
+
+
+	// Check EEPROM first, if not OK we must init it...
+	if (eeprom_check() == 0)
+	{
+		// Make sure we post a message about this...
+		menu_show_messagebox(EEPROM_INFO_T, EEPROM_INFO_1, EEPROM_INFO_2, EEPROM_INFO_3, EEPROM_INFO_4);
+		gui_execute(GUI_EVERY_TICK);
+
+		// Save defaults...
+		eeprom_save_radio_config();
+		eeprom_save_model_config(0);
+		eeprom_save_version(0);
+	}
+	else
+	{
+		// Load the user configs...
+		eeprom_load_radio_config();
+		eeprom_load_model_config(g_RadioConfig.selectedModel);
+	}
+
+
+
+#ifdef USE_DEBUG_MODE
+	sprintf(debugLine1, "Model size: %d", sizeof(SModel));
+	sprintf(debugLine2, "Mixer size: %d", sizeof(SMixer));
+#endif	
 
 	// Main loop.
     while (1 == 1)

@@ -39,9 +39,9 @@ extern char debugLine2[20];
 #endif
 
 
-#define MDL_MAX_CHANNELS	(8)
-#define MDL_MAX_MIXERS (12)
-#define MDL_MAX_CURVE_POINTS (5)
+#define MDL_MAX_CHANNELS		(8)
+#define MDL_MAX_MIXERS 			(16)
+#define MDL_MAX_CURVE_POINTS 	(5)
 
 #define SERVO_CHANNEL(N) (N-1)
 #define FUNCTION_INDEX(N) (N-MIX_OUT_AILERON)
@@ -138,21 +138,21 @@ typedef struct
 	int8_t subTrim[MDL_MAX_CHANNELS];							// 8/23
 
 	// Mixers (level 1 and level 2)
-	SMixer mixers[2][MDL_MAX_MIXERS];							// 24*7=
+	SMixer mixers[MDL_MAX_MIXERS];								// 16*5=80/103
 
 	// Servo reverse // 0- Normal, 1-Reverse, 
 	// BIT-field. [BIT 0 => servo 0 etc]
-	uint8_t servoDirection;										// 8/
+	uint8_t servoDirection;										// 1/104
 
 	// Servo vs channel table...
 	// Used to select if CH1 is AIL etc...
-	uint8_t functionToServoTable[MDL_MAX_CHANNELS];				// 8/
+	uint8_t functionToServoTable[MDL_MAX_CHANNELS];				// 8/112
 
 	// Curves
-	int8_t curve[MDL_MAX_CURVES][MDL_MAX_CURVE_POINTS];			// 8*5=30/
+	int8_t curve[MDL_MAX_CURVES][MDL_MAX_CURVE_POINTS];			// 8*5=40/152
 
 	// EXPO
-	int8_t expo[4][2];											// 8
+	int8_t expo[4][2];											// 8/160
 
 } __attribute__((packed)) SModel;
 
@@ -160,6 +160,5 @@ typedef struct
 extern SRadioConfig g_RadioConfig;
 extern SRadioRuntime g_RadioRuntime;
 extern SModel g_Model;
-
 
 #endif // _GLOBALS_H_
