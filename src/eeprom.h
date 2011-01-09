@@ -30,13 +30,14 @@
 
 
 #define EE_VERSION_NUMBER	(0x0000)
+#define EE_MAGIC_NUMBER		(0x4843)
 
 #define EE_MAP_START		(0)
 #define EE_MAGIC			(EE_MAP_START + 0)			// 2 bytes ('HC')
 #define EE_VERSION			(EE_MAP_START + 2)			// 2 bytes (uint16_t)
 
-#define EE_RADIO_CONFIG		(EE_MAP_START + 98)
-#define EE_MODEL_CONGFIG(N)	(EE_MAP_START + (200*N))	// Each model gets 200 bytes..
+#define EE_RADIO_CONFIG		(EE_MAP_START + 4)
+#define EE_MODEL_CONGFIG(N)	(EE_MAP_START + 100 + (200*N))	// Each model gets 200 bytes..
 
 #define EE_MAX_MODELS		(8)						// 8*200 bytes
 

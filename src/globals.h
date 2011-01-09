@@ -98,7 +98,7 @@ typedef struct
 	// Selected model number
 	uint8_t 	selectedModel;
 
-} __attribute__((packed)) SRadioConfig;
+} SRadioConfig;
 
 typedef struct
 {
@@ -154,7 +154,7 @@ typedef struct
 	// EXPO
 	int8_t expo[4][2];											// 8/160
 
-} __attribute__((packed)) SModel;
+} SModel;
 
 // Exported here...but created  in main.c
 extern SRadioConfig g_RadioConfig;
