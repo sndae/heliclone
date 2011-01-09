@@ -156,7 +156,7 @@ typedef struct
 	// Level (0 or 1)
 	uint8_t level:1;
 
-} __attribute__((packed)) SMixer;						// Size = 7
+} SMixer;
 
 
 extern void mixer_init(); 

@@ -24,6 +24,7 @@
  */
 
 #include "eeprom.h"
+#include "globals.h"
 #include <avr/eeprom.h>
 
 /*--------------------------------------------------------------------------------
@@ -45,9 +46,9 @@ uint8_t eeprom_check()
 {
 	uint16_t buf;
 
-	// Get the magic number (
+	// Get the magic number
 	eeprom_read_block(&buf, (void*)EE_MAGIC, sizeof(buf));
-	if (buf != 0x4843) // 'HC'	
+	if (buf != EE_MAGIC_NUMBER)	
 	{
 		return 0; 
 	}
@@ -67,6 +68,17 @@ uint8_t eeprom_check()
  *--------------------------------------------------------------------------------*/
 void eeprom_save_version()
 {
+	
+	// Get the magic number
+	uint16_t buf = EE_MAGIC_NUMBER;
+	eeprom_write_block(&buf, (void*)EE_MAGIC, sizeof(buf));
+
+	while (eeprom_is_ready()!=0);
+
+	buf = EE_VERSION_NUMBER;
+	eeprom_write_block(&buf, (void*)EE_VERSION, sizeof(buf));
+
+	while (eeprom_is_ready()!=0);
 }
 
 /*--------------------------------------------------------------------------------
@@ -74,6 +86,9 @@ void eeprom_save_version()
  *--------------------------------------------------------------------------------*/
 void eeprom_save_radio_config()
 {
+	eeprom_write_block(&g_RadioConfig, (void*)EE_RADIO_CONFIG, sizeof(SRadioConfig));
+	
+	while (eeprom_is_ready()!=0);
 }
 
 /*--------------------------------------------------------------------------------
@@ -81,6 +96,7 @@ void eeprom_save_radio_config()
  *--------------------------------------------------------------------------------*/
 void eeprom_load_radio_config()
 {
+	eeprom_read_block(&g_RadioConfig, (void*)EE_RADIO_CONFIG, sizeof(SRadioConfig));
 }
 
 /*--------------------------------------------------------------------------------
@@ -88,6 +104,9 @@ void eeprom_load_radio_config()
  *--------------------------------------------------------------------------------*/
 void eeprom_save_model_config(uint8_t modelNumber)
 {
+	eeprom_write_block(&g_Model, (void*)EE_MODEL_CONGFIG(modelNumber), sizeof(SModel));
+	
+	while (eeprom_is_ready()!=0);
 }
 
 /*--------------------------------------------------------------------------------
@@ -95,6 +114,7 @@ void eeprom_save_model_config(uint8_t modelNumber)
  *--------------------------------------------------------------------------------*/
 void eeprom_load_model_config(uint8_t modelNumber)
 {
+	eeprom_read_block(&g_Model, (void*)EE_MODEL_CONGFIG(modelNumber), sizeof(SModel));
 }
 
 
