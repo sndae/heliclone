@@ -250,8 +250,6 @@ char MNU_MODEL_CURVE_ID1[] 	PROGMEM = "ID1";
 char MNU_MODEL_CURVE_ID2[] 	PROGMEM = "ID2";
 char MNU_MODEL_CURVE_HLD[] 	PROGMEM = "HOLD";
 
-uint8_t pitchCurves = 0;
-
 uint8_t menu_model_curve_edit(GUI_EVENT event, uint8_t elapsedTime)
 {
 	char* menuTitle;
