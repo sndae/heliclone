@@ -59,11 +59,11 @@ void template_simulator()
 	g_Model.curve[MDL_CURVE_THR_ID1][4] = 100;
 
 	// Throttle Curve ID2
-	g_Model.curve[MDL_CURVE_THR_ID2][0] = 90;
-	g_Model.curve[MDL_CURVE_THR_ID2][1] = 90;
-	g_Model.curve[MDL_CURVE_THR_ID2][2] = 90;
-	g_Model.curve[MDL_CURVE_THR_ID2][3] = 90;
-	g_Model.curve[MDL_CURVE_THR_ID2][4] = 90;
+	g_Model.curve[MDL_CURVE_THR_ID2][0] = -100;
+	g_Model.curve[MDL_CURVE_THR_ID2][1] = -50;
+	g_Model.curve[MDL_CURVE_THR_ID2][2] = 0;
+	g_Model.curve[MDL_CURVE_THR_ID2][3] = 50;
+	g_Model.curve[MDL_CURVE_THR_ID2][4] = 100;
 
 	// Throttle Curve HOLD
 	g_Model.curve[MDL_CURVE_THR_HOLD][0] = -100;
