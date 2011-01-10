@@ -250,6 +250,8 @@ char MNU_MODEL_CURVE_ID1[] 	PROGMEM = "ID1";
 char MNU_MODEL_CURVE_ID2[] 	PROGMEM = "ID2";
 char MNU_MODEL_CURVE_HLD[] 	PROGMEM = "HOLD";
 
+uint8_t cursorCurve = 0;
+uint8_t changedCurve = 0;
 uint8_t menu_model_curve_edit(GUI_EVENT event, uint8_t elapsedTime)
 {
 	char* menuTitle;
@@ -322,13 +324,50 @@ uint8_t menu_model_curve_edit(GUI_EVENT event, uint8_t elapsedTime)
 	switch (event)
 	{
 		case GUI_EVT_SHOW:
+			cursorCurve = 0;
+			changedCurve = 0;
 			break;
 		case GUI_EVT_HIDE:
 			break;
 		case GUI_EVT_KEY_EXIT:
-			// We are done...
+			// We are done...restore?
+			if (changedCurve == 1)
+			{
+				eeprom_load_model_config(g_RadioConfig.selectedModel);
+			}
 			gui_screen_pop();
 			break;
+		case GUI_EVT_KEY_MENU:
+			// We are done...Save?
+			if (changedCurve == 1)
+			{
+				eeprom_save_model_config(g_RadioConfig.selectedModel);
+			}
+			gui_screen_pop();
+			break;
+		case GUI_EVT_KEY_UP:
+			cursorCurve--;
+			if (cursorCurve < 0)
+			{
+				cursorSetting = 4;
+			}
+			break;
+		case GUI_EVT_KEY_DOWN:
+			cursorCurve++;
+			if (cursorCurve > 4)
+			{
+				cursorCurve = 0;
+			}
+			break;
+		case GUI_EVT_KEY_RIGHT:
+			g_Model.curve[c][cursorCurve] += 1;
+			changedCurve = 1;
+			break;
+		case GUI_EVT_KEY_LEFT:
+			g_Model.curve[c][cursorCurve] -= 1;
+			changedCurve = 1;
+			break;
+
 		default:
 			break;
 	}
@@ -356,7 +395,14 @@ uint8_t menu_model_curve_edit(GUI_EVENT event, uint8_t elapsedTime)
 	for (i=0; i<MDL_MAX_CURVE_POINTS; i++)
 	{
 		lcd_outdezAtt(1*LCD_FONT_WIDTH, (i + 2)*LCD_FONT_HEIGHT, i+1, LCD_NO_INV);
-		lcd_outdezAtt(7*LCD_FONT_WIDTH, (i + 2)*LCD_FONT_HEIGHT, g_Model.curve[c][i], LCD_NO_INV);
+		if (cursorCurve == i)
+		{
+			lcd_outdezAtt(7*LCD_FONT_WIDTH, (i + 2)*LCD_FONT_HEIGHT, g_Model.curve[c][i], LCD_INVERS);
+		}
+		else
+		{
+			lcd_outdezAtt(7*LCD_FONT_WIDTH, (i + 2)*LCD_FONT_HEIGHT, g_Model.curve[c][i], LCD_NO_INV);
+		}
 	}
 
 	// Draw the curve...
@@ -409,7 +455,6 @@ uint8_t menu_model_curve_edit(GUI_EVENT event, uint8_t elapsedTime)
 			py2 = LCD_DISPLAY_H-1;
 		}
 
-		//lcd_line(95 + (x1*32/100), 31 - (y1*32/100), 95 + (x2*32/100), 31 - (y2*32/100));
 		lcd_line(px1, py1, px2, py2);
 
 		x1 = x2;
