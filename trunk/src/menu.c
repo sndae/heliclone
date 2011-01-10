@@ -27,6 +27,7 @@
 #include "gui.h"
 #include "lcd.h"
 #include "adc.h"
+#include "eeprom.h"
 #include "globals.h"
 #include <avr/pgmspace.h>
 #include <string.h>
@@ -421,7 +422,7 @@ char MNU_ADC_CALIB[] 	PROGMEM = "Calibrate Sticks: ";
 char MNU_ADC_INFO_T[] 	PROGMEM = "   HLP:Calibrate!  ";
 char MNU_ADC_INFO_1[] 	PROGMEM = "Move sticks to all ";
 char MNU_ADC_INFO_2[] 	PROGMEM = "ends. Center the   ";
-char MNU_ADC_INFO_3[] 	PROGMEM = "sticks. Press any  ";
+char MNU_ADC_INFO_3[] 	PROGMEM = "sticks. Press MENU ";
 char MNU_ADC_INFO_4[] 	PROGMEM = "key to SAVE.       ";
 
 uint8_t menu_adc_calibrate(GUI_EVENT event, uint8_t elapsedTime)
@@ -473,8 +474,16 @@ uint8_t menu_adc_calibrate(GUI_EVENT event, uint8_t elapsedTime)
 		case GUI_EVT_TICK:
 		case GUI_EVT_HIDE:
 			break;
+		case GUI_EVT_KEY_MENU:
+			// Save EEPROM if pressed MENU
+			eeprom_save_radio_config();
+			gui_screen_pop();
+			break;
 		default:
 			// We are done...remove us on any key-event
+			// make sure to load back old settings to
+			// undo calibration...
+			eeprom_load_radio_config();
 			gui_screen_pop();
 			break;
 	}

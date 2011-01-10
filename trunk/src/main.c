@@ -85,6 +85,9 @@ void load_model_defaults()
 
 	// Use a template to create defaults
 	template_simulator();
+
+	// The one and only model from start...
+	g_RadioConfig.selectedModel = 0;
 }
 
 /*--------------------------------------------------------------------------------
@@ -196,8 +199,8 @@ int main(void)
 
 		// Save defaults...
 		eeprom_save_radio_config();
-		eeprom_save_model_config(0);
-		eeprom_save_version(0);
+		eeprom_save_model_config(g_RadioConfig.selectedModel);
+		eeprom_save_version();
 	}
 	else
 	{
