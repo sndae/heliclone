@@ -29,6 +29,7 @@
 #include "adc.h"
 #include "eeprom.h"
 #include "globals.h"
+#include "hal_io.h"
 #include <avr/pgmspace.h>
 #include <string.h>
 
@@ -52,6 +53,9 @@ uint8_t menu_radio_install(GUI_EVENT event, uint8_t elapsedTime);
 /*--------------------------------------------------------------------------------
  * LOCALS
  *--------------------------------------------------------------------------------*/
+
+#define MNU_ID_PITCH_CURVE (0x12)
+#define MNU_ID_THROTTLE_CURVE (0x13)
 
 typedef enum
 {
@@ -85,6 +89,20 @@ typedef enum
 	MC_SET_SUBT_CH8
 } PARAMETER_ID;
 
+typedef struct 
+{
+	uint8_t id;
+	char* text;
+	char* alternatives;
+	uint8_t parameterId;
+	GUI_SCREEN_FPTR screen;
+} SSelection;
+
+
+SSelection* currentSettings;
+uint8_t numSettings = 0;
+int8_t cursorSetting = -1;
+uint8_t settingValue = -1;
 
 /*--------------------------------------------------------------------------------
  * menu_init
@@ -218,6 +236,191 @@ void menu_show_messagebox(char *title, char *row1, char *row2, char* row3, char*
 	gui_screen_push(&menu_message_box);
 }
 
+/*--------------------------------------------------------------------------------
+ * menu_model_curve_edit
+ *--------------------------------------------------------------------------------*/
+char MNU_MODEL_PITCH_CURVE_TITLE[] 		PROGMEM = "Pitch Curves";
+char MNU_MODEL_THROTTLE_CURVE_TITLE[] 	PROGMEM = "Throttle Curves";
+
+char MNU_MODEL_PITCH_CURVE[] 			PROGMEM = "PIT";
+char MNU_MODEL_THROTTLE_CURVE[] 		PROGMEM = "THR";
+
+char MNU_MODEL_CURVE_ID0[] 	PROGMEM = "ID0";
+char MNU_MODEL_CURVE_ID1[] 	PROGMEM = "ID1";
+char MNU_MODEL_CURVE_ID2[] 	PROGMEM = "ID2";
+char MNU_MODEL_CURVE_HLD[] 	PROGMEM = "HOLD";
+
+uint8_t pitchCurves = 0;
+
+uint8_t menu_model_curve_edit(GUI_EVENT event, uint8_t elapsedTime)
+{
+	char* menuTitle;
+	uint8_t menuId;
+	uint8_t i, c = 0;
+	char* modeStr = MNU_MODEL_CURVE_ID0;
+	int16_t x1,y1,x2,y2;
+	int16_t px1,py1,px2,py2;
+	SSelection* selection;
+
+	// Keep track of PITCH or THROTTLE curves???
+	selection = (SSelection*)&currentSettings[cursorSetting];
+	menuId = (uint8_t)pgm_read_byte(&selection->id);
+	if (menuId == MNU_ID_PITCH_CURVE)
+	{
+		menuTitle = MNU_MODEL_PITCH_CURVE;
+
+		if (hal_io_get_sw(SW_ID0))
+		{
+			c = MDL_CURVE_PIT_ID0;
+			modeStr = MNU_MODEL_CURVE_ID0;
+		}
+		else if (hal_io_get_sw(SW_ID1))
+		{
+			c = MDL_CURVE_PIT_ID1;
+			modeStr = MNU_MODEL_CURVE_ID1;
+		}
+		else if (hal_io_get_sw(SW_ID2))
+		{
+			c = MDL_CURVE_PIT_ID2;
+			modeStr = MNU_MODEL_CURVE_ID2;
+		}
+		
+		// Override with HOLD
+		if (hal_io_get_sw(SW_THR))
+		{
+			c = MDL_CURVE_PIT_HOLD;
+			modeStr = MNU_MODEL_CURVE_HLD;
+		}
+
+	}
+	else
+	{
+		menuTitle = MNU_MODEL_THROTTLE_CURVE;
+
+		if (hal_io_get_sw(SW_ID0))
+		{
+			c = MDL_CURVE_THR_ID0;
+			modeStr = MNU_MODEL_CURVE_ID0;
+		}
+		else if (hal_io_get_sw(SW_ID1))
+		{
+			c = MDL_CURVE_THR_ID1;
+			modeStr = MNU_MODEL_CURVE_ID1;
+		}
+		else if (hal_io_get_sw(SW_ID2))
+		{
+			c = MDL_CURVE_THR_ID2;
+			modeStr = MNU_MODEL_CURVE_ID2;
+		}
+		
+		// Override with HOLD
+		if (hal_io_get_sw(SW_THR))
+		{
+			c = MDL_CURVE_THR_HOLD;
+			modeStr = MNU_MODEL_CURVE_HLD;
+		}
+	}
+
+	switch (event)
+	{
+		case GUI_EVT_SHOW:
+			break;
+		case GUI_EVT_HIDE:
+			break;
+		case GUI_EVT_KEY_EXIT:
+			// We are done...
+			gui_screen_pop();
+			break;
+		default:
+			break;
+	}
+
+	lcd_clear();
+	lcd_puts_P( 0, 0, menuTitle);
+	lcd_puts_P( 5*LCD_FONT_WIDTH, 0, modeStr);
+
+	// Draw the X-Y-axis... (64x64 pixels)
+	lcd_hline(LCD_DISPLAY_W-64, LCD_DISPLAY_H-32,    64);
+	lcd_vline(LCD_DISPLAY_W-32, LCD_DISPLAY_H-64,    64);
+
+	// Scale on X-axis
+	lcd_vline(LCD_DISPLAY_W-64, LCD_DISPLAY_H-33,    3);
+	lcd_vline(LCD_DISPLAY_W-48, LCD_DISPLAY_H-33,    3);
+	lcd_vline(LCD_DISPLAY_W-16, LCD_DISPLAY_H-33,    3);
+	lcd_vline(LCD_DISPLAY_W-1, LCD_DISPLAY_H-33,    3);
+
+	// Scale on Y-axis
+	lcd_hline(LCD_DISPLAY_W-33, LCD_DISPLAY_H-64,    3);
+	lcd_hline(LCD_DISPLAY_W-33, LCD_DISPLAY_H-48,    3);
+	lcd_hline(LCD_DISPLAY_W-33, LCD_DISPLAY_H-16,    3);
+	lcd_hline(LCD_DISPLAY_W-33, LCD_DISPLAY_H-1,    3);
+
+	for (i=0; i<MDL_MAX_CURVE_POINTS; i++)
+	{
+		lcd_outdezAtt(1*LCD_FONT_WIDTH, (i + 2)*LCD_FONT_HEIGHT, i+1, LCD_NO_INV);
+		lcd_outdezAtt(7*LCD_FONT_WIDTH, (i + 2)*LCD_FONT_HEIGHT, g_Model.curve[c][i], LCD_NO_INV);
+	}
+
+	// Draw the curve...
+	x1 = -100;
+	y1 = g_Model.curve[c][0];
+
+	for (i=1; i<MDL_MAX_CURVE_POINTS; i++)
+	{
+		x2 = x1 + 50;
+		y2 = g_Model.curve[c][i];
+
+		px1 = 95 + (x1*32/100);
+		py1 = 31 - (y1*32/100);
+		px2 = 95 + (x2*32/100);
+		py2 = 31 - (y2*32/100);
+
+		if (px1 < 0)
+		{
+			px1 = 0;
+		}
+		if (px1 >= LCD_DISPLAY_W)
+		{
+			px1 = LCD_DISPLAY_W-1;
+		}
+
+		if (px2 < 0)
+		{
+			px2 = 0;
+		}
+		if (px2 >= LCD_DISPLAY_W)
+		{
+			px2 = LCD_DISPLAY_W-1;
+		}
+
+		if (py1 < 0)
+		{
+			py1 = 0;
+		}
+		if (py1 >= LCD_DISPLAY_H)
+		{
+			py1 = LCD_DISPLAY_H-1;
+		}
+
+		if (py2 < 0)
+		{
+			py2 = 0;
+		}
+		if (py2 >= LCD_DISPLAY_H)
+		{
+			py2 = LCD_DISPLAY_H-1;
+		}
+
+		//lcd_line(95 + (x1*32/100), 31 - (y1*32/100), 95 + (x2*32/100), 31 - (y2*32/100));
+		lcd_line(px1, py1, px2, py2);
+
+		x1 = x2;
+		y1 = y2;
+
+	}
+
+	return 1;
+}
 
 /*--------------------------------------------------------------------------------
  * menu_model_servo_direction
@@ -896,21 +1099,6 @@ SMenu* currentMenu = (SMenu*)&ModelSelection;
 uint8_t menuNavigation = 1;
 
 
-typedef struct 
-{
-	char* text;
-	char* alternatives;
-	uint8_t parameterId;
-	GUI_SCREEN_FPTR screen;
-} SSelection;
-
-
-SSelection* currentSettings;
-uint8_t numSettings = 0;
-int8_t cursorSetting = -1;
-uint8_t settingValue = -1;
-
-
 uint8_t menu_get_setting(uint8_t parameterId)
 {
 	switch (parameterId)
@@ -1190,19 +1378,35 @@ uint8_t menu_settings(GUI_EVENT event, uint8_t elapsedTime)
 // Model Config
 //
 
-SSelection modelConfig[2] PROGMEM = 
+SSelection modelConfig[4] PROGMEM = 
 {
 	{
+		0x10,
 		MNU_MODEL_SERVO_TITLE,
 		0,
 		0,
 		&menu_model_servo_direction
 	},
 	{
+		0x11,
 		MNU_MODEL_SERVO_SUBTRIM_TITLE,
 		0,
 		0,
 		&menu_model_servo_subtrim
+	},
+	{
+		MNU_ID_PITCH_CURVE,
+		MNU_MODEL_PITCH_CURVE_TITLE,
+		0,
+		0,
+		&menu_model_curve_edit
+	},
+	{
+		MNU_ID_THROTTLE_CURVE,
+		MNU_MODEL_THROTTLE_CURVE_TITLE,
+		0,
+		0,
+		&menu_model_curve_edit
 	}
 	
 };
@@ -1213,7 +1417,7 @@ uint8_t menu_model_config(GUI_EVENT event, uint8_t elapsedTime)
 	switch (event)
 	{
 		case GUI_EVT_SHOW:
-			numSettings = 2;
+			numSettings = 4;
 			currentSettings = (SSelection*)&modelConfig[0];
 			break;
 		default:
@@ -1239,24 +1443,28 @@ char MNU_RADIO_CONFIG_BEEP_ALARMS_SEL[] PROGMEM = " 1  | 2  | 3  |OFF ";
 SSelection radioSettings[4] PROGMEM = 
 {
 	{
+		0x20,
 		MNU_RADIO_CONFIG_VOLTAGE,
 		MNU_RADIO_CONFIG_VOLTAGE_SEL,
 		RC_SET_VOLTAGE,
 		0
 	},
 	{
+		0x21,
 		MNU_RADIO_CONFIG_BACKLIGHT,
 		MNU_RADIO_CONFIG_BACKLIGHT_SEL,
 		RC_SET_BACKLIGHT,
 		0
 	},
 	{
+		0x22,
 		MNU_RADIO_CONFIG_BEEP_KEYS,
 		MNU_RADIO_CONFIG_BEEP_KEYS_SEL,
 		RC_SET_BEEP_KEYS,
 		0
 	},
 	{
+		0x23,
 		MNU_RADIO_CONFIG_BEEP_ALARMS,
 		MNU_RADIO_CONFIG_BEEP_ALARMS_SEL,
 		RC_SET_BEEP_ALARMS,
@@ -1290,6 +1498,7 @@ char MNU_RADIO_INSTALL_CALIBRATE[] 		PROGMEM = "Calibrate Sticks";
 SSelection radioInstalling[1] PROGMEM = 
 {
 	{
+		0x30,
 		MNU_RADIO_INSTALL_CALIBRATE,
 		0,
 		0,
