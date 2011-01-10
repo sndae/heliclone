@@ -82,6 +82,7 @@ extern void lcd_plot_xor(uint8_t x, uint8_t y);
 extern void lcd_hline_xor(uint8_t x, uint8_t y, int8_t w);
 extern void lcd_hlineStip_xor(uint8_t x, uint8_t y, int8_t w, uint8_t pat);
 extern void lcd_vline_xor(uint8_t x, uint8_t y, int8_t h);
+extern void lcd_line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2);
 
 extern void lcd_img_f(uint8_t x, uint8_t y);
 extern void lcd_img(uint8_t i_x, uint8_t i_y, uint8_t *imgdat, uint8_t idx, uint8_t mode);
