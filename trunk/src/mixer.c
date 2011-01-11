@@ -49,6 +49,59 @@ void mixer_init()
 }
 
 /*--------------------------------------------------------------------------------
+ * mixer_expo
+ *--------------------------------------------------------------------------------*/
+int16_t mixer_expo(MIX_INPUT source, int16_t value)
+{
+	int16_t tempV;
+	int16_t expo = 0;
+	uint8_t mode = MDL_EXPO_NORM;
+
+	switch (source)
+	{
+		case MIX_IN_AIL:
+			if (hal_io_get_sw(SW_AILDR))
+			{
+				mode = MDL_EXPO_DUAL;
+			}
+			break;
+		case MIX_IN_ELE:
+			if (hal_io_get_sw(SW_ELEDR))
+			{
+				mode = MDL_EXPO_DUAL;
+			}
+			break;
+		case MIX_IN_RUD:
+			if (hal_io_get_sw(SW_RUDDR))
+			{
+				mode = MDL_EXPO_DUAL;
+			}
+			break;
+		default:
+			return value;
+	}
+
+	expo = g_Model.expo[source][mode];
+
+	if (expo == 0)
+	{
+		return value;
+	}
+
+	// Calculate expo...
+	tempV = value * value;
+	tempV /=100;
+	tempV *= value;
+	tempV /=100;
+	tempV *= expo;
+	tempV /=100;
+	tempV += (value*(100-expo))/100;
+
+	return (int16_t)tempV;
+}
+
+
+/*--------------------------------------------------------------------------------
  * mixer_get_input
  *--------------------------------------------------------------------------------*/
 int16_t mixer_get_input(MIX_INPUT source)
@@ -65,7 +118,7 @@ int16_t mixer_get_input(MIX_INPUT source)
 		case MIX_IN_POT2:
 		case MIX_IN_POT3:
 			index = source - MIX_IN_AIL;
-			return g_RadioRuntime.adc_s[index];
+			return mixer_expo(source, g_RadioRuntime.adc_s[index]);
 
 		// Level 1 mixers...
 		case MIX_IN_MIXER_1:

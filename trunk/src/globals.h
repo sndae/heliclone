@@ -74,6 +74,11 @@ typedef enum
 	MDL_MAX_TYPES
 } MDL_TYPE;
 
+typedef enum
+{
+	MDL_EXPO_NORM = 0x0,
+	MDL_EXPO_DUAL
+} MDL_EXPO;
 
 
 typedef struct

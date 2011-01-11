@@ -34,6 +34,9 @@ void template_simulator()
 	// All servos NORMAL direction
 	g_Model.servoDirection = 0x00;
 
+	// Sim type
+	g_Model.type = MDL_TYPE_HELI_SIM;
+
 	// FlySky original mapping...
 	g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_AILERON)] = SERVO_CHANNEL(1);
 	g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_ELEVATOR)] = SERVO_CHANNEL(2);
@@ -205,6 +208,16 @@ void template_simulator()
 	g_Model.mixers[10].multiplex = MIX_REPLACE;
 	g_Model.mixers[10].curve = MDL_CURVE_PIT_HOLD;
 	g_Model.mixers[10].level = 0;
+
+	// Default 25% EXPO in Normal mode
+	g_Model.expo[MIX_IN_AIL][MDL_EXPO_NORM] = 25;
+	g_Model.expo[MIX_IN_AIL][MDL_EXPO_DUAL] = 0;
+	g_Model.expo[MIX_IN_THR][MDL_EXPO_NORM] = 25;
+	g_Model.expo[MIX_IN_THR][MDL_EXPO_DUAL] = 0;
+	g_Model.expo[MIX_IN_ELE][MDL_EXPO_NORM] = 25;
+	g_Model.expo[MIX_IN_ELE][MDL_EXPO_DUAL] = 0;
+	g_Model.expo[MIX_IN_RUD][MDL_EXPO_NORM] = 25;
+	g_Model.expo[MIX_IN_RUD][MDL_EXPO_DUAL] = 0;
 
 }
 
