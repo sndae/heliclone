@@ -361,10 +361,18 @@ uint8_t menu_model_curve_edit(GUI_EVENT event, uint8_t elapsedTime)
 			break;
 		case GUI_EVT_KEY_RIGHT:
 			g_Model.curve[c][cursorCurve] += 1;
+			if (g_Model.curve[c][cursorCurve] > 100)
+			{
+				g_Model.curve[c][cursorCurve] = 100;
+			}
 			changedCurve = 1;
 			break;
 		case GUI_EVT_KEY_LEFT:
 			g_Model.curve[c][cursorCurve] -= 1;
+			if (g_Model.curve[c][cursorCurve] < -100)
+			{
+				g_Model.curve[c][cursorCurve] = -100;
+			}
 			changedCurve = 1;
 			break;
 
