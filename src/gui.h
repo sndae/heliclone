@@ -52,7 +52,8 @@ typedef enum
 	GUI_EVT_KEY_MENU,
 	GUI_EVT_KEY_MENU_LONG,
 	GUI_EVT_KEY_EXIT,
-	GUI_EVT_KEY_EXIT_LONG
+	GUI_EVT_KEY_EXIT_LONG,
+	GUI_EVT_POT_MOVE,
 } GUI_EVENT;
 
 
@@ -74,6 +75,8 @@ typedef enum
 	KEY_REPEAT,
 	KEY_WAIT_FOR_RELEASE
 } GUI_KEY_STATE;
+
+#define GUI_POT (6)
 
 typedef uint8_t (*GUI_SCREEN_FPTR)(GUI_EVENT event, uint8_t elapsedTime);
 
