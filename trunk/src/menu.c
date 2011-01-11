@@ -170,7 +170,20 @@ uint8_t menu_model_name_edit(GUI_EVENT event, uint8_t elapsedTime)
 			break;
 		case GUI_EVT_KEY_DOWN:
 			cursor2--;
-			if (cursor2 < 0)
+			if (cursor2 < 32)
+			{
+				cursor2 = 122;
+			}
+			g_Model.name[cursor] = (char)cursor2;
+			changedModel = 1;
+			break;
+		case GUI_EVT_POT_MOVE:
+			cursor2 = (int8_t)g_RadioRuntime.adc_s[GUI_POT]/2 + 80;
+			if (cursor2 < 32)
+			{
+				cursor2 = 32;
+			}
+			if (cursor2 > 122)
 			{
 				cursor2 = 122;
 			}
@@ -308,12 +321,22 @@ uint8_t menu_message_box(GUI_EVENT event, uint8_t elapsedTime)
 				gui_screen_pop();
 			}
 			break;
-		//case GUI_EVT_KEY_EXIT_LONG:
-		//	gui_screen_pop();
-		//	break;
-		default:
-			// All other events close the message box...
+		case GUI_EVT_KEY_UP:
+		case GUI_EVT_KEY_UP_LONG:
+		case GUI_EVT_KEY_DOWN:
+		case GUI_EVT_KEY_DOWN_LONG:
+		case GUI_EVT_KEY_LEFT:
+		case GUI_EVT_KEY_LEFT_LONG:
+		case GUI_EVT_KEY_RIGHT:
+		case GUI_EVT_KEY_RIGHT_LONG:
+		case GUI_EVT_KEY_MENU:
+		case GUI_EVT_KEY_MENU_LONG:
+		case GUI_EVT_KEY_EXIT:
+		case GUI_EVT_KEY_EXIT_LONG:
+			// All other key events close the message box...
 			gui_screen_pop();
+			break;
+		default:
 			break;
 	}
 
@@ -472,6 +495,18 @@ uint8_t menu_model_curve_edit(GUI_EVENT event, uint8_t elapsedTime)
 			}
 			changedModel = 1;
 			break;
+		case GUI_EVT_POT_MOVE:
+			g_Model.curve[c][cursor] = g_RadioRuntime.adc_s[GUI_POT];
+			if (g_Model.curve[c][cursor] < -100)
+			{
+				g_Model.curve[c][cursor] = -100;
+			}
+			if (g_Model.curve[c][cursor] > 100)
+			{
+				g_Model.curve[c][cursor] = 100;
+			}
+			changedModel = 1;
+			break;
 
 		default:
 			break;
@@ -591,13 +626,26 @@ uint8_t menu_model_servo_direction(GUI_EVENT event, uint8_t elapsedTime)
 	{
 		case GUI_EVT_SHOW:
 			servoSelected = 0;
+			changedModel = 0;
 			break;
 		case GUI_EVT_HIDE:
 			break;
 		case GUI_EVT_TICK:
 			break;
 		case GUI_EVT_KEY_EXIT:
-			// We are done...remove us on any key-event
+			// We are done...restore?
+			if (changedModel == 1)
+			{
+				eeprom_load_model_config(g_RadioConfig.selectedModel);
+			}
+			gui_screen_pop();
+			break;
+		case GUI_EVT_KEY_MENU:
+			// We are done...save?
+			if (changedModel == 1)
+			{
+				eeprom_save_model_config(g_RadioConfig.selectedModel);
+			}
 			gui_screen_pop();
 			break;
 		case GUI_EVT_KEY_RIGHT:
@@ -607,12 +655,7 @@ uint8_t menu_model_servo_direction(GUI_EVENT event, uint8_t elapsedTime)
 			servoSelected--;
 			break;
 		case GUI_EVT_KEY_DOWN:
-			servoSelected += 3;
-			break;
 		case GUI_EVT_KEY_UP:
-			servoSelected -= 3;
-			break;
-		case GUI_EVT_KEY_MENU:
 			v = menu_get_setting(servoSelected + MC_SET_DIR_CH1);
 			if (v == 0)
 			{
@@ -623,6 +666,7 @@ uint8_t menu_model_servo_direction(GUI_EVENT event, uint8_t elapsedTime)
 				v = 0;
 			}
 			menu_set_setting(servoSelected + MC_SET_DIR_CH1, v);
+			changedModel = 1;
 			break;
 		default:
 			break;
@@ -693,31 +737,50 @@ uint8_t menu_model_servo_subtrim(GUI_EVENT event, uint8_t elapsedTime)
 	{
 		case GUI_EVT_SHOW:
 			servoSelected = 0;
+			changedModel = 0;
 			break;
 		case GUI_EVT_HIDE:
 			break;
 		case GUI_EVT_TICK:
 			break;
 		case GUI_EVT_KEY_EXIT:
-			// We are done...remove us on any key-event
+			// We are done...restore?
+			if (changedModel == 1)
+			{
+				eeprom_load_model_config(g_RadioConfig.selectedModel);
+			}
 			gui_screen_pop();
 			break;
-		case GUI_EVT_KEY_DOWN:
-			servoSelected += 3;
-			break;
-		case GUI_EVT_KEY_UP:
-			servoSelected -= 3;
+		case GUI_EVT_KEY_MENU:
+			// We are done...save?
+			if (changedModel == 1)
+			{
+				eeprom_save_model_config(g_RadioConfig.selectedModel);
+			}
+			gui_screen_pop();
 			break;
 		case GUI_EVT_KEY_RIGHT:
+			servoSelected += 1;
+			break;
+		case GUI_EVT_KEY_LEFT:
+			servoSelected -= 1;
+			break;
+		case GUI_EVT_KEY_UP:
 			v = menu_get_setting(servoSelected + MC_SET_SUBT_CH1);
 			v += 1;
 			menu_set_setting(servoSelected + MC_SET_SUBT_CH1, v);
+			changedModel = 1;
 			break;
-		case GUI_EVT_KEY_LEFT:
+		case GUI_EVT_KEY_DOWN:
 			v = menu_get_setting(servoSelected + MC_SET_SUBT_CH1);
 			v -= 1;
 			menu_set_setting(servoSelected + MC_SET_SUBT_CH1, v);
+			changedModel = 1;
 			break;
+		case GUI_EVT_POT_MOVE:
+			v = g_RadioRuntime.adc_s[GUI_POT];
+			menu_set_setting(servoSelected + MC_SET_SUBT_CH1, v);
+			changedModel = 1;
 		default:
 			break;
 	}
@@ -830,12 +893,24 @@ uint8_t menu_adc_calibrate(GUI_EVENT event, uint8_t elapsedTime)
 			eeprom_save_radio_config();
 			gui_screen_pop();
 			break;
-		default:
+		case GUI_EVT_KEY_UP:
+		case GUI_EVT_KEY_UP_LONG:
+		case GUI_EVT_KEY_DOWN:
+		case GUI_EVT_KEY_DOWN_LONG:
+		case GUI_EVT_KEY_LEFT:
+		case GUI_EVT_KEY_LEFT_LONG:
+		case GUI_EVT_KEY_RIGHT:
+		case GUI_EVT_KEY_RIGHT_LONG:
+		case GUI_EVT_KEY_MENU_LONG:
+		case GUI_EVT_KEY_EXIT:
+		case GUI_EVT_KEY_EXIT_LONG:
 			// We are done...remove us on any key-event
 			// make sure to load back old settings to
 			// undo calibration...
 			eeprom_load_radio_config();
 			gui_screen_pop();
+			break;
+		default:
 			break;
 	}
 

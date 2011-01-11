@@ -29,6 +29,7 @@
 #include "hal_io.h"
 #include <avr/pgmspace.h>
 #include <string.h>
+#include <stdlib.h>
 
 /*--------------------------------------------------------------------------------
  * Defines & Macros
@@ -67,6 +68,8 @@ uint8_t longPressEnabled = 1;
 GUI_EVENT eventQueue[EVENT_QUEUE_LEN];
 uint8_t eventQueueWritePtr;
 uint8_t eventQueueReadPtr;
+
+int16_t lastNextPrevious = 0;
 
 /*--------------------------------------------------------------------------------
  * Constants
@@ -117,6 +120,7 @@ void gui_init()
 	eventQueueWritePtr = 0;
 	eventQueueReadPtr = 0;
 
+	lastNextPrevious = 0;
 }
 
 
@@ -311,6 +315,15 @@ void gui_handle_keys(uint8_t elapsedTime)
 		// Next keymask
 		maskPtr++;
 	}
+
+
+	// Use the ADC from POT7 to generate POT_MOVE events...for easier GUI.
+	if (g_RadioRuntime.adc_s[GUI_POT] != lastNextPrevious)
+	{
+		gui_event_put(GUI_EVT_POT_MOVE);
+	}
+	lastNextPrevious = g_RadioRuntime.adc_s[GUI_POT];
+
 }
 
 /*--------------------------------------------------------------------------------
