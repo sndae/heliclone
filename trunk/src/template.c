@@ -29,7 +29,7 @@
 
 void template_simulator() 
 {
-	strncpy(&(g_Model.name[0]), "Simulator", 10);
+	strncpy(&(g_Model.name[0]), "Simulator  ", 10);
 
 	// All servos NORMAL direction
 	g_Model.servoDirection = 0x00;

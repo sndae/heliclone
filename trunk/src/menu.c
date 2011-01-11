@@ -103,6 +103,9 @@ SSelection* currentSettings;
 uint8_t numSettings = 0;
 int8_t cursorSetting = -1;
 uint8_t settingValue = -1;
+uint8_t changedModel = 0;
+int8_t cursor = 0;
+int8_t cursor2 = 0;
 
 /*--------------------------------------------------------------------------------
  * menu_init
@@ -119,6 +122,101 @@ void menu_init()
 	}
 	
 }
+
+
+/*--------------------------------------------------------------------------------
+ * menu_model_name_edit
+ *--------------------------------------------------------------------------------*/
+char MNU_MODEL_NAME_EDIT_TITLE[] 		PROGMEM = "Model Name";
+char MNU_MODEL_NAME_EDIT[] 				PROGMEM = "Name:";
+
+uint8_t menu_model_name_edit(GUI_EVENT event, uint8_t elapsedTime)
+{
+	uint8_t i;
+	uint8_t x,y;
+
+	switch (event)
+	{
+		case GUI_EVT_SHOW:
+			cursor = 0;
+			cursor2 = g_Model.name[cursor];
+			break;
+		case GUI_EVT_HIDE:
+			break;
+		case GUI_EVT_KEY_EXIT:
+			// We are done...restore?
+			if (changedModel == 1)
+			{
+				eeprom_load_model_config(g_RadioConfig.selectedModel);
+			}
+			gui_screen_pop();
+			break;
+		case GUI_EVT_KEY_MENU:
+			// We are done...Save?
+			if (changedModel == 1)
+			{
+				eeprom_save_model_config(g_RadioConfig.selectedModel);
+			}
+			gui_screen_pop();
+			break;
+		case GUI_EVT_KEY_UP:
+			cursor2++;
+			if (cursor2 > 122)
+			{
+				cursor2 = 32;
+			}
+			g_Model.name[cursor] = (char)cursor2;
+			changedModel = 1;
+			break;
+		case GUI_EVT_KEY_DOWN:
+			cursor2--;
+			if (cursor2 < 0)
+			{
+				cursor2 = 122;
+			}
+			g_Model.name[cursor] = (char)cursor2;
+			changedModel = 1;
+			break;
+		case GUI_EVT_KEY_RIGHT:
+			cursor++;
+			if (cursor > 10)
+			{
+				cursor = 0;
+			}
+			break;
+		case GUI_EVT_KEY_LEFT:
+			cursor--;
+			if (cursor < 0)
+			{
+				cursor = 9;
+			}
+			break;
+		default:
+			break;
+	}
+
+	lcd_clear();
+	lcd_puts_P( 0, 0, MNU_MODEL_NAME_EDIT_TITLE);
+	lcd_puts_P( 0, 2*LCD_FONT_HEIGHT, MNU_MODEL_NAME_EDIT);
+
+	x = 6;
+	y = 2;
+	for (i=0; i<10; i++)
+	{
+		if (cursor == i)
+		{
+			lcd_putcAtt(x*LCD_FONT_WIDTH, y*LCD_FONT_HEIGHT, g_Model.name[i], LCD_INVERS, 0);
+		}
+		else
+		{
+			lcd_putcAtt(x*LCD_FONT_WIDTH, y*LCD_FONT_HEIGHT, g_Model.name[i], LCD_NO_INV, 0);
+		}
+		x++;
+	}
+
+	return 1;
+}
+
 
 /*--------------------------------------------------------------------------------
  * menu_message_box
@@ -236,6 +334,7 @@ void menu_show_messagebox(char *title, char *row1, char *row2, char* row3, char*
 	gui_screen_push(&menu_message_box);
 }
 
+
 /*--------------------------------------------------------------------------------
  * menu_model_curve_edit
  *--------------------------------------------------------------------------------*/
@@ -250,8 +349,6 @@ char MNU_MODEL_CURVE_ID1[] 	PROGMEM = "ID1";
 char MNU_MODEL_CURVE_ID2[] 	PROGMEM = "ID2";
 char MNU_MODEL_CURVE_HLD[] 	PROGMEM = "HOLD";
 
-uint8_t cursorCurve = 0;
-uint8_t changedCurve = 0;
 uint8_t menu_model_curve_edit(GUI_EVENT event, uint8_t elapsedTime)
 {
 	char* menuTitle;
@@ -324,14 +421,14 @@ uint8_t menu_model_curve_edit(GUI_EVENT event, uint8_t elapsedTime)
 	switch (event)
 	{
 		case GUI_EVT_SHOW:
-			cursorCurve = 0;
-			changedCurve = 0;
+			cursor = 0;
+			changedModel = 0;
 			break;
 		case GUI_EVT_HIDE:
 			break;
 		case GUI_EVT_KEY_EXIT:
 			// We are done...restore?
-			if (changedCurve == 1)
+			if (changedModel == 1)
 			{
 				eeprom_load_model_config(g_RadioConfig.selectedModel);
 			}
@@ -339,41 +436,41 @@ uint8_t menu_model_curve_edit(GUI_EVENT event, uint8_t elapsedTime)
 			break;
 		case GUI_EVT_KEY_MENU:
 			// We are done...Save?
-			if (changedCurve == 1)
+			if (changedModel == 1)
 			{
 				eeprom_save_model_config(g_RadioConfig.selectedModel);
 			}
 			gui_screen_pop();
 			break;
 		case GUI_EVT_KEY_UP:
-			cursorCurve--;
-			if (cursorCurve < 0)
+			cursor--;
+			if (cursor < 0)
 			{
-				cursorSetting = 4;
+				cursor = 4;
 			}
 			break;
 		case GUI_EVT_KEY_DOWN:
-			cursorCurve++;
-			if (cursorCurve > 4)
+			cursor++;
+			if (cursor > 4)
 			{
-				cursorCurve = 0;
+				cursor = 0;
 			}
 			break;
 		case GUI_EVT_KEY_RIGHT:
-			g_Model.curve[c][cursorCurve] += 1;
-			if (g_Model.curve[c][cursorCurve] > 100)
+			g_Model.curve[c][cursor] += 1;
+			if (g_Model.curve[c][cursor] > 100)
 			{
-				g_Model.curve[c][cursorCurve] = 100;
+				g_Model.curve[c][cursor] = 100;
 			}
-			changedCurve = 1;
+			changedModel = 1;
 			break;
 		case GUI_EVT_KEY_LEFT:
-			g_Model.curve[c][cursorCurve] -= 1;
-			if (g_Model.curve[c][cursorCurve] < -100)
+			g_Model.curve[c][cursor] -= 1;
+			if (g_Model.curve[c][cursor] < -100)
 			{
-				g_Model.curve[c][cursorCurve] = -100;
+				g_Model.curve[c][cursor] = -100;
 			}
-			changedCurve = 1;
+			changedModel = 1;
 			break;
 
 		default:
@@ -403,7 +500,7 @@ uint8_t menu_model_curve_edit(GUI_EVENT event, uint8_t elapsedTime)
 	for (i=0; i<MDL_MAX_CURVE_POINTS; i++)
 	{
 		lcd_outdezAtt(1*LCD_FONT_WIDTH, (i + 2)*LCD_FONT_HEIGHT, i+1, LCD_NO_INV);
-		if (cursorCurve == i)
+		if (cursor == i)
 		{
 			lcd_outdezAtt(7*LCD_FONT_WIDTH, (i + 2)*LCD_FONT_HEIGHT, g_Model.curve[c][i], LCD_INVERS);
 		}
@@ -1429,7 +1526,7 @@ uint8_t menu_settings(GUI_EVENT event, uint8_t elapsedTime)
 // Model Config
 //
 
-SSelection modelConfig[4] PROGMEM = 
+SSelection modelConfig[5] PROGMEM = 
 {
 	{
 		0x10,
@@ -1458,7 +1555,15 @@ SSelection modelConfig[4] PROGMEM =
 		0,
 		0,
 		&menu_model_curve_edit
+	},
+	{
+		0x14,
+		MNU_MODEL_NAME_EDIT_TITLE,
+		0,
+		0,
+		&menu_model_name_edit
 	}
+	
 	
 };
 
@@ -1468,7 +1573,7 @@ uint8_t menu_model_config(GUI_EVENT event, uint8_t elapsedTime)
 	switch (event)
 	{
 		case GUI_EVT_SHOW:
-			numSettings = 4;
+			numSettings = 5;
 			currentSettings = (SSelection*)&modelConfig[0];
 			break;
 		default:
