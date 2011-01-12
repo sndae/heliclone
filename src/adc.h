@@ -38,6 +38,7 @@ typedef enum
 	ADC_TRIM_1,
 	ADC_TRIM_2,
 	ADC_TRIM_3,
+	ADC_BATT,
 	ADC_MAX_NUM_ADC
 } ADC_INPUTS;
 

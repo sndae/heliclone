@@ -30,6 +30,7 @@
 #include "eeprom.h"
 #include "globals.h"
 #include "hal_io.h"
+#include "mixer.h"
 #include <avr/pgmspace.h>
 #include <string.h>
 
@@ -123,6 +124,261 @@ void menu_init()
 	
 }
 
+/*--------------------------------------------------------------------------------
+ * menu_info_screen
+ *--------------------------------------------------------------------------------*/
+char MNU_INFO_TITLE[] 				PROGMEM = "Heliclone Info";
+char MNU_INFO_VERSION[] 			PROGMEM = "Version: ---";
+char MNU_INFO_COPYR[] 				PROGMEM = "By Stefan Grufman";
+
+uint8_t menu_info_screen(GUI_EVENT event, uint8_t elapsedTime)
+{
+	switch (event)
+	{
+		case GUI_EVT_SHOW:
+			break;
+		case GUI_EVT_HIDE:
+			break;
+		case GUI_EVT_KEY_EXIT:
+			gui_screen_pop();
+			break;
+		default:
+			break;
+	}
+
+	lcd_clear();
+	lcd_puts_P( 0, 0, MNU_INFO_TITLE);
+	lcd_puts_P( 0, 3*LCD_FONT_HEIGHT, MNU_INFO_VERSION);
+	lcd_puts_P( 0, 5*LCD_FONT_HEIGHT, MNU_INFO_COPYR);
+
+
+	return 1;
+}
+
+/*--------------------------------------------------------------------------------
+ * menu_model_expo_edit
+ *--------------------------------------------------------------------------------*/
+char MNU_MODEL_EXPO_EDIT_TITLE[] 		PROGMEM = "Expo";
+char MNU_MODEL_EXPO_AIL[] 				PROGMEM = "AIL";
+char MNU_MODEL_EXPO_ELE[] 				PROGMEM = "ELE";
+char MNU_MODEL_EXPO_RUD[] 				PROGMEM = "RUD";
+char MNU_MODEL_EXPO_DUAL[] 				PROGMEM = "DUAL";
+char MNU_MODEL_EXPO_NORM[] 				PROGMEM = "NORM";
+
+uint8_t menu_model_expo_edit(GUI_EVENT event, uint8_t elapsedTime)
+{
+	int16_t x,y, px, py;
+	int8_t i;
+	MIX_INPUT input = MIX_IN_AIL;
+	char* expoStr;
+	char* expoModeStr;
+	uint8_t expoMode;
+
+	switch (event)
+	{
+		case GUI_EVT_SHOW:
+			cursor = 0;
+			cursor2 = 0;
+			changedModel = 0;
+			break;
+		case GUI_EVT_HIDE:
+			break;
+		case GUI_EVT_KEY_EXIT:
+			// We are done...restore?
+			if (changedModel == 1)
+			{
+				eeprom_load_model_config(g_RadioConfig.selectedModel);
+			}
+			gui_screen_pop();
+			break;
+		case GUI_EVT_KEY_MENU:
+			// We are done...Save?
+			if (changedModel == 1)
+			{
+				eeprom_save_model_config(g_RadioConfig.selectedModel);
+			}
+			gui_screen_pop();
+			break;
+		case GUI_EVT_KEY_UP:
+			cursor--;
+			if (cursor < 0)
+			{
+				cursor = 1;
+			}
+			break;
+		case GUI_EVT_KEY_DOWN:
+			cursor++;
+			if (cursor > 1)
+			{
+				cursor = 0;
+			}
+			break;
+		case GUI_EVT_KEY_RIGHT:
+			if (cursor == 0)
+			{
+				cursor2++;
+				if (cursor2 > 2)
+				{
+					cursor2 = 0;
+				}
+			}
+			break;
+		case GUI_EVT_KEY_LEFT:
+			if (cursor == 0)
+			{
+				cursor2--;
+				if (cursor2 < 0)
+				{
+					cursor2 = 2;
+				}
+			}
+			break;
+		default:
+			break;
+	}
+
+	lcd_clear();
+	lcd_puts_P( 0, 0, MNU_MODEL_EXPO_EDIT_TITLE);
+
+	// What expo is used...
+	expoStr = MNU_MODEL_EXPO_AIL;
+	expoMode = MDL_EXPO_NORM;
+	expoModeStr = MNU_MODEL_EXPO_NORM;
+	switch (cursor2)
+	{
+		case 0:
+			expoStr = MNU_MODEL_EXPO_AIL;
+			input = MIX_IN_AIL;
+			if (hal_io_get_sw(SW_AILDR))
+			{
+				expoMode = MDL_EXPO_DUAL;
+				expoModeStr = MNU_MODEL_EXPO_DUAL;
+			}
+			break;
+		case 1:
+			expoStr = MNU_MODEL_EXPO_ELE;
+			input = MIX_IN_ELE;
+			if (hal_io_get_sw(SW_ELEDR))
+			{
+				expoMode = MDL_EXPO_DUAL;
+				expoModeStr = MNU_MODEL_EXPO_DUAL;
+			}
+			break;
+		case 2:
+			expoStr = MNU_MODEL_EXPO_RUD;
+			input = MIX_IN_RUD;
+			if (hal_io_get_sw(SW_RUDDR))
+			{
+				expoMode = MDL_EXPO_DUAL;
+				expoModeStr = MNU_MODEL_EXPO_DUAL;
+			}
+			break;
+		default:
+			break;
+	}
+
+
+	// Are we in position for some value changes?
+	if (cursor == 1)
+	{
+		switch (event)
+		{
+			case GUI_EVT_KEY_RIGHT:
+				g_Model.expo[input][expoMode] += 1;
+				changedModel = 1;
+				break;
+			case GUI_EVT_KEY_LEFT:
+				g_Model.expo[input][expoMode] -= 1;
+				changedModel = 1;
+				break;
+			case GUI_EVT_POT_MOVE:
+				g_Model.expo[input][expoMode] = g_RadioRuntime.adc_s[GUI_POT];
+				changedModel = 1;
+				break;
+
+			default:
+				break;
+		}
+	}
+
+	// Limit
+	if (g_Model.expo[input][expoMode] > 100)
+	{
+		g_Model.expo[input][expoMode] = 100;
+	}
+	if (g_Model.expo[input][expoMode] < -100)
+	{
+		g_Model.expo[input][expoMode] = -100;
+	}
+
+	if (cursor == 0)
+	{
+		lcd_putsAtt(0, 2*LCD_FONT_HEIGHT, expoStr, LCD_INVERS);
+	}
+	else
+	{
+		lcd_putsAtt(0, 2*LCD_FONT_HEIGHT, expoStr, LCD_NO_INV);
+	}
+	lcd_puts_P(5*LCD_FONT_WIDTH, 2*LCD_FONT_HEIGHT, expoModeStr);
+
+	// VALUE CHANGE on 1
+	if (cursor == 1)
+	{
+		lcd_outdezAtt(4*LCD_FONT_WIDTH, 4*LCD_FONT_HEIGHT, g_Model.expo[input][expoMode], LCD_INVERS);
+	}
+	else
+	{
+		lcd_outdezAtt(4*LCD_FONT_WIDTH, 4*LCD_FONT_HEIGHT, g_Model.expo[input][expoMode], LCD_NO_INV);
+	}
+
+	// Draw the X-Y-axis... (64x64 pixels)
+	lcd_hline(LCD_DISPLAY_W-63, LCD_DISPLAY_H-32,    63);
+	lcd_vline(LCD_DISPLAY_W-32, LCD_DISPLAY_H-64,    64);
+
+	// Scale on X-axis
+	lcd_vline(LCD_DISPLAY_W-63, LCD_DISPLAY_H-33,    3);
+	lcd_vline(LCD_DISPLAY_W-48, LCD_DISPLAY_H-33,    3);
+	lcd_vline(LCD_DISPLAY_W-16, LCD_DISPLAY_H-33,    3);
+	lcd_vline(LCD_DISPLAY_W-1, LCD_DISPLAY_H-33,    3);
+
+	// Scale on Y-axis
+	lcd_hline(LCD_DISPLAY_W-33, LCD_DISPLAY_H-64,    3);
+	lcd_hline(LCD_DISPLAY_W-33, LCD_DISPLAY_H-48,    3);
+	lcd_hline(LCD_DISPLAY_W-33, LCD_DISPLAY_H-16,    3);
+	lcd_hline(LCD_DISPLAY_W-33, LCD_DISPLAY_H-1,    3);
+
+	// Draw the curve...
+	for (i=-100; i<=100; i++)
+	{
+		x = i;
+		y = mixer_expo(input, x);
+
+		px = 97 + (x*32/100);
+		py = 31 - (y*32/100);
+
+		if (px < 0)
+		{
+			px = 0;
+		}
+		if (px >= LCD_DISPLAY_W)
+		{
+			px = LCD_DISPLAY_W-1;
+		}
+
+		if (py < 0)
+		{
+			py = 0;
+		}
+		if (py >= LCD_DISPLAY_H)
+		{
+			py = LCD_DISPLAY_H-1;
+		}
+
+		lcd_plot(px, py);
+	}
+
+	return 1;
+}
 
 /*--------------------------------------------------------------------------------
  * menu_model_name_edit
@@ -192,7 +448,7 @@ uint8_t menu_model_name_edit(GUI_EVENT event, uint8_t elapsedTime)
 			break;
 		case GUI_EVT_KEY_RIGHT:
 			cursor++;
-			if (cursor > 10)
+			if (cursor > 8)
 			{
 				cursor = 0;
 			}
@@ -201,7 +457,7 @@ uint8_t menu_model_name_edit(GUI_EVENT event, uint8_t elapsedTime)
 			cursor--;
 			if (cursor < 0)
 			{
-				cursor = 9;
+				cursor = 8;
 			}
 			break;
 		default:
@@ -214,7 +470,7 @@ uint8_t menu_model_name_edit(GUI_EVENT event, uint8_t elapsedTime)
 
 	x = 6;
 	y = 2;
-	for (i=0; i<10; i++)
+	for (i=0; i<9; i++)
 	{
 		if (cursor == i)
 		{
@@ -517,11 +773,11 @@ uint8_t menu_model_curve_edit(GUI_EVENT event, uint8_t elapsedTime)
 	lcd_puts_P( 5*LCD_FONT_WIDTH, 0, modeStr);
 
 	// Draw the X-Y-axis... (64x64 pixels)
-	lcd_hline(LCD_DISPLAY_W-64, LCD_DISPLAY_H-32,    64);
+	lcd_hline(LCD_DISPLAY_W-63, LCD_DISPLAY_H-32,    63);
 	lcd_vline(LCD_DISPLAY_W-32, LCD_DISPLAY_H-64,    64);
 
 	// Scale on X-axis
-	lcd_vline(LCD_DISPLAY_W-64, LCD_DISPLAY_H-33,    3);
+	lcd_vline(LCD_DISPLAY_W-63, LCD_DISPLAY_H-33,    3);
 	lcd_vline(LCD_DISPLAY_W-48, LCD_DISPLAY_H-33,    3);
 	lcd_vline(LCD_DISPLAY_W-16, LCD_DISPLAY_H-33,    3);
 	lcd_vline(LCD_DISPLAY_W-1, LCD_DISPLAY_H-33,    3);
@@ -554,9 +810,9 @@ uint8_t menu_model_curve_edit(GUI_EVENT event, uint8_t elapsedTime)
 		x2 = x1 + 50;
 		y2 = g_Model.curve[c][i];
 
-		px1 = 95 + (x1*32/100);
+		px1 = 97 + (x1*32/100);
 		py1 = 31 - (y1*32/100);
-		px2 = 95 + (x2*32/100);
+		px2 = 97 + (x2*32/100);
 		py2 = 31 - (y2*32/100);
 
 		if (px1 < 0)
@@ -1255,7 +1511,7 @@ char MNU_MODEL_SELECTION_NAME[] PROGMEM = "Model Selection   1/5";
 char MNU_MODEL_CONFIG_NAME[] 	PROGMEM = "Model Config      2/5";
 char MNU_MODEL_MGMT_NAME[] 		PROGMEM = "Model Management  3/5";
 char MNU_RADIO_CONFIG_NAME[] 	PROGMEM = "Radio Config      4/5";
-char MNU_RADIO_INSTALL_NAME[] 	PROGMEM = "Radio Install     5/5";
+char MNU_RADIO_INSTALL_NAME[] 	PROGMEM = "Radio Setup&Info  5/5";
 
 typedef struct 
 {
@@ -1601,7 +1857,7 @@ uint8_t menu_settings(GUI_EVENT event, uint8_t elapsedTime)
 // Model Config
 //
 
-SSelection modelConfig[5] PROGMEM = 
+SSelection modelConfig[6] PROGMEM = 
 {
 	{
 		0x10,
@@ -1616,6 +1872,13 @@ SSelection modelConfig[5] PROGMEM =
 		0,
 		0,
 		&menu_model_servo_subtrim
+	},
+	{
+		0x15,
+		MNU_MODEL_EXPO_EDIT_TITLE,
+		0,
+		0,
+		&menu_model_expo_edit
 	},
 	{
 		MNU_ID_PITCH_CURVE,
@@ -1638,8 +1901,7 @@ SSelection modelConfig[5] PROGMEM =
 		0,
 		&menu_model_name_edit
 	}
-	
-	
+
 };
 
 
@@ -1648,7 +1910,7 @@ uint8_t menu_model_config(GUI_EVENT event, uint8_t elapsedTime)
 	switch (event)
 	{
 		case GUI_EVT_SHOW:
-			numSettings = 5;
+			numSettings = 6;
 			currentSettings = (SSelection*)&modelConfig[0];
 			break;
 		default:
@@ -1724,9 +1986,10 @@ uint8_t menu_radio_config(GUI_EVENT event, uint8_t elapsedTime)
 // Radio Installing
 //
 char MNU_RADIO_INSTALL_CALIBRATE[] 		PROGMEM = "Calibrate Sticks";
+char MNU_RADIO_INSTALL_INFO[] 			PROGMEM = "About";
 
 
-SSelection radioInstalling[1] PROGMEM = 
+SSelection radioInstalling[2] PROGMEM = 
 {
 	{
 		0x30,
@@ -1734,7 +1997,16 @@ SSelection radioInstalling[1] PROGMEM =
 		0,
 		0,
 		&menu_adc_calibrate
+	},
+	{
+		0x31,
+		MNU_RADIO_INSTALL_INFO,
+		0,
+		0,
+		&menu_info_screen
 	}
+
+	
 };
 
 
@@ -1743,7 +2015,7 @@ uint8_t menu_radio_install(GUI_EVENT event, uint8_t elapsedTime)
 	switch (event)
 	{
 		case GUI_EVT_SHOW:
-			numSettings = 1;
+			numSettings = 2;
 			currentSettings = (SSelection*)&radioInstalling[0];
 			break;
 		default:
