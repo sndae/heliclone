@@ -152,15 +152,18 @@ uint8_t hal_io_get_sw(uint8_t swId)
 			break;
 		case SW_AILDR:
 			temp = switchState & 0x02;
-			return (temp == 0x02);
+			// sw is reversed...
+			return (temp == 0x00);
 			break;
 		case SW_ELEDR:
 			temp = switchState & 0x04;
-			return (temp == 0x04);
+			// sw is reversed...
+			return (temp == 0x00);
 			break;
 		case SW_RUDDR:
 			temp = switchState & 0x08;
-			return (temp == 0x08);
+			// sw is reversed...
+			return (temp == 0x00);
 			break;
 		case SW_TRN:
 			temp = switchState & 0x20;
