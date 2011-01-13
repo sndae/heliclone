@@ -130,3 +130,15 @@ void eeprom_save_model_trim(uint8_t modelNumber)
 
 	while (eeprom_is_ready()!=0);
 }
+
+/*--------------------------------------------------------------------------------
+ * eeprom_load_model_name
+ *--------------------------------------------------------------------------------*/
+void eeprom_load_model_name(uint8_t modelNumber, char* nameBuf)
+{
+    uint16_t position;
+	position = ((uint16_t)&(g_Model.name)) - ((uint16_t)&g_Model);
+	position = position + EE_MODEL_CONGFIG(modelNumber);
+
+	eeprom_read_block(nameBuf, (void*)position, sizeof(g_Model.name));
+}
