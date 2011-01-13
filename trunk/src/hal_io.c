@@ -25,6 +25,7 @@
 
 #include "hal_io.h"
 #include "globals.h"
+#include "eeprom.h"
 
 //#define DEBUG_SWITCHES
 
@@ -228,6 +229,7 @@ void hal_io_trim_pressed(uint8_t key)
 		g_Model.trim[trimPos] = -100;
 	}
 
+	eeprom_save_model_trim(g_RadioConfig.selectedModel);
 }
 
 /*--------------------------------------------------------------------------------
