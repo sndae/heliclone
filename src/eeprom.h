@@ -50,4 +50,6 @@ extern void eeprom_load_radio_config();
 extern void eeprom_save_model_config(uint8_t modelNumber);
 extern void eeprom_load_model_config(uint8_t modelNumber);
 
+extern void eeprom_save_model_trim(uint8_t modelNumber);
+
 #endif // _EEPROM_H_

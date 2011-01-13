@@ -117,4 +117,16 @@ void eeprom_load_model_config(uint8_t modelNumber)
 	eeprom_read_block(&g_Model, (void*)EE_MODEL_CONGFIG(modelNumber), sizeof(SModel));
 }
 
+/*--------------------------------------------------------------------------------
+ * eeprom_save_model_trim
+ *--------------------------------------------------------------------------------*/
+void eeprom_save_model_trim(uint8_t modelNumber)
+{
+    uint16_t position;
+	position = ((uint16_t)&(g_Model.trim)) - ((uint16_t)&g_Model);
+	position = position + EE_MODEL_CONGFIG(modelNumber);
 
+	eeprom_write_block(&g_Model.trim,(void*)position, sizeof(g_Model.trim));
+
+	while (eeprom_is_ready()!=0);
+}
