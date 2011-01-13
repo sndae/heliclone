@@ -148,12 +148,74 @@ void menu_init()
 	
 }
 
+/*--------------------------------------------------------------------------------
+ * menu_model_create
+ *--------------------------------------------------------------------------------*/
+char MNU_MODEL_CREATE_TITLE[]	PROGMEM = "Create Model";
+
+
+char MNU_MODEL_NO_SLOT_T[] 	PROGMEM = "   No free slot!   ";
+char MNU_MODEL_NO_SLOT_1[] 	PROGMEM = "All model slots are";
+char MNU_MODEL_NO_SLOT_2[] 	PROGMEM = "already used.      ";
+char MNU_MODEL_NO_SLOT_3[] 	PROGMEM = "Delete one model   ";
+char MNU_MODEL_NO_SLOT_4[] 	PROGMEM = "and try again!     ";
+
+uint8_t menu_model_create(GUI_EVENT event, uint8_t elapsedTime)
+{
+	char name[10];
+	uint8_t firstFreeSlot = 0xFF;
+	uint8_t i;
+
+	switch (event)
+	{
+		case GUI_EVT_SHOW:
+			cursor = 0;
+
+			firstFreeSlot = 0xFF;
+			for (i=0; i<EE_MAX_MODELS; i++)
+			{
+				eeprom_load_model_name(i, name);
+				if (name[0] != 0)
+				{
+					firstFreeSlot = i;
+					break;
+				}
+			}
+
+			if (firstFreeSlot == 0xFF)
+			{
+				gui_screen_pop();
+				menu_show_messagebox(MNU_MODEL_NO_SLOT_T, MNU_MODEL_NO_SLOT_1, MNU_MODEL_NO_SLOT_2, MNU_MODEL_NO_SLOT_3, MNU_MODEL_NO_SLOT_4);
+				return 1;
+			}
+
+			break;
+		case GUI_EVT_HIDE:
+			break;
+		case GUI_EVT_KEY_EXIT:
+			gui_screen_pop();
+			break;
+		default:
+			break;
+	}
+
+	lcd_clear();
+	lcd_puts_P( 0, 0, MNU_MODEL_CREATE_TITLE);
+
+	// 
+	//if (cursor == 0)
+	// CONTINUE HERE ;-)
+
+	return 1;
+}
+
+
 
 /*--------------------------------------------------------------------------------
  * menu_model_select
  *--------------------------------------------------------------------------------*/
-char MNU_SELECT_TITLE[] 				PROGMEM = "Select Model";
-char MNU_SELECT_FREE[] 					PROGMEM = "**free**";
+char MNU_MODEL_SELECT_TITLE[] 		PROGMEM = "Select Model";
+char MNU_MODEL_SELECT_FREE[] 		PROGMEM = "**free**";
 
 uint8_t menu_model_select(GUI_EVENT event, uint8_t elapsedTime)
 {
@@ -234,7 +296,7 @@ uint8_t menu_model_select(GUI_EVENT event, uint8_t elapsedTime)
 	}
 
 	lcd_clear();
-	lcd_puts_P( 0, 0, MNU_SELECT_TITLE);
+	lcd_puts_P( 0, 0, MNU_MODEL_SELECT_TITLE);
 
 	x = 0;
 	y = 2;
@@ -260,7 +322,7 @@ uint8_t menu_model_select(GUI_EVENT event, uint8_t elapsedTime)
 		}
 		else
 		{
-			lcd_putsAtt(x*LCD_FONT_WIDTH, y*LCD_FONT_HEIGHT, MNU_SELECT_FREE, LCD_NO_INV);
+			lcd_putsAtt(x*LCD_FONT_WIDTH, y*LCD_FONT_HEIGHT, MNU_MODEL_SELECT_FREE, LCD_NO_INV);
 		}
 		y++;
 	}
@@ -2220,8 +2282,6 @@ uint8_t menu_radio_install(GUI_EVENT event, uint8_t elapsedTime)
 /*--------------------------------------------------------------------------------
  * menu_model_management
  *--------------------------------------------------------------------------------*/
-char MNU_MODEL_SELECT_TITLE[] 		PROGMEM = "Select Model";
-char MNU_MODEL_CREATE_TITLE[] 		PROGMEM = "Create Model";
 char MNU_MODEL_DELETE_TITLE[] 		PROGMEM = "Delete Model";
 char MNU_MODEL_CLONE_TITLE[] 		PROGMEM = "Clone Model";
 
@@ -2240,7 +2300,7 @@ SSelection modelManagement[4] PROGMEM =
 		MNU_MODEL_CREATE_TITLE,
 		0,
 		0,
-		0
+		&menu_model_create
 	},
 	{
 		0x42,
