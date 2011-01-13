@@ -36,27 +36,25 @@
 
 
 /*--------------------------------------------------------------------------------
- * Prototypes
- *--------------------------------------------------------------------------------*/
-uint8_t menu_adc_calibrate(GUI_EVENT event, uint8_t elapsedTime);
-uint8_t menu_main_screen(GUI_EVENT event, uint8_t elapsedTime);
-uint8_t menu_main_menu(GUI_EVENT event, uint8_t elapsedTime);
-
-uint8_t menu_get_setting(uint8_t parameterId);
-void menu_set_setting(uint8_t parameterId, uint8_t newValue);
-
-// Menus
-uint8_t menu_model_config(GUI_EVENT event, uint8_t elapsedTime);
-uint8_t menu_radio_config(GUI_EVENT event, uint8_t elapsedTime);
-uint8_t menu_radio_install(GUI_EVENT event, uint8_t elapsedTime);
-
-
-/*--------------------------------------------------------------------------------
- * LOCALS
+ * Private types
  *--------------------------------------------------------------------------------*/
 
-#define MNU_ID_PITCH_CURVE (0x12)
-#define MNU_ID_THROTTLE_CURVE (0x13)
+typedef struct 
+{
+	char* name;
+	GUI_SCREEN_FPTR screen;
+	void* previous;
+	void* next;
+} SMenu;
+
+typedef struct 
+{
+	uint8_t id;
+	char* text;
+	char* alternatives;
+	uint8_t parameterId;
+	GUI_SCREEN_FPTR screen;
+} SSelection;
 
 typedef enum
 {
@@ -90,15 +88,35 @@ typedef enum
 	MC_SET_SUBT_CH8
 } PARAMETER_ID;
 
-typedef struct 
-{
-	uint8_t id;
-	char* text;
-	char* alternatives;
-	uint8_t parameterId;
-	GUI_SCREEN_FPTR screen;
-} SSelection;
 
+/*--------------------------------------------------------------------------------
+ * Prototypes
+ *--------------------------------------------------------------------------------*/
+uint8_t menu_adc_calibrate(GUI_EVENT event, uint8_t elapsedTime);
+uint8_t menu_main_screen(GUI_EVENT event, uint8_t elapsedTime);
+uint8_t menu_main_menu(GUI_EVENT event, uint8_t elapsedTime);
+
+uint8_t menu_get_setting(uint8_t parameterId);
+void menu_set_setting(uint8_t parameterId, uint8_t newValue);
+
+// Menus
+uint8_t menu_model_management(GUI_EVENT event, uint8_t elapsedTime);
+uint8_t menu_model_config(GUI_EVENT event, uint8_t elapsedTime);
+uint8_t menu_radio_config(GUI_EVENT event, uint8_t elapsedTime);
+uint8_t menu_radio_install(GUI_EVENT event, uint8_t elapsedTime);
+
+/* MAIN MENU CHAIN */
+extern SMenu ModelSelection;
+extern SMenu ModelConfiguration;
+extern SMenu RadioConfiguration;
+extern SMenu RadioInstall;
+
+/*--------------------------------------------------------------------------------
+ * LOCALS
+ *--------------------------------------------------------------------------------*/
+
+#define MNU_ID_PITCH_CURVE (0x12)
+#define MNU_ID_THROTTLE_CURVE (0x13)
 
 SSelection* currentSettings;
 uint8_t numSettings = 0;
@@ -107,6 +125,12 @@ uint8_t settingValue = -1;
 uint8_t changedModel = 0;
 int8_t cursor = 0;
 int8_t cursor2 = 0;
+
+SMenu* currentMenu = (SMenu*)&ModelSelection;
+
+// Indicates if "LEFT/RIGHT" are for navigating among
+// menus...if 0, the menu-screen has ownership
+uint8_t menuNavigation = 1;
 
 /*--------------------------------------------------------------------------------
  * menu_init
@@ -122,6 +146,126 @@ void menu_init()
 		gui_screen_push(&menu_adc_calibrate);
 	}
 	
+}
+
+
+/*--------------------------------------------------------------------------------
+ * menu_model_select
+ *--------------------------------------------------------------------------------*/
+char MNU_SELECT_TITLE[] 				PROGMEM = "Select Model";
+char MNU_SELECT_FREE[] 					PROGMEM = "**free**";
+
+uint8_t menu_model_select(GUI_EVENT event, uint8_t elapsedTime)
+{
+	char name[10];
+	uint8_t i;
+	uint8_t x,y;
+	
+
+	switch (event)
+	{
+		case GUI_EVT_SHOW:
+			cursor = g_RadioConfig.selectedModel;
+			cursor2 = 0;
+			for (i=0; i<EE_MAX_MODELS; i++)
+			{
+				eeprom_load_model_name(i, name);
+				if (name[0] != 0)
+				{
+					// Set a bit to indicate model exist!
+					cursor2 |= (1<<i);
+				}
+			}
+
+			// DEBUG
+			//cursor2 = 0x55;
+	
+			break;
+		case GUI_EVT_HIDE:
+			break;
+		case GUI_EVT_KEY_EXIT:
+			gui_screen_pop();
+			break;
+		case GUI_EVT_KEY_MENU:
+			// Selected new model?
+			if (cursor != g_RadioConfig.selectedModel)
+			{
+				// Select the new model and load it
+				g_RadioConfig.selectedModel = cursor;
+				eeprom_load_model_config(cursor);
+
+				// Save the new selection in EEPROM
+				eeprom_save_radio_config();
+			}
+			gui_screen_pop();
+			break;
+		case GUI_EVT_KEY_UP:
+			cursor--;
+			if (cursor < 0)
+			{
+				cursor = 7;
+			}
+			while ((cursor2 & (1 << cursor)) == 0x00)
+			{
+				cursor--;
+				if (cursor < 0)
+				{
+					cursor = 7;
+				}
+			}
+			break;
+		case GUI_EVT_KEY_DOWN:
+			cursor++;
+			if (cursor > 7)
+			{
+				cursor = 0;
+			}
+			while ((cursor2 & (1 << cursor)) == 0x00)
+			{
+				cursor++;
+				if (cursor > 7)
+				{
+					cursor = 0;
+				}
+			}
+
+		default:
+			break;
+	}
+
+	lcd_clear();
+	lcd_puts_P( 0, 0, MNU_SELECT_TITLE);
+
+	x = 0;
+	y = 2;
+
+	for (i=0; i<EE_MAX_MODELS; i++)
+	{
+		if (i == 4)
+		{
+			x = 12;
+			y = 2;
+		}
+		eeprom_load_model_name(i, name);
+		if (name[0] != 0)
+		{
+			if (cursor == i)
+			{
+				lcd_putsAtt(x*LCD_FONT_WIDTH, y*LCD_FONT_HEIGHT, name, LCD_BSS_INVERS);
+			}
+			else
+			{
+				lcd_putsAtt(x*LCD_FONT_WIDTH, y*LCD_FONT_HEIGHT, name, LCD_BSS_NO_INV);
+			}
+		}
+		else
+		{
+			lcd_putsAtt(x*LCD_FONT_WIDTH, y*LCD_FONT_HEIGHT, MNU_SELECT_FREE, LCD_NO_INV);
+		}
+		y++;
+	}
+
+	return 1;
 }
 
 /*--------------------------------------------------------------------------------
@@ -1507,33 +1651,15 @@ uint8_t menu_main_screen(GUI_EVENT event, uint8_t elapsedTime)
 /*--------------------------------------------------------------------------------
  * menu_main_menu
  *--------------------------------------------------------------------------------*/
-char MNU_MODEL_SELECTION_NAME[] PROGMEM = "Model Selection   1/5";
-char MNU_MODEL_CONFIG_NAME[] 	PROGMEM = "Model Config      2/5";
-char MNU_MODEL_MGMT_NAME[] 		PROGMEM = "Model Management  3/5";
-char MNU_RADIO_CONFIG_NAME[] 	PROGMEM = "Radio Config      4/5";
-char MNU_RADIO_INSTALL_NAME[] 	PROGMEM = "Radio Setup&Info  5/5";
-
-typedef struct 
-{
-	char* name;
-	GUI_SCREEN_FPTR screen;
-	void* previous;
-	void* next;
-} SMenu;
-
-
-/* MAIN MENU CHAIN */
-extern SMenu ModelSelection;
-extern SMenu ModelConfiguration;
-extern SMenu ModelManagement;
-extern SMenu RadioConfiguration;
-extern SMenu RadioInstall;
-
+char MNU_MODEL_SELECTION_NAME[] PROGMEM = "Model Management  1/4";
+char MNU_MODEL_CONFIG_NAME[] 	PROGMEM = "Model Config      2/4";
+char MNU_RADIO_CONFIG_NAME[] 	PROGMEM = "Radio Config      3/4";
+char MNU_RADIO_INSTALL_NAME[] 	PROGMEM = "Radio Setup&Info  4/4";
 
 SMenu ModelSelection PROGMEM = 
 {
 	MNU_MODEL_SELECTION_NAME,
-	0,
+	&menu_model_management,
 	(void*)&RadioInstall,
 	(void*)&ModelConfiguration
 };
@@ -1543,14 +1669,6 @@ SMenu ModelConfiguration PROGMEM =
 	MNU_MODEL_CONFIG_NAME,
 	&menu_model_config,
 	(void*)&ModelSelection,
-	(void*)&ModelManagement,
-};
-
-SMenu ModelManagement PROGMEM = 
-{
-	MNU_MODEL_MGMT_NAME,
-	0,
-	(void*)&ModelConfiguration,
 	(void*)&RadioConfiguration,
 };
 
@@ -1558,7 +1676,7 @@ SMenu RadioConfiguration PROGMEM =
 {
 	MNU_RADIO_CONFIG_NAME,
 	&menu_radio_config,
-	(void*)&ModelManagement,
+	(void*)&ModelConfiguration,
 	(void*)&RadioInstall,
 };
 
@@ -1570,13 +1688,86 @@ SMenu RadioInstall PROGMEM =
 	(void*)&ModelSelection,
 };
 
+uint8_t menu_main_menu(GUI_EVENT event, uint8_t elapsedTime)
+{
+	uint8_t dirty = 0;
+	GUI_SCREEN_FPTR menuScreenPtr;
 
-SMenu* currentMenu = (SMenu*)&ModelSelection;
+	switch (event)
+	{
+		case GUI_EVT_SHOW:
+			gui_set_long_press(0);
+			break;
+		case GUI_EVT_HIDE:
+			gui_set_long_press(1);
+			break;
+		case GUI_EVT_TICK:
+			break;
+		case GUI_EVT_KEY_EXIT:
+			if (menuNavigation == 1)
+			{
+				gui_screen_pop();
+				return 0;
+			}
+			break;
+		case GUI_EVT_KEY_RIGHT:
+			if (menuNavigation == 1)
+			{
+				currentMenu = (SMenu*)pgm_read_word(&currentMenu->next);
+				event = GUI_EVT_SHOW;
+			}
+			break;
+		case GUI_EVT_KEY_LEFT:
+			if (menuNavigation == 1)
+			{
+				currentMenu = (SMenu*)pgm_read_word(&currentMenu->previous);
+				event = GUI_EVT_SHOW;
+			}
+			break;
+		case GUI_EVT_KEY_DOWN:
+			if (menuNavigation == 1)
+			{
+				menuScreenPtr = (GUI_SCREEN_FPTR)pgm_read_word(&currentMenu->screen);
 
-// Indicates if "LEFT/RIGHT" are for navigating among
-// menus...if 0, the menu-screen has ownership
-uint8_t menuNavigation = 1;
+				// Trun control over (if there is a screen)
+				if (menuScreenPtr != 0)
+				{
+					menuNavigation = 0;
+				}
+			}
+		default:
+			break;
+	}
 
+
+	menuScreenPtr = (GUI_SCREEN_FPTR)pgm_read_word(&currentMenu->screen);
+
+	lcd_clear();
+
+	dirty = 1;
+	
+	lcd_putsnAtt(0*LCD_FONT_WIDTH,  0, (char*)pgm_read_word(&currentMenu->name), 17, LCD_NO_INV);
+	if (menuNavigation == 1)
+	{
+		lcd_putsnAtt(18*LCD_FONT_WIDTH,  0, (char*)pgm_read_word(&currentMenu->name)+18, 3, LCD_INVERS);
+	}
+	else
+	{
+		lcd_putsnAtt(18*LCD_FONT_WIDTH,  0, (char*)pgm_read_word(&currentMenu->name)+18, 3, LCD_NO_INV);
+	}
+	lcd_hline(0, 1, LCD_DISPLAY_W);
+
+	if (menuScreenPtr)
+	{
+		dirty |= (*menuScreenPtr)(event, elapsedTime);
+	}
+	
+	return dirty;
+}
+
+/*--------------------------------------------------------------------------------
+ * menu_settings
+ *--------------------------------------------------------------------------------*/
 
 uint8_t menu_get_setting(uint8_t parameterId)
 {
@@ -1853,9 +2044,9 @@ uint8_t menu_settings(GUI_EVENT event, uint8_t elapsedTime)
 	return dirty;
 }
 
-//
-// Model Config
-//
+/*--------------------------------------------------------------------------------
+ * menu_model_config
+ *--------------------------------------------------------------------------------*/
 
 SSelection modelConfig[6] PROGMEM = 
 {
@@ -1920,9 +2111,9 @@ uint8_t menu_model_config(GUI_EVENT event, uint8_t elapsedTime)
 	return menu_settings(event, elapsedTime);
 }
 
-//
-// Radio Config Settings
-//
+/*--------------------------------------------------------------------------------
+ * menu_radio_config
+ *--------------------------------------------------------------------------------*/
 char MNU_RADIO_CONFIG_VOLTAGE[] 		PROGMEM = "Voltage Warning";
 char MNU_RADIO_CONFIG_VOLTAGE_SEL[] 	PROGMEM = "5.0 |5.5 |6.0 |6.5 |7.0 |7.5 |8.0 |8.5 |9.0 |9.5 |10.0";
 char MNU_RADIO_CONFIG_BACKLIGHT[] 		PROGMEM = "Backlight";
@@ -1982,9 +2173,9 @@ uint8_t menu_radio_config(GUI_EVENT event, uint8_t elapsedTime)
 }
 
 
-//
-// Radio Installing
-//
+/*--------------------------------------------------------------------------------
+ * menu_radio_install
+ *--------------------------------------------------------------------------------*/
 char MNU_RADIO_INSTALL_CALIBRATE[] 		PROGMEM = "Calibrate Sticks";
 char MNU_RADIO_INSTALL_INFO[] 			PROGMEM = "About";
 
@@ -2026,80 +2217,60 @@ uint8_t menu_radio_install(GUI_EVENT event, uint8_t elapsedTime)
 }
 
 
+/*--------------------------------------------------------------------------------
+ * menu_model_management
+ *--------------------------------------------------------------------------------*/
+char MNU_MODEL_SELECT_TITLE[] 		PROGMEM = "Select Model";
+char MNU_MODEL_CREATE_TITLE[] 		PROGMEM = "Create Model";
+char MNU_MODEL_DELETE_TITLE[] 		PROGMEM = "Delete Model";
+char MNU_MODEL_CLONE_TITLE[] 		PROGMEM = "Clone Model";
 
-uint8_t menu_main_menu(GUI_EVENT event, uint8_t elapsedTime)
+
+SSelection modelManagement[4] PROGMEM = 
 {
-	uint8_t dirty = 0;
-	GUI_SCREEN_FPTR menuScreenPtr;
+	{
+		0x40,
+		MNU_MODEL_SELECT_TITLE,
+		0,
+		0,
+		&menu_model_select
+	},
+	{
+		0x41,
+		MNU_MODEL_CREATE_TITLE,
+		0,
+		0,
+		0
+	},
+	{
+		0x42,
+		MNU_MODEL_DELETE_TITLE,
+		0,
+		0,
+		0
+	},
+	{
+		0x43,
+		MNU_MODEL_CLONE_TITLE,
+		0,
+		0,
+		0
+	}
+};
 
+
+uint8_t menu_model_management(GUI_EVENT event, uint8_t elapsedTime)
+{
 	switch (event)
 	{
 		case GUI_EVT_SHOW:
-			gui_set_long_press(0);
+			numSettings = 4;
+			currentSettings = (SSelection*)&modelManagement[0];
 			break;
-		case GUI_EVT_HIDE:
-			gui_set_long_press(1);
-			break;
-		case GUI_EVT_TICK:
-			break;
-		case GUI_EVT_KEY_EXIT:
-			if (menuNavigation == 1)
-			{
-				gui_screen_pop();
-				return 0;
-			}
-			break;
-		case GUI_EVT_KEY_RIGHT:
-			if (menuNavigation == 1)
-			{
-				currentMenu = (SMenu*)pgm_read_word(&currentMenu->next);
-				event = GUI_EVT_SHOW;
-			}
-			break;
-		case GUI_EVT_KEY_LEFT:
-			if (menuNavigation == 1)
-			{
-				currentMenu = (SMenu*)pgm_read_word(&currentMenu->previous);
-				event = GUI_EVT_SHOW;
-			}
-			break;
-		case GUI_EVT_KEY_DOWN:
-			if (menuNavigation == 1)
-			{
-				menuScreenPtr = (GUI_SCREEN_FPTR)pgm_read_word(&currentMenu->screen);
-
-				// Trun control over (if there is a screen)
-				if (menuScreenPtr != 0)
-				{
-					menuNavigation = 0;
-				}
-			}
 		default:
 			break;
 	}
 
-
-	menuScreenPtr = (GUI_SCREEN_FPTR)pgm_read_word(&currentMenu->screen);
-
-	lcd_clear();
-
-	dirty = 1;
-	
-	lcd_putsnAtt(0*LCD_FONT_WIDTH,  0, (char*)pgm_read_word(&currentMenu->name), 17, LCD_NO_INV);
-	if (menuNavigation == 1)
-	{
-		lcd_putsnAtt(18*LCD_FONT_WIDTH,  0, (char*)pgm_read_word(&currentMenu->name)+18, 3, LCD_INVERS);
-	}
-	else
-	{
-		lcd_putsnAtt(18*LCD_FONT_WIDTH,  0, (char*)pgm_read_word(&currentMenu->name)+18, 3, LCD_NO_INV);
-	}
-	lcd_hline(0, 1, LCD_DISPLAY_W);
-
-	if (menuScreenPtr)
-	{
-		dirty |= (*menuScreenPtr)(event, elapsedTime);
-	}
-	
-	return dirty;
+	return menu_settings(event, elapsedTime);
 }
+
