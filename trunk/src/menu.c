@@ -31,6 +31,7 @@
 #include "globals.h"
 #include "hal_io.h"
 #include "mixer.h"
+#include "template.h"
 #include <avr/pgmspace.h>
 #include <string.h>
 
@@ -160,22 +161,45 @@ char MNU_MODEL_NO_SLOT_2[] 	PROGMEM = "already used.      ";
 char MNU_MODEL_NO_SLOT_3[] 	PROGMEM = "Delete one model   ";
 char MNU_MODEL_NO_SLOT_4[] 	PROGMEM = "and try again!     ";
 
+char MNU_MODEL_CREATE_TEMPLATE[]	PROGMEM = "Template:";
+char MNU_MODEL_CREATE_TYPE0[]		PROGMEM = "Simulator";
+char MNU_MODEL_CREATE_TYPE1[]		PROGMEM = "FBL";
+char MNU_MODEL_CREATE_TYPE2[]		PROGMEM = "Swash-120";
+char MNU_MODEL_CREATE_TYPE3[]		PROGMEM = "Swash-140";
+
+char* heliTypeStr[] PROGMEM = 
+{
+	MNU_MODEL_CREATE_TYPE0,
+	MNU_MODEL_CREATE_TYPE1,
+	MNU_MODEL_CREATE_TYPE2,
+	MNU_MODEL_CREATE_TYPE3,
+};
+
+char MNU_MODEL_MDL_INFO_T[] 	PROGMEM = "New model created! ";
+char MNU_MODEL_MDL_INFO_1[] 	PROGMEM = "                   ";
+char MNU_MODEL_MDL_INFO_2[] 	PROGMEM = "Do not forget to   ";
+char MNU_MODEL_MDL_INFO_3[] 	PROGMEM = "config this model! ";
+char MNU_MODEL_MDL_INFO_4[] 	PROGMEM = "                   ";
+
+uint8_t firstFreeSlot = 0xFF;
+int8_t heliType = MDL_TYPE_HELI_SIM;
+
 uint8_t menu_model_create(GUI_EVENT event, uint8_t elapsedTime)
 {
 	char name[10];
-	uint8_t firstFreeSlot = 0xFF;
 	uint8_t i;
 
 	switch (event)
 	{
 		case GUI_EVT_SHOW:
+						
 			cursor = 0;
 
 			firstFreeSlot = 0xFF;
 			for (i=0; i<EE_MAX_MODELS; i++)
 			{
 				eeprom_load_model_name(i, name);
-				if (name[0] != 0)
+				if (name[0] == 0)
 				{
 					firstFreeSlot = i;
 					break;
@@ -192,8 +216,55 @@ uint8_t menu_model_create(GUI_EVENT event, uint8_t elapsedTime)
 			break;
 		case GUI_EVT_HIDE:
 			break;
+		case GUI_EVT_KEY_MENU:
+			// Let's create it...
+			switch (heliType)
+			{
+				case MDL_TYPE_HELI_SIM:
+					template_simulator();
+					break;
+				case MDL_TYPE_HELI_FBL:
+					template_fbl();
+					break;
+				case MDL_TYPE_HELI_ECCPM_120:
+					template_swash_120();
+					break;
+				case MDL_TYPE_HELI_ECCPM_140:
+					template_swash_140();
+					break;
+			}
+
+			// Select the new model and load it
+			g_RadioConfig.selectedModel = firstFreeSlot;
+
+			eeprom_save_model_config(g_RadioConfig.selectedModel);
+		
+			gui_screen_pop();
+			menu_show_messagebox(MNU_MODEL_MDL_INFO_T, MNU_MODEL_MDL_INFO_1, MNU_MODEL_MDL_INFO_2, MNU_MODEL_MDL_INFO_3, MNU_MODEL_MDL_INFO_4);
+			return 1;
+			break;
 		case GUI_EVT_KEY_EXIT:
 			gui_screen_pop();
+			break;
+		case GUI_EVT_KEY_RIGHT:
+			if (cursor == 0)
+			{
+				heliType++;
+				if (heliType > 3)
+				{
+					heliType = 0;
+				}
+			}
+			break;
+		case GUI_EVT_KEY_DOWN:
+			if (cursor == 0)
+			{
+				heliType--;
+				if (heliType < 0)
+				{
+					heliType = 3;
+				}
+			}
 			break;
 		default:
 			break;
@@ -202,9 +273,17 @@ uint8_t menu_model_create(GUI_EVENT event, uint8_t elapsedTime)
 	lcd_clear();
 	lcd_puts_P( 0, 0, MNU_MODEL_CREATE_TITLE);
 
-	// 
-	//if (cursor == 0)
-	// CONTINUE HERE ;-)
+	// Helitype
+	lcd_puts_P(0*LCD_FONT_WIDTH, 2*LCD_FONT_HEIGHT, MNU_MODEL_CREATE_TEMPLATE);
+	
+	if (cursor == 0)
+	{
+		lcd_putsAtt(10*LCD_FONT_WIDTH, 2*LCD_FONT_HEIGHT,  (char*)pgm_read_word(&heliTypeStr[heliType]), LCD_INVERS);
+	}
+	else
+	{
+		lcd_putsAtt(10*LCD_FONT_WIDTH, 2*LCD_FONT_HEIGHT, (char*)pgm_read_word(&heliTypeStr[heliType]), LCD_NO_INV);
+	}
 
 	return 1;
 }

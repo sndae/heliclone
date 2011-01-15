@@ -27,16 +27,10 @@
 #include "globals.h"
 #include <string.h>
 
-void template_simulator() 
+void template_common() 
 {
-	strncpy(&(g_Model.name[0]), "Simulator  ", 9);
-	g_Model.name[9] = 0x00;
-
 	// All servos NORMAL direction
 	g_Model.servoDirection = 0x00;
-
-	// Sim type
-	g_Model.type = MDL_TYPE_HELI_SIM;
 
 	// FlySky original mapping...
 	g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_AILERON)] = SERVO_CHANNEL(1);
@@ -219,6 +213,64 @@ void template_simulator()
 	g_Model.expo[MIX_IN_ELE][MDL_EXPO_DUAL] = 0;
 	g_Model.expo[MIX_IN_RUD][MDL_EXPO_NORM] = 25;
 	g_Model.expo[MIX_IN_RUD][MDL_EXPO_DUAL] = 0;
+
+}
+
+void template_simulator() 
+{
+
+	template_common();
+
+	strncpy(&(g_Model.name[0]), "Simulator", 9);
+	g_Model.name[9] = 0x00;
+
+	// Sim type
+	g_Model.type = MDL_TYPE_HELI_SIM;
+
+
+}
+void template_fbl()
+{
+	template_common();
+
+	strncpy(&(g_Model.name[0]), "FBL      ", 9);
+	g_Model.name[9] = 0x00;
+
+	// Sim type
+	g_Model.type = MDL_TYPE_HELI_FBL;
+
+	//TODO:
+	// Setup GYRO
+
+}
+
+void template_swash_120()
+{
+	template_common();
+
+	strncpy(&(g_Model.name[0]), "Swash-120", 9);
+	g_Model.name[9] = 0x00;
+
+	// Sim type
+	g_Model.type = MDL_TYPE_HELI_ECCPM_120;
+
+	//TODO:
+	// Setup GYRO
+
+}
+
+void template_swash_140()
+{
+	template_common();
+
+	strncpy(&(g_Model.name[0]), "Swash-140", 9);
+	g_Model.name[9] = 0x00;
+
+	// Sim type
+	g_Model.type = MDL_TYPE_HELI_ECCPM_140;
+
+	//TODO:
+	// Setup GYRO
 
 }
 
