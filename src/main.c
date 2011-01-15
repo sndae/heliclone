@@ -148,6 +148,9 @@ void load_defaults()
 	g_RadioConfig.voltageWarning = 70;
 	g_RadioConfig.backlight = 1;
 
+	// No PPM out...
+	g_RadioConfig.ppmActive = 0;
+
 }
 
 /*--------------------------------------------------------------------------------
@@ -216,6 +219,9 @@ int main(void)
 	sprintf(debugLine2, "Mixer size: %d", sizeof(SMixer));
 #endif	
 
+	// Enable PPM
+	g_RadioConfig.ppmActive = 1;
+
 	// Main loop.
     while (1 == 1)
 	{
@@ -247,7 +253,10 @@ int main(void)
 		mixer_mix();
 
 		// Export PPM data to PPM ISR
-		ppm_export();
+		if (g_RadioConfig.ppmActive)
+		{
+			ppm_export();
+		}
 		
 	}
 

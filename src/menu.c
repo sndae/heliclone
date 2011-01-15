@@ -148,6 +148,136 @@ void menu_init()
 	}
 	
 }
+/*--------------------------------------------------------------------------------
+ * menu_model_delete
+ *--------------------------------------------------------------------------------*/
+char MNU_MODEL_DELETE_TITLE[] 		PROGMEM = "Delete Model";
+char MNU_MODEL_FREE[] 				PROGMEM = "**free**";
+
+char MNU_MODEL_NO_DEL_T[] 	PROGMEM = " Failed to delete! ";
+char MNU_MODEL_NO_DEL_1[] 	PROGMEM = "Cannot delete the  ";
+char MNU_MODEL_NO_DEL_2[] 	PROGMEM = "selected model.    ";
+char MNU_MODEL_NO_DEL_3[] 	PROGMEM = "Select another one ";
+char MNU_MODEL_NO_DEL_4[] 	PROGMEM = "and try again!     ";
+
+char MNU_MODEL_EMPTY[] 	PROGMEM = "                   ";
+char MNU_MODEL_DEL[] 	PROGMEM = "   Model deleted!  ";
+
+
+uint8_t menu_model_delete(GUI_EVENT event, uint8_t elapsedTime)
+{
+	char name[10];
+	uint8_t i;
+	uint8_t x,y;
+	
+
+	switch (event)
+	{
+		case GUI_EVT_SHOW:
+			cursor = 0;
+			cursor2 = 0;
+			for (i=0; i<EE_MAX_MODELS; i++)
+			{
+				eeprom_load_model_name(i, name);
+				if (name[0] != 0)
+				{
+					// Set a bit to indicate model exist!
+					cursor2 |= (1<<i);
+				}
+			}
+
+			break;
+		case GUI_EVT_HIDE:
+			break;
+		case GUI_EVT_KEY_EXIT:
+			gui_screen_pop();
+			break;
+		case GUI_EVT_KEY_MENU:
+			// Selected new model?
+			if (cursor != g_RadioConfig.selectedModel)
+			{
+				// Do delete...
+				eeprom_delete_model_config(cursor);
+
+				gui_screen_pop();
+				menu_show_messagebox(MNU_MODEL_EMPTY, MNU_MODEL_EMPTY, MNU_MODEL_DEL, MNU_MODEL_EMPTY, MNU_MODEL_EMPTY);
+			}
+			else
+			{
+				// Cannot delete selected model!
+				menu_show_messagebox(MNU_MODEL_NO_DEL_T, MNU_MODEL_NO_DEL_1, MNU_MODEL_NO_DEL_2, MNU_MODEL_NO_DEL_3, MNU_MODEL_NO_DEL_4);
+			}
+			return 1;
+			break;
+		case GUI_EVT_KEY_UP:
+			cursor--;
+			if (cursor < 0)
+			{
+				cursor = 7;
+			}
+			while ((cursor2 & (1 << cursor)) == 0x00)
+			{
+				cursor--;
+				if (cursor < 0)
+				{
+					cursor = 7;
+				}
+			}
+			break;
+		case GUI_EVT_KEY_DOWN:
+			cursor++;
+			if (cursor > 7)
+			{
+				cursor = 0;
+			}
+			while ((cursor2 & (1 << cursor)) == 0x00)
+			{
+				cursor++;
+				if (cursor > 7)
+				{
+					cursor = 0;
+				}
+			}
+
+		default:
+			break;
+	}
+
+	lcd_clear();
+	lcd_puts_P( 0, 0, MNU_MODEL_DELETE_TITLE);
+
+	x = 0;
+	y = 2;
+
+	for (i=0; i<EE_MAX_MODELS; i++)
+	{
+		if (i == 4)
+		{
+			x = 12;
+			y = 2;
+		}
+		eeprom_load_model_name(i, name);
+		if (name[0] != 0)
+		{
+			if (cursor == i)
+			{
+				lcd_putsAtt(x*LCD_FONT_WIDTH, y*LCD_FONT_HEIGHT, name, LCD_BSS_INVERS);
+			}
+			else
+			{
+				lcd_putsAtt(x*LCD_FONT_WIDTH, y*LCD_FONT_HEIGHT, name, LCD_BSS_NO_INV);
+			}
+		}
+		else
+		{
+			lcd_putsAtt(x*LCD_FONT_WIDTH, y*LCD_FONT_HEIGHT, MNU_MODEL_FREE, LCD_NO_INV);
+		}
+		y++;
+	}
+
+	return 1;
+}
+
 
 /*--------------------------------------------------------------------------------
  * menu_model_create
@@ -294,7 +424,6 @@ uint8_t menu_model_create(GUI_EVENT event, uint8_t elapsedTime)
  * menu_model_select
  *--------------------------------------------------------------------------------*/
 char MNU_MODEL_SELECT_TITLE[] 		PROGMEM = "Select Model";
-char MNU_MODEL_SELECT_FREE[] 		PROGMEM = "**free**";
 
 uint8_t menu_model_select(GUI_EVENT event, uint8_t elapsedTime)
 {
@@ -401,8 +530,7 @@ uint8_t menu_model_select(GUI_EVENT event, uint8_t elapsedTime)
 		}
 		else
 		{
-			lcd_putsAtt(x*LCD_FONT_WIDTH, y*LCD_FONT_HEIGHT, MNU_MODEL_SELECT_FREE, LCD_NO_INV);
-		}
+			lcd_putsAtt(x*LCD_FONT_WIDTH, y*LCD_FONT_HEIGHT, MNU_MODEL_FREE, LCD_NO_INV);		}
 		y++;
 	}
 
@@ -2361,7 +2489,6 @@ uint8_t menu_radio_install(GUI_EVENT event, uint8_t elapsedTime)
 /*--------------------------------------------------------------------------------
  * menu_model_management
  *--------------------------------------------------------------------------------*/
-char MNU_MODEL_DELETE_TITLE[] 		PROGMEM = "Delete Model";
 char MNU_MODEL_CLONE_TITLE[] 		PROGMEM = "Clone Model";
 
 
@@ -2386,7 +2513,7 @@ SSelection modelManagement[4] PROGMEM =
 		MNU_MODEL_DELETE_TITLE,
 		0,
 		0,
-		0
+		&menu_model_delete
 	},
 	{
 		0x43,

@@ -103,6 +103,9 @@ typedef struct
 	// Selected model number
 	uint8_t 	selectedModel;
 
+	// PPM active
+	uint8_t 	ppmActive;
+
 } SRadioConfig;
 
 typedef struct
