@@ -133,6 +133,10 @@ SMenu* currentMenu = (SMenu*)&ModelSelection;
 // menus...if 0, the menu-screen has ownership
 uint8_t menuNavigation = 1;
 
+uint8_t firstFreeSlot = 0xFF;
+int8_t heliType = MDL_TYPE_HELI_SIM;
+
+
 /*--------------------------------------------------------------------------------
  * menu_init
  *--------------------------------------------------------------------------------*/
@@ -148,11 +152,169 @@ void menu_init()
 	}
 	
 }
+
+
+/*--------------------------------------------------------------------------------
+ * menu_model_clone
+ *--------------------------------------------------------------------------------*/
+char MNU_MODEL_CLONE_TITLE[] 		PROGMEM = "Clone Model";
+char MNU_MODEL_FREE[] 				PROGMEM = "**free**";
+
+char MNU_MODEL_EMPTY[] 		PROGMEM = "                   ";
+char MNU_MODEL_CLONED[] 	PROGMEM = "   Model cloned!   ";
+
+char MNU_MODEL_NO_SLOT_T[] 	PROGMEM = "   No free slot!   ";
+char MNU_MODEL_NO_SLOT_1[] 	PROGMEM = "All model slots are";
+char MNU_MODEL_NO_SLOT_2[] 	PROGMEM = "already used.      ";
+char MNU_MODEL_NO_SLOT_3[] 	PROGMEM = "Delete one model   ";
+char MNU_MODEL_NO_SLOT_4[] 	PROGMEM = "and try again!     ";
+
+
+uint8_t menu_model_clone(GUI_EVENT event, uint8_t elapsedTime)
+{
+	char name[10];
+	uint8_t i;
+	uint8_t x,y;
+	
+
+	switch (event)
+	{
+		case GUI_EVT_SHOW:
+			cursor = 0;
+			cursor2 = 0;
+			for (i=0; i<EE_MAX_MODELS; i++)
+			{
+				eeprom_load_model_name(i, name);
+				if (name[0] != 0)
+				{
+					// Set a bit to indicate model exist!
+					cursor2 |= (1<<i);
+				}
+			}
+
+			firstFreeSlot = 0xFF;
+			for (i=0; i<EE_MAX_MODELS; i++)
+			{
+				eeprom_load_model_name(i, name);
+				if (name[0] == 0)
+				{
+					firstFreeSlot = i;
+					break;
+				}
+			}
+
+			if (firstFreeSlot == 0xFF)
+			{
+				gui_screen_pop();
+				menu_show_messagebox(MNU_MODEL_NO_SLOT_T, MNU_MODEL_NO_SLOT_1, MNU_MODEL_NO_SLOT_2, MNU_MODEL_NO_SLOT_3, MNU_MODEL_NO_SLOT_4);
+				return 1;
+			}
+
+			break;
+		case GUI_EVT_HIDE:
+			break;
+		case GUI_EVT_KEY_EXIT:
+			gui_screen_pop();
+			break;
+		case GUI_EVT_KEY_MENU:
+			// Disable PPM
+			g_RadioConfig.ppmActive = 0;
+
+			// Load the model to copy...
+			eeprom_load_model_config(cursor);
+
+			// Change the name...
+			g_Model.name[6] = 'C';
+			g_Model.name[7] = 'P';
+			g_Model.name[8] = 'Y';
+			g_Model.name[9] = 0x0;
+
+			// Save at the free slot...
+			eeprom_save_model_config(firstFreeSlot);
+
+			// Load back the current model...
+			eeprom_load_model_config(g_RadioConfig.selectedModel);
+
+			// Enable PPM
+			g_RadioConfig.ppmActive = 1;
+
+			gui_screen_pop();
+			menu_show_messagebox(MNU_MODEL_EMPTY, MNU_MODEL_EMPTY, MNU_MODEL_CLONED, MNU_MODEL_EMPTY, MNU_MODEL_EMPTY);
+			return 1;
+		break;
+		case GUI_EVT_KEY_UP:
+			cursor--;
+			if (cursor < 0)
+			{
+				cursor = 7;
+			}
+			while ((cursor2 & (1 << cursor)) == 0x00)
+			{
+				cursor--;
+				if (cursor < 0)
+				{
+					cursor = 7;
+				}
+			}
+			break;
+		case GUI_EVT_KEY_DOWN:
+			cursor++;
+			if (cursor > 7)
+			{
+				cursor = 0;
+			}
+			while ((cursor2 & (1 << cursor)) == 0x00)
+			{
+				cursor++;
+				if (cursor > 7)
+				{
+					cursor = 0;
+				}
+			}
+
+		default:
+			break;
+	}
+
+	lcd_clear();
+	lcd_puts_P( 0, 0, MNU_MODEL_CLONE_TITLE);
+
+	x = 0;
+	y = 2;
+
+	for (i=0; i<EE_MAX_MODELS; i++)
+	{
+		if (i == 4)
+		{
+			x = 12;
+			y = 2;
+		}
+		eeprom_load_model_name(i, name);
+		if (name[0] != 0)
+		{
+			if (cursor == i)
+			{
+				lcd_putsAtt(x*LCD_FONT_WIDTH, y*LCD_FONT_HEIGHT, name, LCD_BSS_INVERS);
+			}
+			else
+			{
+				lcd_putsAtt(x*LCD_FONT_WIDTH, y*LCD_FONT_HEIGHT, name, LCD_BSS_NO_INV);
+			}
+		}
+		else
+		{
+			lcd_putsAtt(x*LCD_FONT_WIDTH, y*LCD_FONT_HEIGHT, MNU_MODEL_FREE, LCD_NO_INV);
+		}
+		y++;
+	}
+
+	return 1;
+}
+
 /*--------------------------------------------------------------------------------
  * menu_model_delete
  *--------------------------------------------------------------------------------*/
 char MNU_MODEL_DELETE_TITLE[] 		PROGMEM = "Delete Model";
-char MNU_MODEL_FREE[] 				PROGMEM = "**free**";
 
 char MNU_MODEL_NO_DEL_T[] 	PROGMEM = " Failed to delete! ";
 char MNU_MODEL_NO_DEL_1[] 	PROGMEM = "Cannot delete the  ";
@@ -160,7 +322,6 @@ char MNU_MODEL_NO_DEL_2[] 	PROGMEM = "selected model.    ";
 char MNU_MODEL_NO_DEL_3[] 	PROGMEM = "Select another one ";
 char MNU_MODEL_NO_DEL_4[] 	PROGMEM = "and try again!     ";
 
-char MNU_MODEL_EMPTY[] 	PROGMEM = "                   ";
 char MNU_MODEL_DEL[] 	PROGMEM = "   Model deleted!  ";
 
 
@@ -285,12 +446,6 @@ uint8_t menu_model_delete(GUI_EVENT event, uint8_t elapsedTime)
 char MNU_MODEL_CREATE_TITLE[]	PROGMEM = "Create Model";
 
 
-char MNU_MODEL_NO_SLOT_T[] 	PROGMEM = "   No free slot!   ";
-char MNU_MODEL_NO_SLOT_1[] 	PROGMEM = "All model slots are";
-char MNU_MODEL_NO_SLOT_2[] 	PROGMEM = "already used.      ";
-char MNU_MODEL_NO_SLOT_3[] 	PROGMEM = "Delete one model   ";
-char MNU_MODEL_NO_SLOT_4[] 	PROGMEM = "and try again!     ";
-
 char MNU_MODEL_CREATE_TEMPLATE[]	PROGMEM = "Template:";
 char MNU_MODEL_CREATE_TYPE0[]		PROGMEM = "Simulator";
 char MNU_MODEL_CREATE_TYPE1[]		PROGMEM = "FBL";
@@ -310,9 +465,6 @@ char MNU_MODEL_MDL_INFO_1[] 	PROGMEM = "                   ";
 char MNU_MODEL_MDL_INFO_2[] 	PROGMEM = "Do not forget to   ";
 char MNU_MODEL_MDL_INFO_3[] 	PROGMEM = "config this model! ";
 char MNU_MODEL_MDL_INFO_4[] 	PROGMEM = "                   ";
-
-uint8_t firstFreeSlot = 0xFF;
-int8_t heliType = MDL_TYPE_HELI_SIM;
 
 uint8_t menu_model_create(GUI_EVENT event, uint8_t elapsedTime)
 {
@@ -2489,8 +2641,6 @@ uint8_t menu_radio_install(GUI_EVENT event, uint8_t elapsedTime)
 /*--------------------------------------------------------------------------------
  * menu_model_management
  *--------------------------------------------------------------------------------*/
-char MNU_MODEL_CLONE_TITLE[] 		PROGMEM = "Clone Model";
-
 
 SSelection modelManagement[4] PROGMEM = 
 {
@@ -2520,7 +2670,7 @@ SSelection modelManagement[4] PROGMEM =
 		MNU_MODEL_CLONE_TITLE,
 		0,
 		0,
-		0
+		&menu_model_clone
 	}
 };
 
