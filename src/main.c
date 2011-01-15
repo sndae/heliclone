@@ -158,6 +158,8 @@ void load_defaults()
  *--------------------------------------------------------------------------------*/
 int main(void)
 {
+	uint8_t i = 0;
+
 	// Init runtime struct
 	memset(&g_RadioRuntime, 0, sizeof(g_RadioRuntime));
 
@@ -173,10 +175,6 @@ int main(void)
     lcd_clear();
     lcd_refresh();
 
-	// Load defalt settings...
-	load_defaults();
-	load_model_defaults();
-	
 	// ADC
 	adc_init();
 
@@ -200,9 +198,24 @@ int main(void)
 		menu_show_messagebox(EEPROM_INFO_T, EEPROM_INFO_1, EEPROM_INFO_2, EEPROM_INFO_3, EEPROM_INFO_4);
 		gui_execute(GUI_EVERY_TICK);
 
+		// Load defalt settings...
+		load_defaults();
+
 		// Save defaults...
 		eeprom_save_radio_config();
+
+
+		// Clear models...
+		memset(&g_Model, 0, sizeof(g_Model));
+		for (i=1; i<EE_MAX_MODELS; i++)
+		{
+			eeprom_save_model_config(i);
+		}
+
+		// Create and save a default model...
+		load_model_defaults();
 		eeprom_save_model_config(g_RadioConfig.selectedModel);
+
 		eeprom_save_version();
 	}
 	else
