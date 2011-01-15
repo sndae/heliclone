@@ -27,5 +27,8 @@
 #define _TEMPLATE_H_
 
 extern void template_simulator(); 
+extern void template_fbl(); 
+extern void template_swash_120(); 
+extern void template_swash_140();
 
 #endif // _TEMPLATE_H_
