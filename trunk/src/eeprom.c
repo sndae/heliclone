@@ -26,6 +26,7 @@
 #include "eeprom.h"
 #include "globals.h"
 #include <avr/eeprom.h>
+#include <string.h>
 
 /*--------------------------------------------------------------------------------
  * LOCALS
@@ -107,6 +108,34 @@ void eeprom_save_model_config(uint8_t modelNumber)
 	eeprom_write_block(&g_Model, (void*)EE_MODEL_CONGFIG(modelNumber), sizeof(SModel));
 	
 	while (eeprom_is_ready()!=0);
+}
+
+/*--------------------------------------------------------------------------------
+ * eeprom_delete_model_config
+ *--------------------------------------------------------------------------------*/
+void eeprom_delete_model_config(uint8_t modelNumber)
+{
+	if (g_RadioConfig.selectedModel == modelNumber)
+	{
+		// Safety...should not happen!
+		return;
+	}
+
+	// Disable PPM
+	g_RadioConfig.ppmActive = 0;
+
+    // Clear the "current RAM model" memory...
+	memset(&g_Model, 0, sizeof(g_Model));
+
+	// Use the empty data to save a "zeroed" model...
+	eeprom_save_model_config(modelNumber);
+
+	// Load back the original model
+	eeprom_load_model_config(g_RadioConfig.selectedModel);
+	
+	// Enable PPM
+	g_RadioConfig.ppmActive = 1;
+
 }
 
 /*--------------------------------------------------------------------------------

@@ -48,6 +48,7 @@ extern void eeprom_save_version();
 extern void eeprom_save_radio_config();
 extern void eeprom_load_radio_config();
 extern void eeprom_save_model_config(uint8_t modelNumber);
+extern void eeprom_delete_model_config(uint8_t modelNumber);
 extern void eeprom_load_model_config(uint8_t modelNumber);
 
 extern void eeprom_save_model_trim(uint8_t modelNumber);
