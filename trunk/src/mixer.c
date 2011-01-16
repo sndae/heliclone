@@ -124,6 +124,11 @@ int16_t mixer_get_input(MIX_INPUT source)
 			index = source - MIX_IN_AIL;
 			return mixer_expo(source, g_RadioRuntime.adc_s[index]);
 
+		case MIX_IN_GYRO_AVCS:
+			return g_Model.gyro[MDL_GYRO_AVCS];
+		case MIX_IN_GYRO_RATE:
+			return g_Model.gyro[MDL_GYRO_RATE];
+
 		// Level 1 mixers...
 		case MIX_IN_MIXER_1:
 		case MIX_IN_MIXER_2:
