@@ -40,11 +40,19 @@ extern char debugLine2[20];
 
 
 #define MDL_MAX_CHANNELS		(8)
+#define MDL_MAX_FUNCTIONS		(8)
 #define MDL_MAX_MIXERS 			(16)
 #define MDL_MAX_CURVE_POINTS 	(5)
 
 #define SERVO_CHANNEL(N) (N-1)
 #define FUNCTION_INDEX(N) (N-MIX_OUT_AILERON)
+
+typedef enum
+{
+	MDL_SWASH_AIL = 0,
+	MDL_SWASH_ELE,
+	MDL_SWASH_PIT
+} MDL_SWASH;
 
 typedef enum
 {
@@ -155,13 +163,16 @@ typedef struct
 
 	// Servo vs channel table...
 	// Used to select if CH1 is AIL etc...
-	uint8_t functionToServoTable[MDL_MAX_CHANNELS];				// 8/112
+	uint8_t functionToServoTable[MDL_MAX_FUNCTIONS];			// 8/112
 
 	// Curves
 	int8_t curve[MDL_MAX_CURVES][MDL_MAX_CURVE_POINTS];			// 8*5=40/152
 
 	// EXPO
 	int8_t expo[4][2];											// 8/160
+
+	// SWASH_MIX
+	int8_t swash[3];											// 3/163
 
 } SModel;
 
