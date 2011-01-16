@@ -138,6 +138,9 @@ uint8_t menuNavigation = 1;
 uint8_t firstFreeSlot = 0xFF;
 int8_t heliType = MDL_TYPE_HELI_SIM;
 
+char MNU_MODEL_EMPTY[] 		PROGMEM = "                   ";
+
+
 /*--------------------------------------------------------------------------------
  * menu_init
  *--------------------------------------------------------------------------------*/
@@ -154,6 +157,130 @@ void menu_init()
 	
 }
 
+/*--------------------------------------------------------------------------------
+ * menu_model_swash_throw
+ *--------------------------------------------------------------------------------*/
+char MNU_MODEL_SWASH_TITLE[]	PROGMEM = "Swash throw";
+
+char MNU_MODEL_SWASH_AIL[]		PROGMEM = "AILERON:";
+char MNU_MODEL_SWASH_ELE[]		PROGMEM = "ELEVATOR:";
+char MNU_MODEL_SWASH_PIT[]		PROGMEM = "PITCH:";
+
+char MNU_MODEL_NO_SWASH_MIX_T[] 	PROGMEM = "   No swash mix!   ";
+char MNU_MODEL_NO_SWASH_MIX_2[] 	PROGMEM = "This model does not";
+char MNU_MODEL_NO_SWASH_MIX_3[] 	PROGMEM = "use any swash mix. ";
+
+
+char* swashStr[] PROGMEM = 
+{
+	MNU_MODEL_SWASH_AIL,
+	MNU_MODEL_SWASH_ELE,
+	MNU_MODEL_SWASH_PIT
+};
+
+uint8_t menu_model_swash_throw(GUI_EVENT event, uint8_t elapsedTime)
+{
+	uint8_t dirty = 1;
+	uint8_t i;
+	uint8_t drawingMode;
+	int8_t v;
+
+
+	switch (event)
+	{
+		case GUI_EVT_SHOW:
+			cursor = 0;
+			changedModel = 0;
+			if ((g_Model.type != MDL_TYPE_HELI_ECCPM_120) && (g_Model.type != MDL_TYPE_HELI_ECCPM_140))
+			{
+				gui_screen_pop();
+				menu_show_messagebox(MNU_MODEL_NO_SWASH_MIX_T, MNU_MODEL_EMPTY, MNU_MODEL_NO_SWASH_MIX_2, MNU_MODEL_NO_SWASH_MIX_3, MNU_MODEL_EMPTY);
+				return 1;
+			}
+			break;
+		case GUI_EVT_HIDE:
+			break;
+		case GUI_EVT_TICK:
+			break;
+		case GUI_EVT_KEY_EXIT:
+			// We are done...restore?
+			if (changedModel == 1)
+			{
+				eeprom_load_model_config(g_RadioConfig.selectedModel);
+			}
+			gui_screen_pop();
+			break;
+		case GUI_EVT_KEY_MENU:
+			// We are done...save?
+			if (changedModel == 1)
+			{
+				eeprom_save_model_config(g_RadioConfig.selectedModel);
+			}
+			gui_screen_pop();
+			break;
+		case GUI_EVT_KEY_UP:
+			cursor -= 1;
+			break;
+		case GUI_EVT_KEY_DOWN:
+			cursor += 1;
+			break;
+		case GUI_EVT_KEY_RIGHT:
+			g_Model.swash[cursor] = g_Model.swash[cursor] + 1;
+			changedModel = 1;
+			break;
+		case GUI_EVT_KEY_LEFT:
+			g_Model.swash[cursor] = g_Model.swash[cursor] - 1;
+			changedModel = 1;
+			break;
+		case GUI_EVT_POT_MOVE:
+			v = g_RadioRuntime.adc_s[GUI_POT];
+			g_Model.swash[cursor] = v;
+			changedModel = 1;
+		default:
+			break;
+	}
+
+	if (cursor > 2)
+	{
+		cursor = 0;
+	}
+	if (cursor < 0)
+	{
+		cursor = 2;
+	}
+
+	if (g_Model.swash[cursor] > 100)
+	{
+		g_Model.swash[cursor] = 100;
+	}	
+	if (g_Model.swash[cursor] < -100)
+	{
+		g_Model.swash[cursor] = -100;
+	}	
+
+	lcd_clear();
+	lcd_puts_P( 0, 0, MNU_MODEL_SWASH_TITLE);
+
+	for (i=0; i<3; i++)
+	{
+		lcd_putsAtt((0)*LCD_FONT_WIDTH, (2 + i)*LCD_FONT_HEIGHT, (char*)pgm_read_word(&swashStr[i]), LCD_NO_INV);
+
+		if (i == cursor)
+		{
+			drawingMode = LCD_INVERS;
+		}
+		else
+		{
+			drawingMode = LCD_NO_INV;
+		}
+
+		// The value...
+		v = g_Model.swash[i];
+		lcd_outdezAtt((12)*LCD_FONT_WIDTH, (2 + i)*LCD_FONT_HEIGHT, v, drawingMode);
+	}
+
+	return dirty;
+}
 
 /*--------------------------------------------------------------------------------
  * menu_model_clone
@@ -161,7 +288,6 @@ void menu_init()
 char MNU_MODEL_CLONE_TITLE[] 		PROGMEM = "Clone Model";
 char MNU_MODEL_FREE[] 				PROGMEM = "**free**";
 
-char MNU_MODEL_EMPTY[] 		PROGMEM = "                   ";
 char MNU_MODEL_CLONED[] 	PROGMEM = "   Model cloned!   ";
 
 char MNU_MODEL_NO_SLOT_T[] 	PROGMEM = "   No free slot!   ";
@@ -2517,7 +2643,7 @@ uint8_t menu_settings(GUI_EVENT event, uint8_t elapsedTime)
 char MNU_MODEL_CONFIG_TYPE[] 			PROGMEM = "Model Type";
 char MNU_MODEL_CONFIG_TYPE_SEL[] 		PROGMEM = "SIM |FBL |S120|S140";
 
-SSelection modelConfig[7] PROGMEM = 
+SSelection modelConfig[8] PROGMEM = 
 {
 	{
 		0x10,
@@ -2556,13 +2682,20 @@ SSelection modelConfig[7] PROGMEM =
 	},
 	{
 		0x14,
+		MNU_MODEL_SWASH_TITLE,
+		0,
+		0,
+		&menu_model_swash_throw
+	},
+	{
+		0x15,
 		MNU_MODEL_NAME_EDIT_TITLE,
 		0,
 		0,
 		&menu_model_name_edit
 	},
 	{
-		0x15,
+		0x16,
 		MNU_MODEL_CONFIG_TYPE,
 		MNU_MODEL_CONFIG_TYPE_SEL,
 		MC_SET_TYPE,
@@ -2577,7 +2710,7 @@ uint8_t menu_model_config(GUI_EVENT event, uint8_t elapsedTime)
 	switch (event)
 	{
 		case GUI_EVT_SHOW:
-			numSettings = 7;
+			numSettings = 8;
 			currentSettings = (SSelection*)&modelConfig[0];
 			break;
 		default:
