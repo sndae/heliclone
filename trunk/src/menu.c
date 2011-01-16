@@ -759,6 +759,7 @@ uint8_t menu_model_create(GUI_EVENT event, uint8_t elapsedTime)
 			// Select the new model and load it
 			g_RadioConfig.selectedModel = firstFreeSlot;
 
+			eeprom_save_radio_config();
 			eeprom_save_model_config(g_RadioConfig.selectedModel);
 		
 			gui_screen_pop();

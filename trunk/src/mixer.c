@@ -505,7 +505,7 @@ void mixer_mix()
 						break;
 					case MIX_OUT_ELEVATOR:
 						g_RadioRuntime.srv_s[index] = 
-							(pitS*FN_VALUE(MIX_OUT_PITCH)/100) - (eleS*FN_VALUE(MIX_OUT_ELEVATOR)/100);
+							(pitS*FN_VALUE(MIX_OUT_PITCH)/100) + (eleS*FN_VALUE(MIX_OUT_ELEVATOR)/100);
 						break;
 					default:
 						// No mixing...just send out

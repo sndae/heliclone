@@ -236,9 +236,9 @@ void template_common()
 	g_Model.gyro[MDL_GYRO_RATE] = -50;
 
 	// Default SWASH throw
-	g_Model.swash[MDL_SWASH_AIL] = 50;
-	g_Model.swash[MDL_SWASH_ELE] = 50;
-	g_Model.swash[MDL_SWASH_PIT] = 50;
+	g_Model.swash[MDL_SWASH_AIL] = -35;
+	g_Model.swash[MDL_SWASH_ELE] = -35;
+	g_Model.swash[MDL_SWASH_PIT] = -35;
 }
 
 void template_simulator() 

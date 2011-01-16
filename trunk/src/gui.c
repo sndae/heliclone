@@ -46,10 +46,10 @@
 
 // 100 = 1 second
 // 10 = 0.1 second
-#define KEY_LONG_PRESSED_TIME (100)
-#define KEY_REPEAT_TIME (40)
-#define KEY_PRESSED_TIME (10)
-#define KEY_REPEAT_PRESS_TIME (30)
+#define KEY_LONG_PRESSED_TIME (60)
+#define KEY_REPEAT_TIME (30)
+#define KEY_PRESSED_TIME (8)
+#define KEY_REPEAT_PRESS_TIME (20)
 
 #define EVENT_QUEUE_LEN (6)
 
