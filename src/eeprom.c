@@ -122,7 +122,7 @@ void eeprom_delete_model_config(uint8_t modelNumber)
 	}
 
 	// Disable PPM
-	g_RadioConfig.ppmActive = 0;
+	g_RadioRuntime.ppmActive = 0;
 
     // Clear the "current RAM model" memory...
 	memset(&g_Model, 0, sizeof(g_Model));
@@ -134,7 +134,7 @@ void eeprom_delete_model_config(uint8_t modelNumber)
 	eeprom_load_model_config(g_RadioConfig.selectedModel);
 	
 	// Enable PPM
-	g_RadioConfig.ppmActive = 1;
+	g_RadioRuntime.ppmActive = 1;
 
 }
 

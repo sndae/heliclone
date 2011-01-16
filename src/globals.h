@@ -103,9 +103,6 @@ typedef struct
 	// Selected model number
 	uint8_t 	selectedModel;
 
-	// PPM active
-	uint8_t 	ppmActive;
-
 } SRadioConfig;
 
 typedef struct
@@ -127,6 +124,10 @@ typedef struct
 
 	// Servos output values (from mixing stage)
 	int16_t srv_s[MDL_MAX_CHANNELS];  	// current calculated servos  <-100,100>
+
+	// PPM active
+	uint8_t 	ppmActive;
+
 
 } SRadioRuntime;
 
