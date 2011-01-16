@@ -27,6 +27,7 @@
 
 #include "globals.h"
 #include "hal_io.h"
+#include "adc.h"
 
 
 #define CURVE(P, N) g_Model.curve[N][P]
@@ -51,6 +52,35 @@ uint8_t functionChanged[MDL_MAX_FUNCTIONS];
 void mixer_init()
 {
 }
+
+/*--------------------------------------------------------------------------------
+ * mixer_trim
+ *--------------------------------------------------------------------------------*/
+int16_t mixer_trim(MIX_INPUT source, int16_t value)
+{
+	switch (source)
+	{
+		case MIX_IN_THR:
+			// Trim value verticals are reversed
+			value = value - g_Model.trim[ADC_THR];
+			break;
+		case MIX_IN_AIL:
+			value = value + g_Model.trim[ADC_AIL];
+			break;
+		case MIX_IN_ELE:
+			// Trim value verticals are reversed
+			value = value - g_Model.trim[ADC_ELE];
+			break;
+		case MIX_IN_RUD:
+			value = value + g_Model.trim[ADC_RUD];
+			break;
+		default:
+			return value;
+	}
+
+	return value;
+}
+
 
 /*--------------------------------------------------------------------------------
  * mixer_expo
@@ -111,6 +141,7 @@ int16_t mixer_expo(MIX_INPUT source, int16_t value)
 int16_t mixer_get_input(MIX_INPUT source)
 {
 	uint8_t index;
+	int16_t tempV;
 	switch (source)
 	{
 		// ADC Channels
@@ -122,7 +153,8 @@ int16_t mixer_get_input(MIX_INPUT source)
 		case MIX_IN_POT2:
 		case MIX_IN_POT3:
 			index = source - MIX_IN_AIL;
-			return mixer_expo(source, g_RadioRuntime.adc_s[index]);
+			tempV = mixer_trim(source, g_RadioRuntime.adc_s[index]);
+			return mixer_expo(source, tempV);
 
 		case MIX_IN_GYRO_AVCS:
 			return g_Model.gyro[MDL_GYRO_AVCS];
