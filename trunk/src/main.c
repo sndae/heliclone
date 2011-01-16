@@ -149,7 +149,7 @@ void load_defaults()
 	g_RadioConfig.backlight = 1;
 
 	// No PPM out...
-	g_RadioConfig.ppmActive = 0;
+	g_RadioRuntime.ppmActive = 0;
 
 }
 
@@ -233,7 +233,7 @@ int main(void)
 #endif	
 
 	// Enable PPM
-	g_RadioConfig.ppmActive = 1;
+	g_RadioRuntime.ppmActive = 1;
 
 	// Main loop.
     while (1 == 1)
@@ -266,7 +266,7 @@ int main(void)
 		mixer_mix();
 
 		// Export PPM data to PPM ISR
-		if (g_RadioConfig.ppmActive)
+		if (g_RadioRuntime.ppmActive)
 		{
 			ppm_export();
 		}

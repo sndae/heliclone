@@ -218,7 +218,7 @@ uint8_t menu_model_clone(GUI_EVENT event, uint8_t elapsedTime)
 			break;
 		case GUI_EVT_KEY_MENU:
 			// Disable PPM
-			g_RadioConfig.ppmActive = 0;
+			g_RadioRuntime.ppmActive = 0;
 
 			// Load the model to copy...
 			eeprom_load_model_config(cursor);
@@ -236,7 +236,7 @@ uint8_t menu_model_clone(GUI_EVENT event, uint8_t elapsedTime)
 			eeprom_load_model_config(g_RadioConfig.selectedModel);
 
 			// Enable PPM
-			g_RadioConfig.ppmActive = 1;
+			g_RadioRuntime.ppmActive = 1;
 
 			gui_screen_pop();
 			menu_show_messagebox(MNU_MODEL_EMPTY, MNU_MODEL_EMPTY, MNU_MODEL_CLONED, MNU_MODEL_EMPTY, MNU_MODEL_EMPTY);
