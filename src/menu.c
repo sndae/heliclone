@@ -86,7 +86,9 @@ typedef enum
 	MC_SET_SUBT_CH5,
 	MC_SET_SUBT_CH6,
 	MC_SET_SUBT_CH7,
-	MC_SET_SUBT_CH8
+	MC_SET_SUBT_CH8,
+
+	MC_SET_TYPE
 } PARAMETER_ID;
 
 
@@ -135,7 +137,6 @@ uint8_t menuNavigation = 1;
 
 uint8_t firstFreeSlot = 0xFF;
 int8_t heliType = MDL_TYPE_HELI_SIM;
-
 
 /*--------------------------------------------------------------------------------
  * menu_init
@@ -2245,6 +2246,9 @@ uint8_t menu_get_setting(uint8_t parameterId)
 			parameterId = parameterId - MC_SET_SUBT_CH1;
 			return g_Model.subTrim[parameterId];
 			break;
+		case MC_SET_TYPE:
+			return g_Model.type;
+			break;
 		default:
 			break;
 	}
@@ -2253,6 +2257,8 @@ uint8_t menu_get_setting(uint8_t parameterId)
 
 void menu_set_setting(uint8_t parameterId, uint8_t newValue)
 {
+	uint8_t saveEeprom = 0;
+
 	switch (parameterId)
 	{
 		case RC_SET_VOLTAGE:
@@ -2265,6 +2271,7 @@ void menu_set_setting(uint8_t parameterId, uint8_t newValue)
 			{
 				g_RadioConfig.voltageWarning = 50;
 			}
+			saveEeprom = 1;
 			break;
 		case RC_SET_BACKLIGHT:
 			g_RadioConfig.backlight = newValue;
@@ -2276,6 +2283,7 @@ void menu_set_setting(uint8_t parameterId, uint8_t newValue)
 			{
 				g_RadioConfig.backlight = 5;
 			}
+			saveEeprom = 1;
 			break;
 		case RC_SET_BEEP_KEYS:
 			g_RadioConfig.keyBeep = newValue;
@@ -2287,7 +2295,7 @@ void menu_set_setting(uint8_t parameterId, uint8_t newValue)
 			{
 				g_RadioConfig.keyBeep = 1;
 			}
-		
+			saveEeprom = 1;
 			break;
 		case RC_SET_BEEP_ALARMS:
 			g_RadioConfig.alarmBeep = newValue;
@@ -2299,6 +2307,7 @@ void menu_set_setting(uint8_t parameterId, uint8_t newValue)
 			{
 				g_RadioConfig.alarmBeep = 3;
 			}
+			saveEeprom = 1;
 			break;
 
 
@@ -2332,9 +2341,31 @@ void menu_set_setting(uint8_t parameterId, uint8_t newValue)
 			parameterId = parameterId - MC_SET_SUBT_CH1;
 			g_Model.subTrim[parameterId] = newValue;
 			break;
+		case MC_SET_TYPE:
+			g_Model.type = newValue;
+			if (g_Model.type == 0xFF)
+			{
+				g_Model.type = 0;
+			}
+			if (g_Model.type > 3)
+			{
+				g_Model.type = 3;
+			}
+			saveEeprom = 2;
+			break;
 		default:
 			break;
 	}
+
+	if (saveEeprom == 1)
+	{
+		eeprom_save_radio_config();
+	}
+	if (saveEeprom == 2)
+	{
+		eeprom_save_model_config(g_RadioConfig.selectedModel);
+	}
+
 }
 
 uint8_t menu_settings(GUI_EVENT event, uint8_t elapsedTime)
@@ -2483,8 +2514,10 @@ uint8_t menu_settings(GUI_EVENT event, uint8_t elapsedTime)
 /*--------------------------------------------------------------------------------
  * menu_model_config
  *--------------------------------------------------------------------------------*/
+char MNU_MODEL_CONFIG_TYPE[] 			PROGMEM = "Model Type";
+char MNU_MODEL_CONFIG_TYPE_SEL[] 		PROGMEM = "SIM |FBL |S120|S140";
 
-SSelection modelConfig[6] PROGMEM = 
+SSelection modelConfig[7] PROGMEM = 
 {
 	{
 		0x10,
@@ -2527,6 +2560,13 @@ SSelection modelConfig[6] PROGMEM =
 		0,
 		0,
 		&menu_model_name_edit
+	},
+	{
+		0x15,
+		MNU_MODEL_CONFIG_TYPE,
+		MNU_MODEL_CONFIG_TYPE_SEL,
+		MC_SET_TYPE,
+		0
 	}
 
 };
@@ -2537,7 +2577,7 @@ uint8_t menu_model_config(GUI_EVENT event, uint8_t elapsedTime)
 	switch (event)
 	{
 		case GUI_EVT_SHOW:
-			numSettings = 6;
+			numSettings = 7;
 			currentSettings = (SSelection*)&modelConfig[0];
 			break;
 		default:

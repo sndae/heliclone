@@ -411,9 +411,10 @@ void mixer_single_mix(SMixer* mixer)
 /*--------------------------------------------------------------------------------
  * mixer_mix
  *--------------------------------------------------------------------------------*/
+uint8_t i;
 void mixer_mix()
 {
-	uint8_t i, m;
+	uint8_t m;
 	uint8_t level;
 	SMixer* mixer;
 
@@ -451,15 +452,22 @@ void mixer_mix()
 		}
 	}
 
-
 	// If we did not change the values...restore em
+	// else, handle direction.
 	for (i=0; i<MDL_MAX_CHANNELS; i++)
 	{
 		if (servoChanged[i] == 0)
 		{
 			g_RadioRuntime.srv_s[i] = servoSavedValue[i];
 		}
-
+		else
+		{
+			// Reverse servo output?
+			if ((g_Model.servoDirection & (1 << i)))
+			{
+				g_RadioRuntime.srv_s[i] = -g_RadioRuntime.srv_s[i];
+			}
+		}
 	}
 }
 

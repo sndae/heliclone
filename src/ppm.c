@@ -175,12 +175,6 @@ void ppm_export()
 		// Apply wanted Subtrims
 		currentServo += g_Model.subTrim[i];
 
-		// Direction INVERSED?
-		if ((g_Model.servoDirection & (1 << i)) == (1 << i))
-		{
-			currentServo = -currentServo;	
-		}
-
 		if (currentServo < 0)
 		{
 			// Range: [-100...0]
