@@ -738,6 +738,7 @@ uint8_t menu_model_expo_edit(GUI_EVENT event, uint8_t elapsedTime)
 	char* expoStr;
 	char* expoModeStr;
 	uint8_t expoMode;
+	int16_t adcValue;
 
 	switch (event)
 	{
@@ -809,6 +810,7 @@ uint8_t menu_model_expo_edit(GUI_EVENT event, uint8_t elapsedTime)
 	expoStr = MNU_MODEL_EXPO_AIL;
 	expoMode = MDL_EXPO_NORM;
 	expoModeStr = MNU_MODEL_EXPO_NORM;
+	adcValue = g_RadioRuntime.adc_s[ADC_AIL];
 	switch (cursor2)
 	{
 		case 0:
@@ -819,6 +821,7 @@ uint8_t menu_model_expo_edit(GUI_EVENT event, uint8_t elapsedTime)
 				expoMode = MDL_EXPO_DUAL;
 				expoModeStr = MNU_MODEL_EXPO_DUAL;
 			}
+			adcValue = g_RadioRuntime.adc_s[ADC_AIL];
 			break;
 		case 1:
 			expoStr = MNU_MODEL_EXPO_ELE;
@@ -828,6 +831,7 @@ uint8_t menu_model_expo_edit(GUI_EVENT event, uint8_t elapsedTime)
 				expoMode = MDL_EXPO_DUAL;
 				expoModeStr = MNU_MODEL_EXPO_DUAL;
 			}
+			adcValue = g_RadioRuntime.adc_s[ADC_ELE];
 			break;
 		case 2:
 			expoStr = MNU_MODEL_EXPO_RUD;
@@ -837,6 +841,7 @@ uint8_t menu_model_expo_edit(GUI_EVENT event, uint8_t elapsedTime)
 				expoMode = MDL_EXPO_DUAL;
 				expoModeStr = MNU_MODEL_EXPO_DUAL;
 			}
+			adcValue = g_RadioRuntime.adc_s[ADC_RUD];
 			break;
 		default:
 			break;
@@ -941,6 +946,10 @@ uint8_t menu_model_expo_edit(GUI_EVENT event, uint8_t elapsedTime)
 
 		lcd_plot(px, py);
 	}
+
+	// Draw the actual position of the input
+	px = (LCD_DISPLAY_W-32) + (adcValue*32/100);
+	lcd_vline(px, LCD_DISPLAY_H-64,    64);
 
 	return 1;
 }
@@ -1202,6 +1211,7 @@ uint8_t menu_model_curve_edit(GUI_EVENT event, uint8_t elapsedTime)
 	int16_t x1,y1,x2,y2;
 	int16_t px1,py1,px2,py2;
 	SSelection* selection;
+	int16_t adcValue;
 
 	// Keep track of PITCH or THROTTLE curves???
 	selection = (SSelection*)&currentSettings[cursorSetting];
@@ -1423,6 +1433,11 @@ uint8_t menu_model_curve_edit(GUI_EVENT event, uint8_t elapsedTime)
 
 	}
 
+	// Draw the actual position of the input
+	adcValue = g_RadioRuntime.adc_s[ADC_THR];
+	px1 = (LCD_DISPLAY_W-32) + (adcValue*32/100);
+	lcd_vline(px1, LCD_DISPLAY_H-64,    64);
+	
 	return 1;
 }
 

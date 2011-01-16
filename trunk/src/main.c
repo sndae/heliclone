@@ -148,9 +148,6 @@ void load_defaults()
 	g_RadioConfig.voltageWarning = 70;
 	g_RadioConfig.backlight = 1;
 
-	// No PPM out...
-	g_RadioRuntime.ppmActive = 0;
-
 }
 
 /*--------------------------------------------------------------------------------
@@ -162,6 +159,9 @@ int main(void)
 
 	// Init runtime struct
 	memset(&g_RadioRuntime, 0, sizeof(g_RadioRuntime));
+
+	// No PPM out...
+	g_RadioRuntime.ppmActive = 0;
 
     // Init stuff..
     hal_io_init();
