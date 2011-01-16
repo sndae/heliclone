@@ -544,6 +544,16 @@ void mixer_mix()
 		}
 		else
 		{
+			// Adjust for EndPoints?
+			if (g_RadioRuntime.srv_s[i] > 0)
+			{
+				g_RadioRuntime.srv_s[i] = (g_RadioRuntime.srv_s[i] * g_Model.endPoint[1][i])/120;
+			}
+			else
+			{
+				g_RadioRuntime.srv_s[i] = (g_RadioRuntime.srv_s[i] * g_Model.endPoint[0][i])/120;
+			}
+
 			// Reverse servo output?
 			if ((g_Model.servoDirection & (1 << i)))
 			{

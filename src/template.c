@@ -29,6 +29,8 @@
 
 void template_common() 
 {
+	uint8_t i;
+
 	// All servos NORMAL direction
 	g_Model.servoDirection = 0x00;
 
@@ -239,6 +241,14 @@ void template_common()
 	g_Model.swash[MDL_SWASH_AIL] = -35;
 	g_Model.swash[MDL_SWASH_ELE] = -35;
 	g_Model.swash[MDL_SWASH_PIT] = -35;
+
+	for (i=0; i<MDL_MAX_CHANNELS; i++)
+	{
+		// 100% throw...
+		g_Model.endPoint[0][i] = 100;
+		g_Model.endPoint[1][i] = 100;
+	}
+
 }
 
 void template_simulator() 

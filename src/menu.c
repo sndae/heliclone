@@ -128,6 +128,7 @@ uint8_t settingValue = -1;
 uint8_t changedModel = 0;
 int8_t cursor = 0;
 int8_t cursor2 = 0;
+int8_t servoSelected;
 
 SMenu* currentMenu = (SMenu*)&ModelSelection;
 
@@ -139,6 +140,7 @@ uint8_t firstFreeSlot = 0xFF;
 int8_t heliType = MDL_TYPE_HELI_SIM;
 
 char MNU_MODEL_EMPTY[] 		PROGMEM = "                   ";
+char MNU_MODEL_SERVO_CH[] 			PROGMEM = "CH";
 
 
 /*--------------------------------------------------------------------------------
@@ -155,6 +157,170 @@ void menu_init()
 		gui_screen_push(&menu_adc_calibrate);
 	}
 	
+}
+
+
+/*--------------------------------------------------------------------------------
+ * menu_model_servo_limits
+ *--------------------------------------------------------------------------------*/
+char MNU_MODEL_SERVO_LIMITS_TITLE[]	PROGMEM = "Servo Endpoints";
+
+uint8_t menu_model_servo_limits(GUI_EVENT event, uint8_t elapsedTime)
+{
+	uint8_t dirty = 1;
+	uint8_t x,y,s;
+	uint8_t drawingMode;
+	int8_t v;
+
+	switch (event)
+	{
+		case GUI_EVT_SHOW:
+			servoSelected = 0;
+			changedModel = 0;
+			break;
+		case GUI_EVT_HIDE:
+			break;
+		case GUI_EVT_TICK:
+			break;
+		case GUI_EVT_KEY_EXIT:
+			// We are done...restore?
+			if (changedModel == 1)
+			{
+				eeprom_load_model_config(g_RadioConfig.selectedModel);
+			}
+			gui_screen_pop();
+			break;
+		case GUI_EVT_KEY_MENU:
+			// We are done...save?
+			if (changedModel == 1)
+			{
+				eeprom_save_model_config(g_RadioConfig.selectedModel);
+			}
+			gui_screen_pop();
+			break;
+		case GUI_EVT_KEY_RIGHT:
+			servoSelected += 1;
+			break;
+		case GUI_EVT_KEY_LEFT:
+			servoSelected -= 1;
+			break;
+		case GUI_EVT_KEY_UP:
+			if (servoSelected % 2 == 0)
+			{
+				g_Model.endPoint[0][servoSelected/2] += 1;
+			}
+			else
+			{
+				g_Model.endPoint[1][servoSelected/2] += 1;
+			}
+			changedModel = 1;
+			break;
+		case GUI_EVT_KEY_DOWN:
+			if (servoSelected % 2 == 0)
+			{
+				g_Model.endPoint[0][servoSelected/2] -= 1;
+			}
+			else
+			{
+				g_Model.endPoint[1][servoSelected/2] -= 1;
+			}
+			changedModel = 1;
+			break;
+		case GUI_EVT_POT_MOVE:
+			v = 100 + g_RadioRuntime.adc_s[GUI_POT];
+			if (servoSelected % 2 == 0)
+			{
+				g_Model.endPoint[0][servoSelected/2] = v;
+			}
+			else
+			{
+				g_Model.endPoint[1][servoSelected/2] = v;
+			}
+			changedModel = 1;
+		default:
+			break;
+	}
+
+	if (servoSelected > 15)
+	{
+		servoSelected = servoSelected - 16;
+	}
+	if (servoSelected < 0)
+	{
+		servoSelected = servoSelected + 16;
+	}
+
+	if (servoSelected % 2 == 0)
+	{
+		if (g_Model.endPoint[0][servoSelected/2] < 0)
+		{
+			g_Model.endPoint[0][servoSelected/2] = 0;
+		}
+		
+		if (g_Model.endPoint[0][servoSelected/2] > 120)
+		{
+			g_Model.endPoint[0][servoSelected/2] = 120;
+		}
+	}
+	else
+	{
+		if (g_Model.endPoint[1][servoSelected/2] < 0)
+		{
+			g_Model.endPoint[1][servoSelected/2] = 0;
+		}
+		
+		if (g_Model.endPoint[1][servoSelected/2] > 120)
+		{
+			g_Model.endPoint[1][servoSelected/2] = 120;
+		}
+	}
+
+
+	lcd_clear();
+	lcd_puts_P( 0, 0, MNU_MODEL_SERVO_LIMITS_TITLE);
+	s = 0;
+
+	for(y=0; ((y<3) && (s<16)); y++)
+	{
+		for(x=0; ((x<3) && (s<16)); x++)
+		{
+			// "CHn"
+			lcd_putsAtt((x*7)*LCD_FONT_WIDTH, (y*2 + 2)*LCD_FONT_HEIGHT, MNU_MODEL_SERVO_CH, LCD_NO_INV);
+			lcd_outdezAtt((x*7 + 3)*LCD_FONT_WIDTH, (y*2 + 2)*LCD_FONT_HEIGHT, (s/2)+1, LCD_NO_INV);
+
+			if (s == servoSelected)
+			{
+				drawingMode = LCD_INVERS;
+			}
+			else
+			{
+				drawingMode = LCD_NO_INV;
+			}
+
+			// The LOW value...
+			v = g_Model.endPoint[0][s/2];
+			lcd_outdezAtt((x*7+6)*LCD_FONT_WIDTH, (y*2 + 2)*LCD_FONT_HEIGHT, v, drawingMode);
+
+			s++;
+
+			if (s == servoSelected)
+			{
+				drawingMode = LCD_INVERS;
+			}
+			else
+			{
+				drawingMode = LCD_NO_INV;
+			}
+
+			// The HIGH value...
+			v = g_Model.endPoint[1][s/2];
+			lcd_outdezAtt((x*7+6)*LCD_FONT_WIDTH, (y*2 + 3)*LCD_FONT_HEIGHT, v, drawingMode);
+
+			s++;
+		}
+	}
+
+	return dirty;
 }
 
 /*--------------------------------------------------------------------------------
@@ -1690,11 +1856,8 @@ uint8_t menu_model_curve_edit(GUI_EVENT event, uint8_t elapsedTime)
  * menu_model_servo_direction
  *--------------------------------------------------------------------------------*/
 char MNU_MODEL_SERVO_TITLE[] 		PROGMEM = "Servo Direction";
-char MNU_MODEL_SERVO_CH[] 			PROGMEM = "CH";
 char MNU_MODEL_SERVO_CH_NORM[] 		PROGMEM = "NOR";
 char MNU_MODEL_SERVO_CH_INV[] 		PROGMEM = "INV";
-
-int8_t servoSelected;
 
 uint8_t menu_model_servo_direction(GUI_EVENT event, uint8_t elapsedTime)
 {
@@ -1804,7 +1967,7 @@ uint8_t menu_model_servo_direction(GUI_EVENT event, uint8_t elapsedTime)
 /*--------------------------------------------------------------------------------
  * menu_model_servo_subtrim
  *--------------------------------------------------------------------------------*/
-char MNU_MODEL_SERVO_SUBTRIM_TITLE[]	PROGMEM = "Subtrims";
+char MNU_MODEL_SERVO_SUBTRIM_TITLE[]	PROGMEM = "Servo Subtrim";
 
 uint8_t menu_model_servo_subtrim(GUI_EVENT event, uint8_t elapsedTime)
 {
@@ -2761,7 +2924,7 @@ uint8_t menu_settings(GUI_EVENT event, uint8_t elapsedTime)
 char MNU_MODEL_CONFIG_TYPE[] 			PROGMEM = "Model Type";
 char MNU_MODEL_CONFIG_TYPE_SEL[] 		PROGMEM = "SIM |FBL |S120|S140";
 
-SSelection modelConfig[9] PROGMEM = 
+SSelection modelConfig[10] PROGMEM = 
 {
 	{
 		0x10,
@@ -2779,6 +2942,13 @@ SSelection modelConfig[9] PROGMEM =
 	},
 	{
 		0x15,
+		MNU_MODEL_SERVO_LIMITS_TITLE,
+		0,
+		0,
+		&menu_model_servo_limits
+	},
+	{
+		0x16,
 		MNU_MODEL_EXPO_EDIT_TITLE,
 		0,
 		0,
@@ -2799,28 +2969,28 @@ SSelection modelConfig[9] PROGMEM =
 		&menu_model_curve_edit
 	},
 	{
-		0x16,
+		0x17,
 		MNU_MODEL_GYRO_TITLE,
 		0,
 		0,
 		&menu_model_gyro_gain
 	},
 	{
-		0x17,
+		0x18,
 		MNU_MODEL_SWASH_TITLE,
 		0,
 		0,
 		&menu_model_swash_throw
 	},
 	{
-		0x18,
+		0x19,
 		MNU_MODEL_NAME_EDIT_TITLE,
 		0,
 		0,
 		&menu_model_name_edit
 	},
 	{
-		0x19,
+		0x1a,
 		MNU_MODEL_CONFIG_TYPE,
 		MNU_MODEL_CONFIG_TYPE_SEL,
 		MC_SET_TYPE,
@@ -2835,7 +3005,7 @@ uint8_t menu_model_config(GUI_EVENT event, uint8_t elapsedTime)
 	switch (event)
 	{
 		case GUI_EVT_SHOW:
-			numSettings = 9;
+			numSettings = 10;
 			currentSettings = (SSelection*)&modelConfig[0];
 			break;
 		default:

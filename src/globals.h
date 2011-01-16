@@ -183,6 +183,10 @@ typedef struct
 	// GYRO Gain
 	int8_t gyro[2];												// 2/165
 
+	// endpoints
+	int8_t endPoint[2][MDL_MAX_CHANNELS];						// 16/181
+
+
 } SModel;
 
 // Exported here...but created  in main.c
