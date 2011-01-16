@@ -158,6 +158,119 @@ void menu_init()
 }
 
 /*--------------------------------------------------------------------------------
+ * menu_model_gyro_gain
+ *--------------------------------------------------------------------------------*/
+char MNU_MODEL_GYRO_TITLE[]	PROGMEM = "Gyro Setup";
+
+char MNU_MODEL_GYRO_AVCS[]		PROGMEM = "AVCS:";
+char MNU_MODEL_GYRO_RATE[]		PROGMEM = "RATE:";
+
+char* gyroStr[] PROGMEM = 
+{
+	MNU_MODEL_GYRO_AVCS,
+	MNU_MODEL_GYRO_RATE
+};
+
+uint8_t menu_model_gyro_gain(GUI_EVENT event, uint8_t elapsedTime)
+{
+	uint8_t dirty = 1;
+	uint8_t i;
+	uint8_t drawingMode;
+	int8_t v;
+
+
+	switch (event)
+	{
+		case GUI_EVT_SHOW:
+			cursor = 0;
+			changedModel = 0;
+			break;
+		case GUI_EVT_HIDE:
+			break;
+		case GUI_EVT_TICK:
+			break;
+		case GUI_EVT_KEY_EXIT:
+			// We are done...restore?
+			if (changedModel == 1)
+			{
+				eeprom_load_model_config(g_RadioConfig.selectedModel);
+			}
+			gui_screen_pop();
+			break;
+		case GUI_EVT_KEY_MENU:
+			// We are done...save?
+			if (changedModel == 1)
+			{
+				eeprom_save_model_config(g_RadioConfig.selectedModel);
+			}
+			gui_screen_pop();
+			break;
+		case GUI_EVT_KEY_UP:
+			cursor -= 1;
+			break;
+		case GUI_EVT_KEY_DOWN:
+			cursor += 1;
+			break;
+		case GUI_EVT_KEY_RIGHT:
+			g_Model.gyro[cursor] = g_Model.gyro[cursor] + 1;
+			changedModel = 1;
+			break;
+		case GUI_EVT_KEY_LEFT:
+			g_Model.gyro[cursor] = g_Model.gyro[cursor] - 1;
+			changedModel = 1;
+			break;
+		case GUI_EVT_POT_MOVE:
+			v = g_RadioRuntime.adc_s[GUI_POT];
+			g_Model.gyro[cursor] = v;
+			changedModel = 1;
+		default:
+			break;
+	}
+
+	if (cursor > 1)
+	{
+		cursor = 0;
+	}
+	if (cursor < 0)
+	{
+		cursor = 1;
+	}
+
+	if (g_Model.gyro[cursor] > 100)
+	{
+		g_Model.gyro[cursor] = 100;
+	}	
+	if (g_Model.gyro[cursor] < -100)
+	{
+		g_Model.gyro[cursor] = -100;
+	}	
+
+
+	lcd_clear();
+	lcd_puts_P( 0, 0, MNU_MODEL_GYRO_TITLE);
+
+	for (i=0; i<2; i++)
+	{
+		lcd_putsAtt((0)*LCD_FONT_WIDTH, (2 + i)*LCD_FONT_HEIGHT, (char*)pgm_read_word(&gyroStr[i]), LCD_NO_INV);
+
+		if (i == cursor)
+		{
+			drawingMode = LCD_INVERS;
+		}
+		else
+		{
+			drawingMode = LCD_NO_INV;
+		}
+
+		// The value...
+		v = g_Model.gyro[i];
+		lcd_outdezAtt((8)*LCD_FONT_WIDTH, (2 + i)*LCD_FONT_HEIGHT, v, drawingMode);
+	}
+
+	return dirty;
+}
+
+/*--------------------------------------------------------------------------------
  * menu_model_swash_throw
  *--------------------------------------------------------------------------------*/
 char MNU_MODEL_SWASH_TITLE[]	PROGMEM = "Swash throw";
@@ -2643,7 +2756,7 @@ uint8_t menu_settings(GUI_EVENT event, uint8_t elapsedTime)
 char MNU_MODEL_CONFIG_TYPE[] 			PROGMEM = "Model Type";
 char MNU_MODEL_CONFIG_TYPE_SEL[] 		PROGMEM = "SIM |FBL |S120|S140";
 
-SSelection modelConfig[8] PROGMEM = 
+SSelection modelConfig[9] PROGMEM = 
 {
 	{
 		0x10,
@@ -2681,21 +2794,28 @@ SSelection modelConfig[8] PROGMEM =
 		&menu_model_curve_edit
 	},
 	{
-		0x14,
+		0x16,
+		MNU_MODEL_GYRO_TITLE,
+		0,
+		0,
+		&menu_model_gyro_gain
+	},
+	{
+		0x17,
 		MNU_MODEL_SWASH_TITLE,
 		0,
 		0,
 		&menu_model_swash_throw
 	},
 	{
-		0x15,
+		0x18,
 		MNU_MODEL_NAME_EDIT_TITLE,
 		0,
 		0,
 		&menu_model_name_edit
 	},
 	{
-		0x16,
+		0x19,
 		MNU_MODEL_CONFIG_TYPE,
 		MNU_MODEL_CONFIG_TYPE_SEL,
 		MC_SET_TYPE,
@@ -2710,7 +2830,7 @@ uint8_t menu_model_config(GUI_EVENT event, uint8_t elapsedTime)
 	switch (event)
 	{
 		case GUI_EVT_SHOW:
-			numSettings = 8;
+			numSettings = 9;
 			currentSettings = (SSelection*)&modelConfig[0];
 			break;
 		default:

@@ -39,6 +39,10 @@ typedef enum
 	MIX_IN_POT2,
 	MIX_IN_POT3,
 
+	// Settings in the model
+	MIX_IN_GYRO_AVCS = 0x10,
+	MIX_IN_GYRO_RATE,
+
 	// Other MIXERS (LEVEL 1)
 	MIX_IN_MIXER_1 = 0x20,
 	MIX_IN_MIXER_2,

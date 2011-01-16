@@ -56,6 +56,12 @@ typedef enum
 
 typedef enum
 {
+	MDL_GYRO_AVCS = 0,
+	MDL_GYRO_RATE
+} MDL_GYRO;
+
+typedef enum
+{
 	// Throttle curves
 	MDL_CURVE_THR_ID0 = 0x00,
 	MDL_CURVE_THR_ID1,
@@ -173,6 +179,9 @@ typedef struct
 
 	// SWASH_MIX
 	int8_t swash[3];											// 3/163
+
+	// GYRO Gain
+	int8_t gyro[2];												// 2/165
 
 } SModel;
 

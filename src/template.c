@@ -204,6 +204,23 @@ void template_common()
 	g_Model.mixers[10].curve = MDL_CURVE_PIT_HOLD;
 	g_Model.mixers[10].level = 0;
 
+	// Gyro mixers...
+	g_Model.mixers[11].type = MIX_DIRECT;
+	g_Model.mixers[11].input = MIX_IN_GYRO_AVCS;
+	g_Model.mixers[11].output = MIX_OUT_GYRO_GAIN;
+	g_Model.mixers[11].scale = 100;
+	g_Model.mixers[11].condition = MIX_COND_GEAR;
+	g_Model.mixers[11].multiplex = MIX_REPLACE;
+	g_Model.mixers[11].level = 0;
+
+	g_Model.mixers[12].type = MIX_DIRECT;
+	g_Model.mixers[12].input = MIX_IN_GYRO_RATE;
+	g_Model.mixers[12].output = MIX_OUT_GYRO_GAIN;
+	g_Model.mixers[12].scale = 100;
+	g_Model.mixers[12].condition = MIX_COND_NOT_GEAR;
+	g_Model.mixers[12].multiplex = MIX_REPLACE;
+	g_Model.mixers[12].level = 0;
+
 	// Default 25% EXPO in Normal mode
 	g_Model.expo[MIX_IN_AIL][MDL_EXPO_NORM] = 25;
 	g_Model.expo[MIX_IN_AIL][MDL_EXPO_DUAL] = 0;
@@ -214,6 +231,14 @@ void template_common()
 	g_Model.expo[MIX_IN_RUD][MDL_EXPO_NORM] = 25;
 	g_Model.expo[MIX_IN_RUD][MDL_EXPO_DUAL] = 0;
 
+	// Default GYRO GAIN
+	g_Model.gyro[MDL_GYRO_AVCS] = 50;
+	g_Model.gyro[MDL_GYRO_RATE] = -50;
+
+	// Default SWASH throw
+	g_Model.swash[MDL_SWASH_AIL] = 50;
+	g_Model.swash[MDL_SWASH_ELE] = 50;
+	g_Model.swash[MDL_SWASH_PIT] = 50;
 }
 
 void template_simulator() 
@@ -227,6 +252,9 @@ void template_simulator()
 	// Sim type
 	g_Model.type = MDL_TYPE_HELI_SIM;
 
+	// Disable GYRO mixers in Sim
+	g_Model.mixers[11].condition = MIX_COND_FALSE;
+	g_Model.mixers[12].condition = MIX_COND_FALSE;
 
 }
 void template_fbl()
@@ -238,10 +266,6 @@ void template_fbl()
 
 	// Sim type
 	g_Model.type = MDL_TYPE_HELI_FBL;
-
-	//TODO:
-	// Setup GYRO
-
 }
 
 void template_swash_120()
@@ -253,13 +277,6 @@ void template_swash_120()
 
 	// Sim type
 	g_Model.type = MDL_TYPE_HELI_ECCPM_120;
-	g_Model.swash[MDL_SWASH_AIL] = 50;
-	g_Model.swash[MDL_SWASH_ELE] = 50;
-	g_Model.swash[MDL_SWASH_PIT] = 50;
-
-
-	//TODO:
-	// Setup GYRO
 
 }
 
@@ -272,9 +289,6 @@ void template_swash_140()
 
 	// Sim type
 	g_Model.type = MDL_TYPE_HELI_ECCPM_140;
-
-	//TODO:
-	// Setup GYRO
 
 }
 
