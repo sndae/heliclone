@@ -933,7 +933,9 @@ uint8_t menu_model_select(GUI_EVENT event, uint8_t elapsedTime)
  * menu_info_screen
  *--------------------------------------------------------------------------------*/
 char MNU_INFO_TITLE[] 				PROGMEM = "Heliclone Info";
-char MNU_INFO_VERSION[] 			PROGMEM = "Version: ---";
+char MNU_INFO_VERSION_TXT[]			PROGMEM = "Version:";
+char MNU_INFO_TIME[]	 			PROGMEM = __TIME__;
+char MNU_INFO_DATE[]	 			PROGMEM = __DATE__;
 char MNU_INFO_COPYR[] 				PROGMEM = "By Stefan Grufman";
 
 uint8_t menu_info_screen(GUI_EVENT event, uint8_t elapsedTime)
@@ -953,8 +955,10 @@ uint8_t menu_info_screen(GUI_EVENT event, uint8_t elapsedTime)
 
 	lcd_clear();
 	lcd_puts_P( 0, 0, MNU_INFO_TITLE);
-	lcd_puts_P( 0, 3*LCD_FONT_HEIGHT, MNU_INFO_VERSION);
-	lcd_puts_P( 0, 5*LCD_FONT_HEIGHT, MNU_INFO_COPYR);
+	lcd_puts_P( 0, 2*LCD_FONT_HEIGHT, MNU_INFO_VERSION_TXT);
+	lcd_puts_P( 0, 3*LCD_FONT_HEIGHT, MNU_INFO_DATE);
+	lcd_puts_P( 0, 4*LCD_FONT_HEIGHT, MNU_INFO_TIME);
+	lcd_puts_P( 0, 6*LCD_FONT_HEIGHT, MNU_INFO_COPYR);
 
 
 	return 1;
