@@ -31,6 +31,8 @@
 
 #define CURVE(P, N) g_Model.curve[N][P]
 
+#define FN_VALUE(FN) (functionOutput[FUNCTION_INDEX(FN)])
+
 
 /*--------------------------------------------------------------------------------
  * LOCALS
@@ -40,6 +42,8 @@ int16_t mixerOutput[MDL_MAX_MIXERS];
 int16_t servoSavedValue[MDL_MAX_CHANNELS];
 uint8_t servoChanged[MDL_MAX_CHANNELS];
 
+int16_t functionOutput[MDL_MAX_FUNCTIONS];
+uint8_t functionChanged[MDL_MAX_FUNCTIONS];
 
 /*--------------------------------------------------------------------------------
  * mixer_init
@@ -180,11 +184,8 @@ void mixer_set_output(MIX_OUTPUT destination, int16_t value)
 		case MIX_OUT_AUX1:
 		case MIX_OUT_AUX2:
 			index = destination - MIX_OUT_AILERON;
-			// Lookup where the function is mapped...
-			index = g_Model.functionToServoTable[index];
-			// Now set the wanted servo to the output.
-			g_RadioRuntime.srv_s[index] = value;
-			servoChanged[index] = 1;
+			functionOutput[index] = value;
+			functionChanged[index] = 1;
 			break;
 		default:
 			return;
@@ -211,6 +212,19 @@ int16_t mixer_get_output(MIX_OUTPUT destination)
 			index = destination - MIX_OUT_SRV1;
 			return g_RadioRuntime.srv_s[index];
 
+		// Level two mixers...
+		case MIX_OUT_MIXER_21:
+		case MIX_OUT_MIXER_22:
+		case MIX_OUT_MIXER_23:
+		case MIX_OUT_MIXER_24:
+		case MIX_OUT_MIXER_25:
+		case MIX_OUT_MIXER_26:
+		case MIX_OUT_MIXER_27:
+		case MIX_OUT_MIXER_28:
+			index = destination - MIX_OUT_MIXER_21;
+			return mixerOutput[index];
+			break;
+
 		// Functional output
 		case MIX_OUT_AILERON:
 		case MIX_OUT_THROTTLE:
@@ -221,9 +235,7 @@ int16_t mixer_get_output(MIX_OUTPUT destination)
 		case MIX_OUT_AUX1:
 		case MIX_OUT_AUX2:
 			index = destination - MIX_OUT_AILERON;
-			// Lookup where the function is mapped...
-			index = g_Model.functionToServoTable[index];
-			return g_RadioRuntime.srv_s[index];
+			return functionOutput[index];
 			break;
 
 		default:
@@ -413,18 +425,25 @@ void mixer_single_mix(SMixer* mixer)
  *--------------------------------------------------------------------------------*/
 void mixer_mix()
 {
-	uint8_t i, m;
+	uint8_t fn, i, m, index;
 	uint8_t level;
 	SMixer* mixer;
+	int16_t ailS, eleS, pitS;
 
 	for (i=0; i<MDL_MAX_CHANNELS; i++)
 	{
 		// Save values for servos
 		servoSavedValue[i] = g_RadioRuntime.srv_s[i];
 		servoChanged[i] = 0;
-	
+
 		// Clear values so mixers can do their job...
 		g_RadioRuntime.srv_s[i] = 0;
+	}
+
+	for (i=0; i<MDL_MAX_FUNCTIONS; i++)
+	{
+		functionChanged[i] = 0;
+		functionOutput[i] = 0;
 	}
 
 	// Level 0
@@ -448,6 +467,65 @@ void mixer_mix()
 		if (mixer->level == level)
 		{
 			mixer_single_mix(mixer);
+		}
+	}
+
+	// Do the SWASH-mixing (if enabled)
+	if (g_Model.type == MDL_TYPE_HELI_ECCPM_120)
+	{
+		// This mode is mixing the 120 degree swash
+
+		// Get the swash-mix throw scaling
+		ailS = (int16_t)g_Model.swash[MDL_SWASH_AIL];
+		eleS = (int16_t)g_Model.swash[MDL_SWASH_ELE];
+		pitS = (int16_t)g_Model.swash[MDL_SWASH_PIT];
+
+		// Do the mapping "function to servo"
+		for (i=0; i<MDL_MAX_FUNCTIONS; i++)
+		{
+			index = g_Model.functionToServoTable[i];
+
+			if (functionChanged[i] != 0)
+			{
+				fn = i + MIX_OUT_AILERON;
+				switch (fn)
+				{
+					case MIX_OUT_AILERON:
+						g_RadioRuntime.srv_s[index] = 
+							(pitS*FN_VALUE(MIX_OUT_PITCH)/100) - (eleS*FN_VALUE(MIX_OUT_ELEVATOR)/200) - (ailS*FN_VALUE(MIX_OUT_AILERON)/100);
+						break;
+					case MIX_OUT_PITCH:
+						g_RadioRuntime.srv_s[index] = 
+							(pitS*FN_VALUE(MIX_OUT_PITCH)/100) - (eleS*FN_VALUE(MIX_OUT_ELEVATOR)/200) + (ailS*FN_VALUE(MIX_OUT_AILERON)/100);
+						break;
+					case MIX_OUT_ELEVATOR:
+						g_RadioRuntime.srv_s[index] = 
+							(pitS*FN_VALUE(MIX_OUT_PITCH)/100) - (eleS*FN_VALUE(MIX_OUT_ELEVATOR)/100);
+						break;
+					default:
+						// No mixing...just send out
+						g_RadioRuntime.srv_s[index] = functionOutput[i];
+						break;
+				}
+
+				servoChanged[index] = 1;
+			}
+		}
+	}
+	else
+	{
+		// Do the mapping "function to servo"
+		for (i=0; i<MDL_MAX_FUNCTIONS; i++)
+		{
+			// Only transfer data to a servo if things has changed...
+			if (functionChanged[i] != 0)
+			{
+				// Lookup where the function is mapped...
+				index = g_Model.functionToServoTable[i];
+				// Now set the wanted servo to the output.
+				g_RadioRuntime.srv_s[index] = functionOutput[i];
+				servoChanged[index] = 1;
+			}		
 		}
 	}
 

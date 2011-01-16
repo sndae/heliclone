@@ -253,6 +253,10 @@ void template_swash_120()
 
 	// Sim type
 	g_Model.type = MDL_TYPE_HELI_ECCPM_120;
+	g_Model.swash[MDL_SWASH_AIL] = 50;
+	g_Model.swash[MDL_SWASH_ELE] = 50;
+	g_Model.swash[MDL_SWASH_PIT] = 50;
+
 
 	//TODO:
 	// Setup GYRO
