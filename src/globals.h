@@ -38,7 +38,6 @@ extern char debugLine1[20];
 extern char debugLine2[20];
 #endif
 
-
 #define MDL_MAX_CHANNELS		(8)
 #define MDL_MAX_FUNCTIONS		(8)
 #define MDL_MAX_MIXERS 			(16)
@@ -104,6 +103,7 @@ typedef struct
 	// BEEP
 	uint8_t keyBeep;
 	uint8_t alarmBeep;
+	uint8_t volumeBeep;
 
 	// ADC
 	uint16_t 	adc_c[8][3]; // mins, max, cent
@@ -141,6 +141,10 @@ typedef struct
 
 	// PPM active
 	uint8_t 	ppmActive;
+
+	// BEEP (next Beep request)
+	uint8_t beep;
+	uint8_t beepStyle;
 
 
 } SRadioRuntime;

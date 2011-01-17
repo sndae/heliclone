@@ -263,6 +263,10 @@ void gui_handle_keys(uint8_t elapsedTime)
 					else if ((longPressEnabled == 0) && (keyTicks[k] >= KEY_REPEAT_TIME))
 					{
 						// move to "Repeat state"?
+						if (g_RadioConfig.keyBeep)
+						{
+							gui_beep(10);
+						}
 						gui_event_put(pgm_read_byte(&keyEventShort[k]));
 						keyState[k] = KEY_REPEAT;
 					}
@@ -273,6 +277,10 @@ void gui_handle_keys(uint8_t elapsedTime)
 					{
 						// We have pressed less than REPEAT, but more than KEY
 						// i.e. let's send out a key event!
+						if (g_RadioConfig.keyBeep)
+						{
+							gui_beep(10);
+						}
 						gui_event_put(pgm_read_byte(&keyEventShort[k]));
 						keyState[k] = KEY_RELEASED;
 						keyTicks[k] = 0;
@@ -291,6 +299,10 @@ void gui_handle_keys(uint8_t elapsedTime)
 					// Send repeat key_press...
 					if (keyTicks[k] % KEY_REPEAT_PRESS_TIME == 0)
 					{
+						if (g_RadioConfig.keyBeep)
+						{
+							gui_beep(10);
+						}
 						gui_event_put(pgm_read_byte(&keyEventShort[k]));
 					}
 				}
@@ -362,4 +374,61 @@ void gui_execute(uint8_t elapsedTime)
 void gui_set_long_press(uint8_t longPress)
 {
 	longPressEnabled = longPress;
+}
+
+/*--------------------------------------------------------------------------------
+ * gui_beep
+ *--------------------------------------------------------------------------------*/
+void gui_beep(uint8_t beepSeqence)
+{	
+	uint8_t beep_n;
+
+	g_RadioRuntime.beepStyle = 0xFF;
+
+	switch (beepSeqence) 
+	{
+		case 0: // silence
+			beep_n=0;
+			break;
+		case 1: // short
+			beep_n=0b10000000;
+			break;
+		case 2: // 2 x short
+			beep_n=0b10100000;
+			break;
+		case 3: // 3 x short
+			beep_n=0b10101000;
+			break;
+		case 4: // long 
+			beep_n=0b11000000;
+			break;
+		case 5: // 2 x long
+			beep_n=0b11001100;
+			break;
+		case 6: // short + long
+			beep_n=0b11001000;
+			break;
+		case 7: // very long beep
+			beep_n=0b11111110;
+			break;
+		case 8: // 
+			beep_n=0b10101010;
+			break;
+
+		case 10: // speed beep - keys
+			beep_n=0b00000010;
+			g_RadioRuntime.beepStyle = 0x01;
+			break;
+
+		case 11: // speed beep - keys / zero transition
+			beep_n=0b00000110;
+			g_RadioRuntime.beepStyle = 0x01;
+			break;
+		default:
+			beep_n = 0;
+			break;
+	}
+
+	// Force beep (even if something might be playing...)
+	g_RadioRuntime.beep |= beep_n;
 }
