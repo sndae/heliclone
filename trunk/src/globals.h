@@ -46,6 +46,11 @@ extern char debugLine2[20];
 #define SERVO_CHANNEL(N) (N-1)
 #define FUNCTION_INDEX(N) (N-MIX_OUT_AILERON)
 
+#define DO_GUI   (0x01)
+#define DO_KEYS  (0x02)
+#define DO_IO    (0x04)
+#define DO_CLOCK (0x08)
+
 typedef enum
 {
 	MDL_SWASH_AIL = 0,
@@ -94,6 +99,13 @@ typedef enum
 } MDL_EXPO;
 
 
+typedef enum
+{
+	MDL_TIMER_OFF         = 0,
+	MDL_TIMER_SWITCH      = 200,
+} MDL_TIMER;
+
+
 typedef struct
 {
 	// LCD
@@ -123,11 +135,11 @@ typedef struct
 {
 	// Clocks
 	uint32_t systemTick;
+	uint32_t secondTick;
+	uint32_t modelTimer;
 
 	// Signals
-	uint8_t	doGui;
-	uint8_t	doKeys;
-	uint8_t	doIO;
+	uint8_t	doSignal;
 
 	// ADC
 	uint16_t 	adc_r[8];    // raw reads
@@ -190,6 +202,9 @@ typedef struct
 	// endpoints
 	int8_t endPoint[2][MDL_MAX_CHANNELS];						// 16/181
 
+	// timer
+	uint16_t timer;												// 2/183
+	uint8_t timerCond;											// 1/184
 
 } SModel;
 

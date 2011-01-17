@@ -249,6 +249,8 @@ void template_common()
 		g_Model.endPoint[1][i] = 100;
 	}
 
+	g_Model.timer = 60*5;	// 5 minutes
+	g_Model.timerCond = 5;	// more than 5% of throttle will start it...
 }
 
 void template_simulator() 

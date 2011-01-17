@@ -144,6 +144,9 @@ void eeprom_delete_model_config(uint8_t modelNumber)
 void eeprom_load_model_config(uint8_t modelNumber)
 {
 	eeprom_read_block(&g_Model, (void*)EE_MODEL_CONGFIG(modelNumber), sizeof(SModel));
+
+	// Each time we load a model, we reset the timer..
+	g_RadioRuntime.modelTimer = g_Model.timer;
 }
 
 /*--------------------------------------------------------------------------------
