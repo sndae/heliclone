@@ -45,6 +45,13 @@ SRadioRuntime g_RadioRuntime;
 SModel g_Model;
 
 /*--------------------------------------------------------------------------------
+ * LOCALS
+ *--------------------------------------------------------------------------------*/
+static uint8_t beep8 = 0;
+static uint8_t tick_beep = 0;
+
+
+/*--------------------------------------------------------------------------------
  * Defines & Macros
  *--------------------------------------------------------------------------------*/
 #define TMR0_TICK (156)
@@ -102,6 +109,11 @@ void load_defaults()
 
 	// LCD
 	g_RadioConfig.contrast = 25;
+
+	// BEEP
+	g_RadioConfig.keyBeep = 0; // OFF
+	g_RadioConfig.alarmBeep = 1; // ONE BEEP
+	g_RadioConfig.volumeBeep = 0xFF; 
 
 	for (i=0; i<7; i++)
 	{
@@ -313,29 +325,31 @@ ISR(TIMER0_COMP_vect, ISR_NOBLOCK) //10ms timer
 		g_RadioRuntime.doIO = 1;
 	}
 
-/*	// beep - playing sound
+	// beep - playing sound
 	if (beep8 & 0x01)
-		devBeepPORT |=   (1<<devBeepPin); // <-1
+	{
+		devBeepPORT |= (1<<devBeepPin); // <-1
+	}
 	else
-		devBeepPORT &=  ~(1<<devBeepPin); // <-0
+	{
+		devBeepPORT &= ~(1<<devBeepPin); // <-0
+	}
+
 	beep8 >>=1;
 	tick_beep++;
 
-	if (tick_beep>=8) {// new bit (every 1/10 sec)
-		if (beep & 0x0001)
-			beep8=volume;
-		beep>>=1; // next bit 
-		tick_beep=0;
-
-
-		tick_tsec=0xFF;   // every 1/10 second
-		tick10++;
-		if (tick10>=10) {
-			tick10=0;
-			tick_sec=0xFF; // every second
+	if (tick_beep >= 8) 
+	{
+		// new bit (every 1/10*8 = 80ms)
+		if (g_RadioRuntime.beep & 0x0001)
+		{
+			beep8 = g_RadioRuntime.beepStyle;
 		}
+
+		g_RadioRuntime.beep >>= 1; // next bit 
+
+		tick_beep=0;
 	}
-*/
 
 	/*
 	cli();

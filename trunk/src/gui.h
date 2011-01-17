@@ -87,5 +87,7 @@ extern void gui_execute(uint8_t elapsedTime);
 extern void gui_handle_keys(uint8_t elapsedTime);
 extern void gui_set_long_press(uint8_t longPress);
 
+extern void gui_beep(uint8_t beepSeqence);
+
 
 #endif // _GUI_H_
