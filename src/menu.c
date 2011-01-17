@@ -2297,7 +2297,7 @@ void main_draw_servo(uint8_t x, uint8_t y, uint8_t servo)
 // 3 - Analog input (raw)
 // 4 - Timer mode 
 // 10 - Debug mode...
-int8_t mainDisplayMode = 0;
+int8_t mainDisplayMode = 4;
 
 char MNU_MAIN_MODE_1[] 	PROGMEM = "Servo output:";
 char MNU_MAIN_MODE_2[] 	PROGMEM = "Stick input:";
@@ -2309,6 +2309,8 @@ char MNU_MAIN_MODE_10[] PROGMEM = "-- DEBUG MODE --";
 char debugLine1[20] = {0};
 char debugLine2[20] = {0};
 #endif
+
+char MNU_MAIN_ZERO_SEC[] 	PROGMEM = "00";
 
 char MNU_MAIN_CH1[] 	PROGMEM = "C1";
 char MNU_MAIN_CH2[] 	PROGMEM = "C2";
@@ -2348,7 +2350,7 @@ uint8_t menu_main_screen(GUI_EVENT event, uint8_t elapsedTime)
 			break;
 		case GUI_EVT_KEY_UP:
 			mainDisplayMode++;
-			if (mainDisplayMode > 3)
+			if (mainDisplayMode > 4)
 			{
 				mainDisplayMode = 0;
 			}
@@ -2357,7 +2359,7 @@ uint8_t menu_main_screen(GUI_EVENT event, uint8_t elapsedTime)
 			mainDisplayMode--;
 			if (mainDisplayMode < 0)
 			{
-				mainDisplayMode = 3;
+				mainDisplayMode = 4;
 			}
 			break;
 		case GUI_EVT_KEY_MENU_LONG:
@@ -2467,6 +2469,21 @@ uint8_t menu_main_screen(GUI_EVENT event, uint8_t elapsedTime)
 					x = 3;
 				}
 			}	
+			break;
+		case 4:
+			adcValue = g_RadioRuntime.modelTimer;
+
+			lcd_outdezAtt( 8*LCD_FONT_WIDTH, 3*LCD_FONT_HEIGHT+5, adcValue/60, LCD_NO_INV|LCD_DBLSIZE);
+			lcd_putcAtt(   9*LCD_FONT_WIDTH, 3*LCD_FONT_HEIGHT+5, ':', LCD_NO_INV|LCD_DBLSIZE, 0);
+			if (adcValue%60 == 0)
+			{
+				lcd_putsAtt(  10*LCD_FONT_WIDTH+2, 3*LCD_FONT_HEIGHT+5, MNU_MAIN_ZERO_SEC, LCD_NO_INV|LCD_DBLSIZE);
+			}
+			else
+			{
+				lcd_outdezAtt(13*LCD_FONT_WIDTH, 3*LCD_FONT_HEIGHT+5, adcValue%60, LCD_NO_INV|LCD_DBLSIZE);
+			}
+
 			break;
 #ifdef USE_DEBUG_MODE
 		case 10:

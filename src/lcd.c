@@ -116,7 +116,7 @@ void lcd_putcAtt(uint8_t x, uint8_t y, char c, uint8_t mode, uint8_t flag)
        * five bottom by ten bottom bytes (20 bytes per
        * char) */
       q = &font_10x16_x20_x7f[(c - 0x20) * 10 + ((c - 0x20) / 16) * 160];
-      for (char i = 5; i >= 0; i--)
+      for (char i = 5; i != 0; i--)
       {
          /*top byte*/
          uint8_t b1 = i > 0 ? pgm_read_byte(q) : 0;

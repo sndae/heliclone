@@ -163,6 +163,37 @@ void load_defaults()
 }
 
 /*--------------------------------------------------------------------------------
+ * handle_timers
+ *--------------------------------------------------------------------------------*/
+void handle_timers()
+{
+	int16_t adcV;
+	if (g_RadioRuntime.modelTimer != 0)
+	{
+		if ((g_Model.timerCond > 0) && (g_Model.timerCond <= 100))
+		{
+			// Throttle % timer mode
+			adcV = g_RadioRuntime.adc_s[ADC_THR];
+			
+			// Convert to 0...200
+			adcV = adcV + 100;
+
+			// Convert to %
+			adcV = adcV / 2;
+
+			if (adcV >= g_Model.timerCond)
+			{
+				g_RadioRuntime.modelTimer--;
+			}
+		}
+		else if (g_Model.timerCond == 201)
+		{
+			g_RadioRuntime.modelTimer--;
+		}
+	}
+}
+
+/*--------------------------------------------------------------------------------
  * main - the main function
  *--------------------------------------------------------------------------------*/
 int main(void)
@@ -254,24 +285,31 @@ int main(void)
 		adc_sample();
 
 		// IO (Trims & Switches)
-		if (g_RadioRuntime.doIO == 1)
+		if (g_RadioRuntime.doSignal & DO_IO)
 		{
-			g_RadioRuntime.doIO = 0;
+			g_RadioRuntime.doSignal &= ~DO_IO;
 			hal_io_handle(IO_EVERY_TICK);
 		}
 
 		// GUI
-		if (g_RadioRuntime.doGui == 1)
+		if (g_RadioRuntime.doSignal & DO_GUI)
 		{
-			g_RadioRuntime.doGui = 0;
+			g_RadioRuntime.doSignal &= ~DO_GUI;
 			gui_execute(GUI_EVERY_TICK);
 		}
 
 		// KEYS
-		if (g_RadioRuntime.doKeys == 1)
+		if (g_RadioRuntime.doSignal & DO_KEYS)
 		{
-			g_RadioRuntime.doKeys = 0;
+			g_RadioRuntime.doSignal &= ~DO_KEYS;
 			gui_handle_keys(KEY_EVERY_TICK);
+		}
+
+		// CLOCK
+		if (g_RadioRuntime.doSignal & DO_CLOCK)
+		{
+			g_RadioRuntime.doSignal &= ~DO_CLOCK;
+			handle_timers();
 		}
 
 		// MIXER
@@ -307,22 +345,28 @@ ISR(TIMER0_COMP_vect, ISR_NOBLOCK) //10ms timer
 	// Save in MS
 	g_RadioRuntime.systemTick += 10;
 
+	if ((g_RadioRuntime.systemTick % 1000) == 0)
+	{
+		g_RadioRuntime.secondTick++;
+		g_RadioRuntime.doSignal |= DO_CLOCK;
+	}
+
 	// Signal time for GUI
 	if ((g_RadioRuntime.systemTick % GUI_EVERY_TICK) == 0)
 	{
-		g_RadioRuntime.doGui = 1;
+		g_RadioRuntime.doSignal |= DO_GUI;
 	}
 
 	// Signal time for KEYS
 	if ((g_RadioRuntime.systemTick % KEY_EVERY_TICK) == 0)
 	{
-		g_RadioRuntime.doKeys = 1;
+		g_RadioRuntime.doSignal |= DO_KEYS;
 	}
 
 	// Signal time for IO
 	if ((g_RadioRuntime.systemTick % IO_EVERY_TICK) == 0)
 	{
-		g_RadioRuntime.doIO = 1;
+		g_RadioRuntime.doSignal |= DO_IO;
 	}
 
 	// beep - playing sound
