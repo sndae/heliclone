@@ -34,7 +34,7 @@
 #include "template.h"
 #include <avr/pgmspace.h>
 #include <string.h>
-
+#include <stdio.h>
 
 /*--------------------------------------------------------------------------------
  * Private types
@@ -2332,6 +2332,32 @@ char* channelTable[] PROGMEM =
 	MNU_MAIN_CH8
 };
 
+void menu_build_time_str(int16_t time)
+{
+	int8_t minute, second;
+	char* buf = &g_RadioRuntime.buffer[0];
+
+	minute = time/60;
+	second = time%60;
+
+	if ((minute < 10) && (second < 10))
+	{
+		sprintf(buf, "0%d:0%d", minute, second);
+	}
+	else if ((minute < 10) && (second >= 10))
+	{
+		sprintf(buf, "0%d:%d", minute, second);
+	}
+	else if ((minute >= 10) && (second < 10))
+	{
+		sprintf(buf, "%d:%0d", minute, second);
+	}
+	else
+	{
+		sprintf(buf, "%d:%d", minute, second);
+	}
+}
+
 uint8_t menu_main_screen(GUI_EVENT event, uint8_t elapsedTime)
 {
 	int16_t adcValue = 0;
@@ -2379,7 +2405,7 @@ uint8_t menu_main_screen(GUI_EVENT event, uint8_t elapsedTime)
 	lcd_clear();
 
 	// MODEL NAME
-	lcd_putsnAtt(1*LCD_FONT_WIDTH,  0, g_Model.name, strlen(g_Model.name), LCD_BSS_NO_INV);
+	lcd_putsnAtt(0*LCD_FONT_WIDTH + 2,  0, g_Model.name, strlen(g_Model.name), LCD_BSS_NO_INV);
 
 	// BATTERY
 	menu_main_draw_battey(LCD_DISPLAY_W, 0);
@@ -2399,7 +2425,6 @@ uint8_t menu_main_screen(GUI_EVENT event, uint8_t elapsedTime)
 			break;
 
 		case 1:
-			//lcd_putsAtt(4*LCD_FONT_WIDTH,  1*LCD_FONT_HEIGHT+5, MNU_MAIN_MODE_1, LCD_NO_INV);
 			x = 6;
 			y = 1;
 			for (a=0; a<MDL_MAX_CHANNELS; a++)
@@ -2472,17 +2497,8 @@ uint8_t menu_main_screen(GUI_EVENT event, uint8_t elapsedTime)
 			break;
 		case 4:
 			adcValue = g_RadioRuntime.modelTimer;
-
-			lcd_outdezAtt( 8*LCD_FONT_WIDTH, 3*LCD_FONT_HEIGHT+5, adcValue/60, LCD_NO_INV|LCD_DBLSIZE);
-			lcd_putcAtt(   9*LCD_FONT_WIDTH, 3*LCD_FONT_HEIGHT+5, ':', LCD_NO_INV|LCD_DBLSIZE, 0);
-			if (adcValue%60 == 0)
-			{
-				lcd_putsAtt(  10*LCD_FONT_WIDTH+2, 3*LCD_FONT_HEIGHT+5, MNU_MAIN_ZERO_SEC, LCD_NO_INV|LCD_DBLSIZE);
-			}
-			else
-			{
-				lcd_outdezAtt(13*LCD_FONT_WIDTH, 3*LCD_FONT_HEIGHT+5, adcValue%60, LCD_NO_INV|LCD_DBLSIZE);
-			}
+			menu_build_time_str(adcValue);
+			lcd_putsAtt(6*LCD_FONT_WIDTH,  3*LCD_FONT_HEIGHT+5, &g_RadioRuntime.buffer[0], LCD_BSS_NO_INV|LCD_DBLSIZE);
 
 			break;
 #ifdef USE_DEBUG_MODE
