@@ -158,6 +158,8 @@ typedef struct
 	uint8_t beep;
 	uint8_t beepStyle;
 
+	// Misc buffer...good to have ;-)
+	char buffer[16];
 
 } SRadioRuntime;
 
