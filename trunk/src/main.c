@@ -170,6 +170,8 @@ void load_defaults()
 void handle_timers()
 {
 	int16_t adcV;
+	uint8_t timerTicking = 0;
+
 	if (g_RadioRuntime.modelTimer != 0)
 	{
 		if ((g_Model.timerCond > 0) && (g_Model.timerCond <= 100))
@@ -186,6 +188,7 @@ void handle_timers()
 			if (adcV >= g_Model.timerCond)
 			{
 				g_RadioRuntime.modelTimer--;
+				timerTicking = 1;
 			}
 		}
 		else if (g_Model.timerCond == 200)
@@ -193,26 +196,30 @@ void handle_timers()
 			if (g_RadioRuntime.timerStarted)
 			{
 				g_RadioRuntime.modelTimer--;
+				timerTicking = 1;
 			}
 		}
 	}
 
 
-	// Alarm?
-	if (g_RadioRuntime.modelTimer <= g_Model.timerAlarmLimit)
+	// Only sound Alarm if timer is active
+	if (timerTicking == 1)
 	{
-		// Alarm!!! 
-		tick_alarm++;
-
-		if ((tick_alarm % ALARM_BEEP_EVERY) == 0)
+		if (g_RadioRuntime.modelTimer <= g_Model.timerAlarmLimit)
 		{
-			gui_beep(g_RadioConfig.alarmBeep);
+			// Alarm!!! 
+			tick_alarm++;
+
+			if (((tick_alarm % ALARM_BEEP_EVERY) == 0) || (tick_alarm == 1))
+			{
+				gui_beep(g_RadioConfig.alarmBeep);
+			}
 		}
-	}
-	else
-	{
-		// Reset this one
-		tick_alarm = 0;
+		else
+		{
+			// Reset this one
+			tick_alarm = 0;
+		}
 	}
 
 }
