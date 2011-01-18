@@ -27,11 +27,12 @@
 #include "globals.h"
 #include "eeprom.h"
 
-//#define DEBUG_SWITCHES
+#define DEBUG_SWITCHES
 
 #ifdef DEBUG_SWITCHES
 #ifdef USE_DEBUG_MODE
 #include <string.h>
+#include <stdio.h>
 #endif
 #endif
 
@@ -58,6 +59,8 @@ typedef enum
 
 #define TIMER_LONG_PRESS (300)
 #define TIMER_PRESS (10)
+
+#define DEFAULT_SW_STATE (0xBF)
 
 /*--------------------------------------------------------------------------------
  * LOCALS
@@ -187,6 +190,21 @@ uint8_t hal_io_get_sw(uint8_t swId)
 		default:
 			return 0;
 			break;
+	}
+}
+
+/*--------------------------------------------------------------------------------
+ * hal_io_sw_is_default()
+ *--------------------------------------------------------------------------------*/
+uint8_t hal_io_sw_is_default()
+{
+	if (switchState == DEFAULT_SW_STATE)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
 	}
 }
 
@@ -338,6 +356,7 @@ void hal_io_handle(uint8_t elapsedTime)
 #ifdef DEBUG_SWITCHES
 #ifdef USE_DEBUG_MODE
 	strcpy(debugLine1, "SW: ");
+	sprintf(debugLine2, "%d", switchState);
 	for (uint8_t i=0; i<8; i++)
 	{
 		if ((switchState & (1 << i)) == (1 << i))
