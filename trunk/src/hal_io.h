@@ -111,6 +111,7 @@ typedef enum
  * External interface
  *--------------------------------------------------------------------------------*/
 extern void hal_io_init(void);
+extern uint8_t hal_io_sw_is_default();
 extern uint8_t hal_io_get_sw(uint8_t swId);
 extern void hal_io_handle(uint8_t elapsedTime);
 

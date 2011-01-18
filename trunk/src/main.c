@@ -71,6 +71,11 @@ char EEPROM_INFO_2[] 	PROGMEM = "  Please wait for  ";
 char EEPROM_INFO_3[] 	PROGMEM = "  EEPROM to be     ";
 char EEPROM_INFO_4[] 	PROGMEM = "  initialized!!!   ";
 
+char SWITCH_INFO_T[] 	PROGMEM = "   Switch Error!   ";
+char SWITCH_INFO_1[] 	PROGMEM = "                   ";
+char SWITCH_INFO_2[] 	PROGMEM = " Move all switches ";
+char SWITCH_INFO_3[] 	PROGMEM = " to back position! ";
+char SWITCH_INFO_4[] 	PROGMEM = "                   ";
 /*--------------------------------------------------------------------------------
  * init_main_tick
  *--------------------------------------------------------------------------------*/
@@ -294,6 +299,8 @@ int main(void)
 		g_RadioRuntime.modelTimer = g_Model.timer;
 
 		eeprom_save_version();
+
+		gui_screen_pop();
 	}
 	else
 	{
@@ -302,12 +309,22 @@ int main(void)
 		eeprom_load_model_config(g_RadioConfig.selectedModel);
 	}
 
-
-
-#ifdef USE_DEBUG_MODE
-	sprintf(debugLine1, "Model size: %d", sizeof(SModel));
-	sprintf(debugLine2, "Mixer size: %d", sizeof(SMixer));
-#endif	
+	// Check for default SWITCHES settings.
+	/*
+	hal_io_handle(IO_EVERY_TICK);
+	i = 0;
+	while (hal_io_sw_is_default() == 0)
+	{
+		menu_show_messagebox(SWITCH_INFO_T, SWITCH_INFO_1, SWITCH_INFO_2, SWITCH_INFO_3, SWITCH_INFO_4);
+		gui_execute(GUI_EVERY_TICK);
+		hal_io_handle(IO_EVERY_TICK);
+		i = 1;
+	}
+	if (i == 1)
+	{
+		gui_screen_pop();
+	}
+	*/
 
 	// Enable PPM
 	g_RadioRuntime.ppmActive = 1;
