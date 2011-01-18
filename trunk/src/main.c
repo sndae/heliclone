@@ -49,6 +49,7 @@ SModel g_Model;
  *--------------------------------------------------------------------------------*/
 static uint8_t beep8 = 0;
 static uint8_t tick_beep = 0;
+static uint8_t tick_alarm = 0;
 
 
 /*--------------------------------------------------------------------------------
@@ -56,6 +57,7 @@ static uint8_t tick_beep = 0;
  *--------------------------------------------------------------------------------*/
 #define TMR0_TICK (156)
 
+#define ALARM_BEEP_EVERY (3)
 
 // Defined in ms
 #define GUI_EVERY_TICK (100)
@@ -186,11 +188,33 @@ void handle_timers()
 				g_RadioRuntime.modelTimer--;
 			}
 		}
-		else if (g_Model.timerCond == 201)
+		else if (g_Model.timerCond == 200)
 		{
-			g_RadioRuntime.modelTimer--;
+			if (g_RadioRuntime.timerStarted)
+			{
+				g_RadioRuntime.modelTimer--;
+			}
 		}
 	}
+
+
+	// Alarm?
+	if (g_RadioRuntime.modelTimer <= g_Model.timerAlarmLimit)
+	{
+		// Alarm!!! 
+		tick_alarm++;
+
+		if ((tick_alarm % ALARM_BEEP_EVERY) == 0)
+		{
+			gui_beep(g_RadioConfig.alarmBeep);
+		}
+	}
+	else
+	{
+		// Reset this one
+		tick_alarm = 0;
+	}
+
 }
 
 /*--------------------------------------------------------------------------------
@@ -258,6 +282,9 @@ int main(void)
 		// Create and save a default model...
 		load_model_defaults();
 		eeprom_save_model_config(g_RadioConfig.selectedModel);
+
+		// Set the new timer data
+		g_RadioRuntime.modelTimer = g_Model.timer;
 
 		eeprom_save_version();
 	}

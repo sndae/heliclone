@@ -56,6 +56,8 @@ typedef enum
 
 #define TRIM_STEP (4)
 
+#define TIMER_LONG_PRESS (400)
+#define TIMER_PRESS (10)
 
 /*--------------------------------------------------------------------------------
  * LOCALS
@@ -63,6 +65,8 @@ typedef enum
 // 8 trim keys
 TRIM_KEY_STATE trimKeyState[TRIM_NUM_KEYS];
 uint16_t trimKeyTicks[TRIM_NUM_KEYS];
+
+uint16_t timerKeyTicks;
 
 // Holds a BIT-field of all switches
 uint8_t switchState;
@@ -168,7 +172,8 @@ uint8_t hal_io_get_sw(uint8_t swId)
 			break;
 		case SW_TRN:
 			temp = switchState & 0x20;
-			return (temp == 0x20);
+			// TRN sw is reversed...
+			return (temp == 0x00);
 			break;
 		case SW_GEAR:
 			temp = switchState & 0x10;
@@ -347,5 +352,38 @@ void hal_io_handle(uint8_t elapsedTime)
 #endif	
 #endif
 
+	//
+	// TIMER SWITCH
+	//
+	if (hal_io_get_sw(SW_TRN))
+	{
+		timerKeyTicks += (elapsedTime/10);
+		
+		if (timerKeyTicks >= TIMER_LONG_PRESS)
+		{
+			// Timer RESET
+			g_RadioRuntime.modelTimer = g_Model.timer;
+		}
+	}
+	else
+	{
+		if ((timerKeyTicks < TIMER_LONG_PRESS) && (timerKeyTicks >= TIMER_PRESS))
+		{
+			// Pressed timer switch
 
+			// 200 - means switch mode
+			if (g_Model.timerCond == 200)
+			{
+				g_RadioRuntime.timerStarted = 1;
+			}
+			else if (g_Model.timerCond == 201)
+			{
+				g_RadioRuntime.timerStarted = 0;
+			}
+
+		}
+
+		timerKeyTicks = 0;
+	}
+	
 }
