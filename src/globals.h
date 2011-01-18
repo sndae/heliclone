@@ -137,6 +137,7 @@ typedef struct
 	uint32_t systemTick;
 	uint32_t secondTick;
 	uint32_t modelTimer;
+	uint8_t timerStarted;
 
 	// Signals
 	uint8_t	doSignal;
@@ -206,7 +207,8 @@ typedef struct
 
 	// timer
 	uint16_t timer;												// 2/183
-	uint8_t timerCond;											// 1/184
+	uint8_t  timerCond;											// 1/184
+	uint16_t timerAlarmLimit;									// 2/186
 
 } SModel;
 
