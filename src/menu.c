@@ -144,6 +144,36 @@ char MNU_MODEL_SERVO_CH[] 			PROGMEM = "CH";
 
 
 /*--------------------------------------------------------------------------------
+ * menu_build_time_str
+ *--------------------------------------------------------------------------------*/
+void menu_build_time_str(int16_t time)
+{
+	int8_t minute, second;
+	char* buf = &g_RadioRuntime.buffer[0];
+
+	minute = time/60;
+	second = time%60;
+
+	if ((minute < 10) && (second < 10))
+	{
+		sprintf(buf, "0%d:0%d", minute, second);
+	}
+	else if ((minute < 10) && (second >= 10))
+	{
+		sprintf(buf, "0%d:%d", minute, second);
+	}
+	else if ((minute >= 10) && (second < 10))
+	{
+		sprintf(buf, "%d:%0d", minute, second);
+	}
+	else
+	{
+		sprintf(buf, "%d:%d", minute, second);
+	}
+}
+
+
+/*--------------------------------------------------------------------------------
  * menu_init
  *--------------------------------------------------------------------------------*/
 void menu_init()
@@ -157,6 +187,232 @@ void menu_init()
 		gui_screen_push(&menu_adc_calibrate);
 	}
 	
+}
+
+/*--------------------------------------------------------------------------------
+ * menu_model_timer_setup
+ *--------------------------------------------------------------------------------*/
+char MNU_MODEL_TIMER_TITLE[]	PROGMEM = "Timer Setup";
+
+char MNU_MODEL_TIMER_TIME[]			PROGMEM = "Time:";
+char MNU_MODEL_TIMER_ALARM[]		PROGMEM = "Alarm:";
+char MNU_MODEL_TIMER_MODE[]			PROGMEM = "Mode:";
+char MNU_MODEL_TIMER_MODE_SEL[]		PROGMEM = "OFF |AUTO|MAN ";
+
+uint8_t menu_model_timer_setup(GUI_EVENT event, uint8_t elapsedTime)
+{
+	uint8_t dirty = 1;
+	int16_t v;
+	uint8_t sstart;
+	char* selString;
+
+	switch (event)
+	{
+		case GUI_EVT_SHOW:
+			cursor = 0;
+			changedModel = 0;
+			break;
+		case GUI_EVT_HIDE:
+			break;
+		case GUI_EVT_TICK:
+			break;
+		case GUI_EVT_KEY_EXIT:
+			// We are done...restore?
+			if (changedModel == 1)
+			{
+				eeprom_load_model_config(g_RadioConfig.selectedModel);
+			}
+			gui_screen_pop();
+			break;
+		case GUI_EVT_KEY_MENU:
+			// We are done...save?
+			if (changedModel == 1)
+			{
+				eeprom_save_model_config(g_RadioConfig.selectedModel);
+
+				// Reset the timer also...
+				g_RadioRuntime.modelTimer = g_Model.timer;
+			}
+			gui_screen_pop();
+			break;
+		case GUI_EVT_KEY_UP:
+			cursor -= 1;
+			break;
+		case GUI_EVT_KEY_DOWN:
+			cursor += 1;
+			break;
+		case GUI_EVT_KEY_RIGHT:
+			switch (cursor)
+			{
+				case 0:
+					if (g_Model.timerCond == 0)
+					{
+						g_Model.timerCond = MDL_DEFAULT_THR_TIMER;
+					}
+					else if (g_Model.timerCond == MDL_DEFAULT_THR_TIMER)
+					{
+						g_Model.timerCond = 200;
+					}
+					else 
+					{
+						g_Model.timerCond = 0;
+					}
+					break;
+				case 1:
+					g_Model.timer++;
+					if (g_Model.timer > 3600)
+					{
+						g_Model.timer = 3600;
+					}
+					break;
+				case 2:
+					g_Model.timerAlarmLimit++;
+					if (g_Model.timerAlarmLimit >= g_Model.timer)
+					{
+						g_Model.timerAlarmLimit = g_Model.timer - 1;
+					}
+					break;
+				default:
+					break;
+			}
+			changedModel = 1;
+			break;
+		case GUI_EVT_KEY_LEFT:
+			switch (cursor)
+			{
+				case 0:
+					if (g_Model.timerCond == 0)
+					{
+						g_Model.timerCond = 200;
+					}
+					else if (g_Model.timerCond == MDL_DEFAULT_THR_TIMER)
+					{
+						g_Model.timerCond = 0;
+					}
+					else 
+					{
+						g_Model.timerCond = MDL_DEFAULT_THR_TIMER;
+					}
+					break;
+				case 1:
+					g_Model.timer--;
+					if (g_Model.timer < 10)
+					{
+						g_Model.timer = 10;
+					}
+					break;
+				case 2:
+					if (g_Model.timerAlarmLimit > 1)
+					{
+						g_Model.timerAlarmLimit--;
+					}
+					else
+					{
+						g_Model.timerAlarmLimit = 1;
+					}
+					break;
+				default:
+					break;
+			}
+			changedModel = 1;
+			break;
+		case GUI_EVT_POT_MOVE:
+			v = (g_RadioRuntime.adc_s[GUI_POT] + 100)*5;
+			if (v < 0)
+			{
+				v = 0;
+			}
+			switch (cursor)
+			{
+				case 0:
+					break;
+				case 1:
+					g_Model.timer = v;
+					if (g_Model.timer > 3600)
+					{
+						g_Model.timer = 3600;
+					}
+
+					break;
+				case 2:
+					g_Model.timerAlarmLimit = v;
+					if (g_Model.timerAlarmLimit >= g_Model.timer)
+					{
+						g_Model.timerAlarmLimit = g_Model.timer - 1;
+					}
+					break;
+				default:
+					break;
+			}
+			
+			changedModel = 1;
+		default:
+			break;
+	}
+
+	if (cursor > 2)
+	{
+		cursor = 0;
+	}
+	if (cursor < 0)
+	{
+		cursor = 2;
+	}
+
+	lcd_clear();
+	lcd_puts_P( 0, 0, MNU_MODEL_TIMER_TITLE);
+
+	// 0 - MODE
+	lcd_putsAtt(0*LCD_FONT_WIDTH, 2*LCD_FONT_HEIGHT, MNU_MODEL_TIMER_MODE, LCD_NO_INV);
+	if (g_Model.timerCond == 0)
+	{
+		sstart = 0;
+	}
+	else if (g_Model.timerCond == 200)
+	{
+		sstart = 2*5;
+	}
+	else
+	{
+		sstart = 1*5;
+	}
+	selString = (char*)(MNU_MODEL_TIMER_MODE_SEL + sstart);
+	if (cursor == 0)
+	{
+		lcd_putsnAtt(8*LCD_FONT_WIDTH, 2*LCD_FONT_HEIGHT, selString, 4, LCD_INVERS);
+	}
+	else
+	{
+		lcd_putsnAtt(8*LCD_FONT_WIDTH, 2*LCD_FONT_HEIGHT, selString, 4, LCD_NO_INV);
+	}
+
+
+	// 1 - TIME
+	lcd_putsAtt(0*LCD_FONT_WIDTH, 4*LCD_FONT_HEIGHT, MNU_MODEL_TIMER_TIME, LCD_NO_INV);
+	menu_build_time_str(g_Model.timer);
+	if (cursor == 1)
+	{
+		lcd_putsAtt(8*LCD_FONT_WIDTH, 4*LCD_FONT_HEIGHT, &g_RadioRuntime.buffer[0], LCD_BSS_INVERS);
+	}
+	else
+	{
+		lcd_putsAtt(8*LCD_FONT_WIDTH, 4*LCD_FONT_HEIGHT, &g_RadioRuntime.buffer[0], LCD_BSS_NO_INV);
+	}
+
+
+	// 2 - ALARM
+	lcd_putsAtt(0*LCD_FONT_WIDTH, 6*LCD_FONT_HEIGHT, MNU_MODEL_TIMER_ALARM, LCD_NO_INV);
+	menu_build_time_str(g_Model.timerAlarmLimit);
+	if (cursor == 2)
+	{
+		lcd_putsAtt(8*LCD_FONT_WIDTH, 6*LCD_FONT_HEIGHT, &g_RadioRuntime.buffer[0], LCD_BSS_INVERS);
+	}
+	else
+	{
+		lcd_putsAtt(8*LCD_FONT_WIDTH, 6*LCD_FONT_HEIGHT, &g_RadioRuntime.buffer[0], LCD_BSS_NO_INV);
+	}
+
+	return dirty;
 }
 
 
@@ -2332,32 +2588,6 @@ char* channelTable[] PROGMEM =
 	MNU_MAIN_CH8
 };
 
-void menu_build_time_str(int16_t time)
-{
-	int8_t minute, second;
-	char* buf = &g_RadioRuntime.buffer[0];
-
-	minute = time/60;
-	second = time%60;
-
-	if ((minute < 10) && (second < 10))
-	{
-		sprintf(buf, "0%d:0%d", minute, second);
-	}
-	else if ((minute < 10) && (second >= 10))
-	{
-		sprintf(buf, "0%d:%d", minute, second);
-	}
-	else if ((minute >= 10) && (second < 10))
-	{
-		sprintf(buf, "%d:%0d", minute, second);
-	}
-	else
-	{
-		sprintf(buf, "%d:%d", minute, second);
-	}
-}
-
 uint8_t menu_main_screen(GUI_EVENT event, uint8_t elapsedTime)
 {
 	int16_t adcValue = 0;
@@ -2957,8 +3187,15 @@ uint8_t menu_settings(GUI_EVENT event, uint8_t elapsedTime)
 char MNU_MODEL_CONFIG_TYPE[] 			PROGMEM = "Model Type";
 char MNU_MODEL_CONFIG_TYPE_SEL[] 		PROGMEM = "SIM |FBL |S120|S140";
 
-SSelection modelConfig[10] PROGMEM = 
+SSelection modelConfig[11] PROGMEM = 
 {
+	{
+		0x1b,
+		MNU_MODEL_TIMER_TITLE,
+		0,
+		0,
+		menu_model_timer_setup
+	},
 	{
 		0x10,
 		MNU_MODEL_SERVO_TITLE,
@@ -3038,7 +3275,7 @@ uint8_t menu_model_config(GUI_EVENT event, uint8_t elapsedTime)
 	switch (event)
 	{
 		case GUI_EVT_SHOW:
-			numSettings = 10;
+			numSettings = 11;
 			currentSettings = (SSelection*)&modelConfig[0];
 			break;
 		default:

@@ -38,6 +38,8 @@ extern char debugLine1[20];
 extern char debugLine2[20];
 #endif
 
+#define MDL_DEFAULT_THR_TIMER	(5)
+
 #define MDL_MAX_CHANNELS		(8)
 #define MDL_MAX_FUNCTIONS		(8)
 #define MDL_MAX_MIXERS 			(16)
