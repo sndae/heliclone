@@ -56,7 +56,7 @@ typedef enum
 
 #define TRIM_STEP (4)
 
-#define TIMER_LONG_PRESS (400)
+#define TIMER_LONG_PRESS (300)
 #define TIMER_PRESS (10)
 
 /*--------------------------------------------------------------------------------
@@ -374,13 +374,15 @@ void hal_io_handle(uint8_t elapsedTime)
 			// 200 - means switch mode
 			if (g_Model.timerCond == 200)
 			{
-				g_RadioRuntime.timerStarted = 1;
+				if (g_RadioRuntime.timerStarted == 0)
+				{
+					g_RadioRuntime.timerStarted = 1;
+				}
+				else 
+				{
+					g_RadioRuntime.timerStarted = 0;
+				}
 			}
-			else if (g_Model.timerCond == 201)
-			{
-				g_RadioRuntime.timerStarted = 0;
-			}
-
 		}
 
 		timerKeyTicks = 0;
