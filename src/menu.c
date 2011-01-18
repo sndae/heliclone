@@ -2555,6 +2555,7 @@ void main_draw_servo(uint8_t x, uint8_t y, uint8_t servo)
 // 10 - Debug mode...
 int8_t mainDisplayMode = 4;
 
+char MNU_MAIN_TIMER_OFF[] 	PROGMEM = "XX:XX";
 char MNU_MAIN_MODE_1[] 	PROGMEM = "Servo output:";
 char MNU_MAIN_MODE_2[] 	PROGMEM = "Stick input:";
 char MNU_MAIN_MODE_3[] 	PROGMEM = "ADC Raw input:";
@@ -2727,8 +2728,15 @@ uint8_t menu_main_screen(GUI_EVENT event, uint8_t elapsedTime)
 			break;
 		case 4:
 			adcValue = g_RadioRuntime.modelTimer;
-			menu_build_time_str(adcValue);
-			lcd_putsAtt(6*LCD_FONT_WIDTH,  3*LCD_FONT_HEIGHT+5, &g_RadioRuntime.buffer[0], LCD_BSS_NO_INV|LCD_DBLSIZE);
+			if (g_Model.timerCond != 0)
+			{
+				menu_build_time_str(adcValue);
+				lcd_putsAtt(6*LCD_FONT_WIDTH,  3*LCD_FONT_HEIGHT+5, &g_RadioRuntime.buffer[0], LCD_BSS_NO_INV|LCD_DBLSIZE);
+			}
+			else
+			{
+				lcd_putsAtt(6*LCD_FONT_WIDTH,  3*LCD_FONT_HEIGHT+5, MNU_MAIN_TIMER_OFF, LCD_NO_INV|LCD_DBLSIZE);
+			}
 
 			break;
 #ifdef USE_DEBUG_MODE
