@@ -27,6 +27,7 @@
 #include "lcd.h"
 #include "globals.h"
 #include "hal_io.h"
+#include "lcd.h"
 #include <avr/pgmspace.h>
 #include <string.h>
 #include <stdlib.h>
@@ -246,6 +247,9 @@ void gui_handle_keys(uint8_t elapsedTime)
 					{
 						keyState[k] = KEY_PRESSED;
 						keyTicks[k] = 0;
+
+						// Turn on backlight (if config allows)
+						lcd_backlight(LCD_BACKLIGHT_ON);
 					}
 				}
 
