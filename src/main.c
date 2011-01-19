@@ -269,27 +269,19 @@ int main(void)
 	gui_init();
 	menu_init();
 
-
 	// Check for default SWITCHES settings.
-	i = 0; // Temp reused for this check...saves some stack
 	hal_io_handle(IO_EVERY_TICK);
 	if (hal_io_sw_is_default() == 0)
 	{
 		menu_show_messagebox(0xFF, SWITCH_INFO_T, SWITCH_INFO_1, SWITCH_INFO_2, SWITCH_INFO_3, SWITCH_INFO_4);
-		i = 1;
-	}
-
-	// Stay here if we have switches in wrong pos
-	while (hal_io_sw_is_default() == 0)
-	{
 		gui_execute(GUI_EVERY_TICK);
-		hal_io_handle(IO_EVERY_TICK);
-	}
 
-	// Once we get out (if coming from inside)
-	// we should remove the screen
-	if (i == 1)
-	{
+		// Stay here if we have switches in wrong pos
+		while (hal_io_sw_is_default() == 0)
+		{
+			hal_io_handle(IO_EVERY_TICK);
+		}
+
 		gui_screen_pop();
 	}
 
@@ -297,7 +289,7 @@ int main(void)
 	if (eeprom_check() == 0)
 	{
 		// Make sure we post a message about this...
-		menu_show_messagebox(0, EEPROM_INFO_T, EEPROM_INFO_1, EEPROM_INFO_2, EEPROM_INFO_3, EEPROM_INFO_4);
+		menu_show_messagebox(0xFF, EEPROM_INFO_T, EEPROM_INFO_1, EEPROM_INFO_2, EEPROM_INFO_3, EEPROM_INFO_4);
 		gui_execute(GUI_EVERY_TICK);
 
 		// Load defalt settings...
