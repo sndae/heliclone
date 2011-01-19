@@ -2970,6 +2970,14 @@ void menu_set_setting(uint8_t parameterId, uint8_t newValue)
 			{
 				g_RadioConfig.backlight = 5;
 			}
+			if (g_RadioConfig.backlight == 1)
+			{
+				lcd_backlight(LCD_BACKLIGHT_OFF);
+			}
+			else
+			{
+				lcd_backlight(LCD_BACKLIGHT_ON);
+			}
 			saveEeprom = 1;
 			break;
 		case RC_SET_BEEP_KEYS:

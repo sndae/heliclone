@@ -51,7 +51,6 @@ static uint8_t beep8 = 0;
 static uint8_t tick_beep = 0;
 static uint8_t tick_alarm = 0;
 
-
 /*--------------------------------------------------------------------------------
  * Defines & Macros
  *--------------------------------------------------------------------------------*/
@@ -227,6 +226,8 @@ void handle_timers()
 		}
 	}
 
+	// Backlight timer
+	lcd_backlight_timer();
 }
 
 /*--------------------------------------------------------------------------------
@@ -323,6 +324,9 @@ int main(void)
 		eeprom_load_radio_config();
 		eeprom_load_model_config(g_RadioConfig.selectedModel);
 	}
+
+	// Turn on backlight (if config allows)
+	lcd_backlight(LCD_BACKLIGHT_ON);
 
 	// Enable PPM
 	g_RadioRuntime.ppmActive = 1;

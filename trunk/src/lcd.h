@@ -55,6 +55,8 @@
 #define LCD_FONT_WIDTH_NUM       5
 #define LCD_FONT_HEIGHT          8
 
+#define LCD_BACKLIGHT_ON		1
+#define LCD_BACKLIGHT_OFF		0
 
 /*--------------------------------------------------------------------------------
  * External interface
@@ -91,6 +93,8 @@ extern void lcd_init();
 extern void lcd_clear();
 extern void lcd_refresh();
 extern void lcd_contrast(uint8_t val);
+extern void lcd_backlight(uint8_t val);
+extern void lcd_backlight_timer();
 
 #endif // _LCD_H_
 

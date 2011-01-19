@@ -26,6 +26,8 @@
 
 #include "lcd.h"
 #include "util.h"
+#include "hal_io.h"
+#include "globals.h"
 
 #include <avr/io.h>
 #include <avr/pgmspace.h>
@@ -43,6 +45,7 @@ uint8_t displayBuf[LCD_DISPLAY_W * LCD_DISPLAY_H / 8];
 
 #define LCD_BLINK_TIMER           (1)
 
+static uint8_t tick_backlight = 0;
 
 /*--------------------------------------------------------------------------------
  * Fonts
@@ -600,14 +603,18 @@ void lcd_init()
   
 }
 
-
+/*--------------------------------------------------------------------------------
+ * lcd_contrast
+ *--------------------------------------------------------------------------------*/
 void lcd_contrast(uint8_t val)
 {
    lcdSendCtl(0x81);
    lcdSendCtl(val);
 }
 
-
+/*--------------------------------------------------------------------------------
+ * lcd_refresh
+ *--------------------------------------------------------------------------------*/
 void lcd_refresh()
 {
    uint8_t *p = displayBuf;
@@ -623,4 +630,52 @@ void lcd_refresh()
          p++;
       }
    }
+}
+
+/*--------------------------------------------------------------------------------
+ * lcd_backlight
+ *--------------------------------------------------------------------------------*/
+void lcd_backlight(uint8_t val)
+{
+	if (val == LCD_BACKLIGHT_ON)
+	{
+		if (g_RadioConfig.backlight == 1)
+		{
+			// Never allowed to turn on...
+			tick_backlight = 0;
+			return;
+		}
+
+		devBacklightPORT |= 1<<devBacklightPin;
+
+		if (g_RadioConfig.backlight == 0)
+		{
+			// ALWAYS ON, i.e. do not start timer...
+			tick_backlight = 0;
+			return;
+		}
+
+		// 5s per value, 2=5, 3=10
+		tick_backlight = 1 + (g_RadioConfig.backlight - 1)*5;
+	}
+	else
+	{
+		devBacklightPORT &= ~(1<<devBacklightPin);
+		tick_backlight = 0;
+	}
+}
+
+/*--------------------------------------------------------------------------------
+ * lcd_backlight_timer
+ *--------------------------------------------------------------------------------*/
+void lcd_backlight_timer()
+{
+	if (tick_backlight > 0)
+	{
+		tick_backlight--;
+		if (tick_backlight == 0)
+		{
+			lcd_backlight(LCD_BACKLIGHT_OFF);
+		}
+	}
 }
