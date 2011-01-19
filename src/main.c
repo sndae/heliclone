@@ -164,7 +164,7 @@ void load_defaults()
 	g_RadioConfig.message_box_timeout = 50;
 
 	g_RadioConfig.voltageWarning = 70;
-	g_RadioConfig.backlight = 1;
+	g_RadioConfig.backlight = 2;
 
 }
 
