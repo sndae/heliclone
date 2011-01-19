@@ -50,6 +50,7 @@ SModel g_Model;
 static uint8_t beep8 = 0;
 static uint8_t tick_beep = 0;
 static uint8_t tick_alarm = 0;
+static uint8_t tick_volt_alarm = 5;
 
 /*--------------------------------------------------------------------------------
  * Defines & Macros
@@ -163,7 +164,7 @@ void load_defaults()
 	// MENUS (5 seconds, i.e. 50 GUI ticks)
 	g_RadioConfig.message_box_timeout = 50;
 
-	g_RadioConfig.voltageWarning = 70;
+	g_RadioConfig.voltageWarning = 40;
 	g_RadioConfig.backlight = 2;
 
 }
@@ -217,6 +218,7 @@ void handle_timers()
 			if (((tick_alarm % ALARM_BEEP_EVERY) == 0) || (tick_alarm == 1))
 			{
 				gui_beep(g_RadioConfig.alarmBeep);
+				lcd_backlight(LCD_BACKLIGHT_ON);
 			}
 		}
 		else
@@ -228,6 +230,24 @@ void handle_timers()
 
 	// Backlight timer
 	lcd_backlight_timer();
+
+	// Voltage alarm?
+	tick_volt_alarm--;
+	if (tick_volt_alarm == 0)
+	{
+		adcV = ((int32_t)g_RadioRuntime.adc_r[7] - (int32_t)g_RadioConfig.adc_c[7][0]);
+		adcV = adcV * 700;
+		adcV = adcV / ((int32_t)g_RadioConfig.adc_c[7][2] - (int32_t)g_RadioConfig.adc_c[7][0]);
+		adcV = adcV + 500;
+
+		if (adcV < g_RadioConfig.voltageWarning*10)
+		{
+			gui_beep(g_RadioConfig.alarmBeep);
+			lcd_backlight(LCD_BACKLIGHT_ON);
+		}
+		tick_volt_alarm = 5;
+	}
+
 }
 
 /*--------------------------------------------------------------------------------
