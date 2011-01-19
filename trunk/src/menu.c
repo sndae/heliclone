@@ -729,7 +729,7 @@ uint8_t menu_model_swash_throw(GUI_EVENT event, uint8_t elapsedTime)
 			if ((g_Model.type != MDL_TYPE_HELI_ECCPM_120) && (g_Model.type != MDL_TYPE_HELI_ECCPM_140))
 			{
 				gui_screen_pop();
-				menu_show_messagebox(MNU_MODEL_NO_SWASH_MIX_T, MNU_MODEL_EMPTY, MNU_MODEL_NO_SWASH_MIX_2, MNU_MODEL_NO_SWASH_MIX_3, MNU_MODEL_EMPTY);
+				menu_show_messagebox(0, MNU_MODEL_NO_SWASH_MIX_T, MNU_MODEL_EMPTY, MNU_MODEL_NO_SWASH_MIX_2, MNU_MODEL_NO_SWASH_MIX_3, MNU_MODEL_EMPTY);
 				return 1;
 			}
 			break;
@@ -868,7 +868,7 @@ uint8_t menu_model_clone(GUI_EVENT event, uint8_t elapsedTime)
 			if (firstFreeSlot == 0xFF)
 			{
 				gui_screen_pop();
-				menu_show_messagebox(MNU_MODEL_NO_SLOT_T, MNU_MODEL_NO_SLOT_1, MNU_MODEL_NO_SLOT_2, MNU_MODEL_NO_SLOT_3, MNU_MODEL_NO_SLOT_4);
+				menu_show_messagebox(0, MNU_MODEL_NO_SLOT_T, MNU_MODEL_NO_SLOT_1, MNU_MODEL_NO_SLOT_2, MNU_MODEL_NO_SLOT_3, MNU_MODEL_NO_SLOT_4);
 				return 1;
 			}
 
@@ -901,7 +901,7 @@ uint8_t menu_model_clone(GUI_EVENT event, uint8_t elapsedTime)
 			g_RadioRuntime.ppmActive = 1;
 
 			gui_screen_pop();
-			menu_show_messagebox(MNU_MODEL_EMPTY, MNU_MODEL_EMPTY, MNU_MODEL_CLONED, MNU_MODEL_EMPTY, MNU_MODEL_EMPTY);
+			menu_show_messagebox(0, MNU_MODEL_EMPTY, MNU_MODEL_EMPTY, MNU_MODEL_CLONED, MNU_MODEL_EMPTY, MNU_MODEL_EMPTY);
 			return 1;
 		break;
 		case GUI_EVT_KEY_UP:
@@ -1023,12 +1023,12 @@ uint8_t menu_model_delete(GUI_EVENT event, uint8_t elapsedTime)
 				eeprom_delete_model_config(cursor);
 
 				gui_screen_pop();
-				menu_show_messagebox(MNU_MODEL_EMPTY, MNU_MODEL_EMPTY, MNU_MODEL_DEL, MNU_MODEL_EMPTY, MNU_MODEL_EMPTY);
+				menu_show_messagebox(0, MNU_MODEL_EMPTY, MNU_MODEL_EMPTY, MNU_MODEL_DEL, MNU_MODEL_EMPTY, MNU_MODEL_EMPTY);
 			}
 			else
 			{
 				// Cannot delete selected model!
-				menu_show_messagebox(MNU_MODEL_NO_DEL_T, MNU_MODEL_NO_DEL_1, MNU_MODEL_NO_DEL_2, MNU_MODEL_NO_DEL_3, MNU_MODEL_NO_DEL_4);
+				menu_show_messagebox(0, MNU_MODEL_NO_DEL_T, MNU_MODEL_NO_DEL_1, MNU_MODEL_NO_DEL_2, MNU_MODEL_NO_DEL_3, MNU_MODEL_NO_DEL_4);
 			}
 			return 1;
 			break;
@@ -1153,7 +1153,7 @@ uint8_t menu_model_create(GUI_EVENT event, uint8_t elapsedTime)
 			if (firstFreeSlot == 0xFF)
 			{
 				gui_screen_pop();
-				menu_show_messagebox(MNU_MODEL_NO_SLOT_T, MNU_MODEL_NO_SLOT_1, MNU_MODEL_NO_SLOT_2, MNU_MODEL_NO_SLOT_3, MNU_MODEL_NO_SLOT_4);
+				menu_show_messagebox(0, MNU_MODEL_NO_SLOT_T, MNU_MODEL_NO_SLOT_1, MNU_MODEL_NO_SLOT_2, MNU_MODEL_NO_SLOT_3, MNU_MODEL_NO_SLOT_4);
 				return 1;
 			}
 
@@ -1185,7 +1185,7 @@ uint8_t menu_model_create(GUI_EVENT event, uint8_t elapsedTime)
 			eeprom_save_model_config(g_RadioConfig.selectedModel);
 		
 			gui_screen_pop();
-			menu_show_messagebox(MNU_MODEL_MDL_INFO_T, MNU_MODEL_MDL_INFO_1, MNU_MODEL_MDL_INFO_2, MNU_MODEL_MDL_INFO_3, MNU_MODEL_MDL_INFO_4);
+			menu_show_messagebox(0, MNU_MODEL_MDL_INFO_T, MNU_MODEL_MDL_INFO_1, MNU_MODEL_MDL_INFO_2, MNU_MODEL_MDL_INFO_3, MNU_MODEL_MDL_INFO_4);
 			return 1;
 			break;
 		case GUI_EVT_KEY_EXIT:
@@ -1748,8 +1748,6 @@ uint8_t menu_message_box(GUI_EVENT event, uint8_t elapsedTime)
 	switch (event)
 	{
 		case GUI_EVT_SHOW:
-			msgbox_countdown = g_RadioConfig.message_box_timeout;
-
 			lcd_putsAtt( 1*LCD_FONT_WIDTH, 1*LCD_FONT_HEIGHT, MNU_MSGBOX_CLEAR, LCD_NO_INV);
 			lcd_putsAtt( 1*LCD_FONT_WIDTH, 2*LCD_FONT_HEIGHT, MNU_MSGBOX_CLEAR, LCD_NO_INV);
 			lcd_putsAtt( 1*LCD_FONT_WIDTH, 3*LCD_FONT_HEIGHT, MNU_MSGBOX_CLEAR, LCD_NO_INV);
@@ -1810,12 +1808,15 @@ uint8_t menu_message_box(GUI_EVENT event, uint8_t elapsedTime)
 		case GUI_EVT_HIDE:
 			break;
 		case GUI_EVT_TICK:
-			msgbox_countdown--;
-			// Remove the messagebox?
-			if (msgbox_countdown == 0)
+			if (msgbox_countdown != 0xFF)
 			{
-				// Remove us...
-				gui_screen_pop();
+				msgbox_countdown--;
+				// Remove the messagebox?
+				if (msgbox_countdown == 0)
+				{
+					// Remove us...
+					gui_screen_pop();
+				}
 			}
 			break;
 		case GUI_EVT_KEY_UP:
@@ -1840,7 +1841,7 @@ uint8_t menu_message_box(GUI_EVENT event, uint8_t elapsedTime)
 	return dirty;
 }
 
-void menu_show_messagebox(char *title, char *row1, char *row2, char* row3, char* row4)
+void menu_show_messagebox(uint8_t time, char *title, char *row1, char *row2, char* row3, char* row4)
 {
 	// Store pointers
 	msgbox_title = title;
@@ -1848,6 +1849,14 @@ void menu_show_messagebox(char *title, char *row1, char *row2, char* row3, char*
 	msgbox_row2 = row2;
 	msgbox_row3 = row3;
 	msgbox_row4 = row4;
+	if (time == 0)
+	{
+		msgbox_countdown = g_RadioConfig.message_box_timeout;
+	}
+	else
+	{
+		msgbox_countdown = time;
+	}
 
 	// invoke the msgbox on the stack
 
@@ -2383,7 +2392,7 @@ uint8_t menu_adc_calibrate(GUI_EVENT event, uint8_t elapsedTime)
 	{
 		case GUI_EVT_SHOW:
 			// Show help...
-			menu_show_messagebox(MNU_ADC_INFO_T, MNU_ADC_INFO_1, MNU_ADC_INFO_2, MNU_ADC_INFO_3, MNU_ADC_INFO_4);
+			menu_show_messagebox(0, MNU_ADC_INFO_T, MNU_ADC_INFO_1, MNU_ADC_INFO_2, MNU_ADC_INFO_3, MNU_ADC_INFO_4);
 			break;
 		case GUI_EVT_TICK:
 		case GUI_EVT_HIDE:
