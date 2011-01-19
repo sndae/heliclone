@@ -29,6 +29,6 @@
 #include <stdint.h>
 
 extern void menu_init();
-extern void menu_show_messagebox(char *title, char *row1, char *row2, char* row3, char* row4);
+extern void menu_show_messagebox(uint8_t time, char *title, char *row1, char *row2, char* row3, char* row4);
 
 #endif // _GUI_H_
