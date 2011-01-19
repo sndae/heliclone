@@ -2890,7 +2890,7 @@ uint8_t menu_get_setting(uint8_t parameterId)
 	switch (parameterId)
 	{
 		case RC_SET_VOLTAGE:
-			return (g_RadioConfig.voltageWarning - 50)/5;
+			return (g_RadioConfig.voltageWarning - 40)/5;
 			break;
 		case RC_SET_BACKLIGHT:
 			return g_RadioConfig.backlight;
@@ -2941,14 +2941,14 @@ void menu_set_setting(uint8_t parameterId, uint8_t newValue)
 	switch (parameterId)
 	{
 		case RC_SET_VOLTAGE:
-			g_RadioConfig.voltageWarning = 50 + (newValue*5);
+			g_RadioConfig.voltageWarning = 40 + (newValue*5);
 			if (g_RadioConfig.voltageWarning > 100)
 			{
 				g_RadioConfig.voltageWarning = 100;
 			}
-			if (g_RadioConfig.voltageWarning < 50)
+			if (g_RadioConfig.voltageWarning < 40)
 			{
-				g_RadioConfig.voltageWarning = 50;
+				g_RadioConfig.voltageWarning = 40;
 			}
 			saveEeprom = 1;
 			break;
@@ -3306,7 +3306,7 @@ uint8_t menu_model_config(GUI_EVENT event, uint8_t elapsedTime)
  * menu_radio_config
  *--------------------------------------------------------------------------------*/
 char MNU_RADIO_CONFIG_VOLTAGE[] 		PROGMEM = "Voltage Warning";
-char MNU_RADIO_CONFIG_VOLTAGE_SEL[] 	PROGMEM = "5.0 |5.5 |6.0 |6.5 |7.0 |7.5 |8.0 |8.5 |9.0 |9.5 |10.0";
+char MNU_RADIO_CONFIG_VOLTAGE_SEL[] 	PROGMEM = "4.0 |4.5 |5.0 |5.5 |6.0 |6.5 |7.0 |7.5 |8.0 |8.5 |9.0 |9.5 |10.0";
 char MNU_RADIO_CONFIG_BACKLIGHT[] 		PROGMEM = "Backlight";
 char MNU_RADIO_CONFIG_BACKLIGHT_SEL[] 	PROGMEM = "ON  |OFF |5s  |10s |15s |20s ";
 char MNU_RADIO_CONFIG_BEEP_KEYS[] 		PROGMEM = "BEEP Keys";
