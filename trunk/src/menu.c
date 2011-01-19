@@ -2504,32 +2504,24 @@ void menu_main_draw_h_trim(uint8_t xpos, uint8_t ypos, ADC_INPUTS a)
 
 void menu_main_draw_battey(uint8_t x, uint8_t y) 
 {
- 	uint16_t v;
-	uint8_t drawingMode = LCD_NO_INV;
+ 	int32_t v;
+	uint8_t drawingMode = LCD_BSS_NO_INV;
+	char* buf = &g_RadioRuntime.buffer[0];
 
-	v = 50; // 5V
-	v += ((g_RadioRuntime.adc_r[7]-g_RadioConfig.adc_c[7][0]) * 10) / 
-	     ((g_RadioConfig.adc_c[7][2]-g_RadioConfig.adc_c[7][0])/7);
+	v = ((int32_t)g_RadioRuntime.adc_r[7] - (int32_t)g_RadioConfig.adc_c[7][0]);
+	v = v * 700;
+	v = v / ((int32_t)g_RadioConfig.adc_c[7][2] - (int32_t)g_RadioConfig.adc_c[7][0]);
 
-	if (g_RadioRuntime.adc_r[7] < g_RadioConfig.adc_c[7][1])
+	v = v + 500;
+
+	if (v < g_RadioConfig.voltageWarning*10)
 	{
 	 	// We are under alarm...
-		drawingMode = LCD_INVERS;
+		drawingMode = LCD_BSS_INVERS;
 	}
 
-
-	// Integer part of Volt (2 digits max...)
-	lcd_outdezAtt(x - LCD_FONT_WIDTH*3 + 3, y, (v/10), drawingMode);
-
-	// The "."
-	lcd_putc(x - LCD_FONT_WIDTH*3 + 3, y, '.');
-
-	// Tens of Volt
-	lcd_outdezAtt(x - LCD_FONT_WIDTH*1, y, (v/100), drawingMode);
-
-	// The "V"
-	lcd_putc(x - LCD_FONT_WIDTH*1, y, 'V');
-
+	sprintf(buf, "%d.%dV", (uint16_t)(v/100), (uint16_t)(v%100));
+	lcd_putsAtt(x - LCD_FONT_WIDTH*strlen(buf) - 2, y, buf, drawingMode);
 }
 
 void main_draw_servo(uint8_t x, uint8_t y, uint8_t servo)
