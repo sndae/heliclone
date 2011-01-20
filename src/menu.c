@@ -140,7 +140,29 @@ uint8_t firstFreeSlot = 0xFF;
 int8_t heliType = MDL_TYPE_HELI_SIM;
 
 char MNU_MODEL_EMPTY[] 		PROGMEM = "                   ";
-char MNU_MODEL_SERVO_CH[] 			PROGMEM = "CH";
+char MNU_MODEL_SERVO_CH[] 	PROGMEM = "CH";
+
+
+char MNU_FN_AIL[] 	PROGMEM = "AIL";
+char MNU_FN_ELE[] 	PROGMEM = "ELE";
+char MNU_FN_RUD[] 	PROGMEM = "RUD";
+char MNU_FN_PIT[] 	PROGMEM = "PIT";
+char MNU_FN_THR[] 	PROGMEM = "THR";
+char MNU_FN_GYR[] 	PROGMEM = "GYR";
+char MNU_FN_AUX1[] 	PROGMEM = "AX1";
+char MNU_FN_AUX2[] 	PROGMEM = "AX2";
+
+char* fnStr[] PROGMEM = 
+{
+	MNU_FN_AIL,
+	MNU_FN_THR,
+	MNU_FN_ELE,
+	MNU_FN_RUD,
+	MNU_FN_GYR,
+	MNU_FN_PIT,
+	MNU_FN_AUX1,
+	MNU_FN_AUX2
+};
 
 
 /*--------------------------------------------------------------------------------
@@ -188,6 +210,169 @@ void menu_init()
 	}
 	
 }
+
+/*--------------------------------------------------------------------------------
+ * menu_model_servo_mapping
+ *--------------------------------------------------------------------------------*/
+char MNU_MODEL_SERVO_MAP_TITLE[]	PROGMEM = "Servo Map";
+char MNU_MODEL_SERVO_MAP_SEL[]		PROGMEM = "Futaba   |Spektrum ";
+
+uint8_t menu_get_current_mapping()
+{
+	// Do we have AILERON function mapped to CHANNEL 1 (i.e. value 0)
+	// then we have FUTABA...else Spektrum...the only ones now...
+	if (g_Model.functionToServoTable[0] == 0)
+	{
+		return 0;
+	}
+	else 
+	{
+		return 1;
+	}
+}
+
+void  menu_set_current_mapping(uint8_t val)
+{
+	switch (val)
+	{
+		case 0:
+			// FUTABA mapping...
+			g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_AILERON)] = SERVO_CHANNEL(1);
+			g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_ELEVATOR)] = SERVO_CHANNEL(2);
+			g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_THROTTLE)] = SERVO_CHANNEL(3);
+			g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_RUDDER)] = SERVO_CHANNEL(4);
+			g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_GYRO_GAIN)] = SERVO_CHANNEL(5);
+			g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_PITCH)] = SERVO_CHANNEL(6);
+			g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_AUX1)] = SERVO_CHANNEL(7);
+			g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_AUX2)] = SERVO_CHANNEL(8);
+			break;
+		case 1:
+			// SPEKTRUM mapping...
+			g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_AILERON)] = SERVO_CHANNEL(2);
+			g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_ELEVATOR)] = SERVO_CHANNEL(3);
+			g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_THROTTLE)] = SERVO_CHANNEL(1);
+			g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_RUDDER)] = SERVO_CHANNEL(4);
+			g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_GYRO_GAIN)] = SERVO_CHANNEL(5);
+			g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_PITCH)] = SERVO_CHANNEL(6);
+			g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_AUX1)] = SERVO_CHANNEL(7);
+			g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_AUX2)] = SERVO_CHANNEL(8);
+			break;					
+		default:
+			// FUTABA mapping...
+			g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_AILERON)] = SERVO_CHANNEL(1);
+			g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_ELEVATOR)] = SERVO_CHANNEL(2);
+			g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_THROTTLE)] = SERVO_CHANNEL(3);
+			g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_RUDDER)] = SERVO_CHANNEL(4);
+			g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_GYRO_GAIN)] = SERVO_CHANNEL(5);
+			g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_PITCH)] = SERVO_CHANNEL(6);
+			g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_AUX1)] = SERVO_CHANNEL(7);
+			g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_AUX2)] = SERVO_CHANNEL(8);
+		break;
+	}
+}
+
+uint8_t menu_model_servo_mapping(GUI_EVENT event, uint8_t elapsedTime)
+{
+	uint8_t dirty = 1;
+	uint8_t i;
+	uint8_t x,y;
+	uint8_t s;
+	char* selString;
+	uint8_t sstart;
+
+	switch (event)
+	{
+		case GUI_EVT_SHOW:
+			cursor = 0;
+			changedModel = 0;
+			break;
+		case GUI_EVT_HIDE:
+			break;
+		case GUI_EVT_TICK:
+			break;
+		case GUI_EVT_KEY_EXIT:
+			// We are done...restore?
+			if (changedModel == 1)
+			{
+				eeprom_load_model_config(g_RadioConfig.selectedModel);
+			}
+			gui_screen_pop();
+			break;
+		case GUI_EVT_KEY_MENU:
+			// We are done...save?
+			if (changedModel == 1)
+			{
+				eeprom_save_model_config(g_RadioConfig.selectedModel);
+			}
+			gui_screen_pop();
+			break;
+		case GUI_EVT_KEY_UP:
+			break;
+		case GUI_EVT_KEY_DOWN:
+			break;
+		case GUI_EVT_KEY_RIGHT:
+			cursor++;
+			if (cursor > 1)
+			{
+				cursor = 0;
+			}
+			menu_set_current_mapping(cursor);
+			changedModel = 1;
+			break;
+		case GUI_EVT_KEY_LEFT:
+			cursor--;
+			if (cursor < 0)
+			{
+				cursor = 1;
+			}
+			menu_set_current_mapping(cursor);
+			changedModel = 1;
+			break;
+		default:
+			break;
+	}
+
+
+
+	lcd_clear();
+	lcd_puts_P( 0, 0, MNU_MODEL_SERVO_MAP_TITLE);
+
+	sstart = menu_get_current_mapping()*10;
+	selString = (char*)(MNU_MODEL_SERVO_MAP_SEL + sstart);
+
+	lcd_putsnAtt( 12*LCD_FONT_WIDTH, 0, selString, 9, LCD_INVERS);
+
+	x = 0;
+	y = 2;
+
+	for (i=0; i<8; i++)
+	{
+		lcd_putsAtt((x)*LCD_FONT_WIDTH, (y)*LCD_FONT_HEIGHT, MNU_MODEL_SERVO_CH, LCD_NO_INV);
+		lcd_outdezAtt((x + 3)*LCD_FONT_WIDTH, (y)*LCD_FONT_HEIGHT, i+1, LCD_NO_INV);
+
+		lcd_putsAtt((3 + x)*LCD_FONT_WIDTH, (y)*LCD_FONT_HEIGHT, PSTR("->"), LCD_NO_INV);
+
+		for (s=0; s<8; s++)
+		{
+			if (s == g_Model.functionToServoTable[i])
+			{
+				break;
+			}
+		}
+
+		lcd_putsAtt((5+x)*LCD_FONT_WIDTH, (y)*LCD_FONT_HEIGHT, (char*)pgm_read_word(&fnStr[s]), LCD_NO_INV);
+
+		y++;
+
+		if (i == 3)
+		{
+			y = 2;
+			x = 12;
+		}
+	}
+	return dirty;
+}
+
 
 /*--------------------------------------------------------------------------------
  * menu_model_timer_setup
@@ -3204,7 +3389,7 @@ uint8_t menu_settings(GUI_EVENT event, uint8_t elapsedTime)
 char MNU_MODEL_CONFIG_TYPE[] 			PROGMEM = "Model Type";
 char MNU_MODEL_CONFIG_TYPE_SEL[] 		PROGMEM = "SIM |FBL |S120|S140";
 
-SSelection modelConfig[11] PROGMEM = 
+SSelection modelConfig[12] PROGMEM = 
 {
 	{
 		0x1b,
@@ -3212,34 +3397,6 @@ SSelection modelConfig[11] PROGMEM =
 		0,
 		0,
 		menu_model_timer_setup
-	},
-	{
-		0x10,
-		MNU_MODEL_SERVO_TITLE,
-		0,
-		0,
-		&menu_model_servo_direction
-	},
-	{
-		0x11,
-		MNU_MODEL_SERVO_SUBTRIM_TITLE,
-		0,
-		0,
-		&menu_model_servo_subtrim
-	},
-	{
-		0x15,
-		MNU_MODEL_SERVO_LIMITS_TITLE,
-		0,
-		0,
-		&menu_model_servo_limits
-	},
-	{
-		0x16,
-		MNU_MODEL_EXPO_EDIT_TITLE,
-		0,
-		0,
-		&menu_model_expo_edit
 	},
 	{
 		MNU_ID_PITCH_CURVE,
@@ -3270,6 +3427,41 @@ SSelection modelConfig[11] PROGMEM =
 		&menu_model_swash_throw
 	},
 	{
+		0x1b,
+		MNU_MODEL_SERVO_MAP_TITLE,
+		0,
+		0,
+		&menu_model_servo_mapping
+	},
+	{
+		0x10,
+		MNU_MODEL_SERVO_TITLE,
+		0,
+		0,
+		&menu_model_servo_direction
+	},
+	{
+		0x11,
+		MNU_MODEL_SERVO_SUBTRIM_TITLE,
+		0,
+		0,
+		&menu_model_servo_subtrim
+	},
+	{
+		0x15,
+		MNU_MODEL_SERVO_LIMITS_TITLE,
+		0,
+		0,
+		&menu_model_servo_limits
+	},
+	{
+		0x16,
+		MNU_MODEL_EXPO_EDIT_TITLE,
+		0,
+		0,
+		&menu_model_expo_edit
+	},
+	{
 		0x19,
 		MNU_MODEL_NAME_EDIT_TITLE,
 		0,
@@ -3292,7 +3484,7 @@ uint8_t menu_model_config(GUI_EVENT event, uint8_t elapsedTime)
 	switch (event)
 	{
 		case GUI_EVT_SHOW:
-			numSettings = 11;
+			numSettings = 12;
 			currentSettings = (SSelection*)&modelConfig[0];
 			break;
 		default:

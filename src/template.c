@@ -34,7 +34,7 @@ void template_common()
 	// All servos NORMAL direction
 	g_Model.servoDirection = 0x00;
 
-	// FlySky original mapping...
+	// FUTABA mapping...
 	g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_AILERON)] = SERVO_CHANNEL(1);
 	g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_ELEVATOR)] = SERVO_CHANNEL(2);
 	g_Model.functionToServoTable[FUNCTION_INDEX(MIX_OUT_THROTTLE)] = SERVO_CHANNEL(3);
@@ -249,9 +249,6 @@ void template_common()
 		g_Model.endPoint[1][i] = 100;
 	}
 
-	g_Model.timer = 60*5;						// 5 minutes
-	g_Model.timerCond = MDL_DEFAULT_THR_TIMER;	// more than 5% of throttle will start it...
-	g_Model.timerAlarmLimit = 15;				// 15 secs before
 }
 
 void template_simulator() 
@@ -269,6 +266,9 @@ void template_simulator()
 	g_Model.mixers[11].condition = MIX_COND_FALSE;
 	g_Model.mixers[12].condition = MIX_COND_FALSE;
 
+	g_Model.timer = 60*5;						// 5 minutes
+	g_Model.timerCond = 0;						// OFF for sim
+	g_Model.timerAlarmLimit = 15;				// 15 secs before
 }
 void template_fbl()
 {
@@ -279,6 +279,10 @@ void template_fbl()
 
 	// Sim type
 	g_Model.type = MDL_TYPE_HELI_FBL;
+
+	g_Model.timer = 60*5;						// 5 minutes
+	g_Model.timerCond = MDL_DEFAULT_THR_TIMER;	// more than 5% of throttle will start it...
+	g_Model.timerAlarmLimit = 15;				// 15 secs before
 }
 
 void template_swash_120()
@@ -291,6 +295,10 @@ void template_swash_120()
 	// Sim type
 	g_Model.type = MDL_TYPE_HELI_ECCPM_120;
 
+	g_Model.timer = 60*5;						// 5 minutes
+	g_Model.timerCond = MDL_DEFAULT_THR_TIMER;	// more than 5% of throttle will start it...
+	g_Model.timerAlarmLimit = 15;				// 15 secs before
+
 }
 
 void template_swash_140()
@@ -302,6 +310,10 @@ void template_swash_140()
 
 	// Sim type
 	g_Model.type = MDL_TYPE_HELI_ECCPM_140;
+
+	g_Model.timer = 60*5;						// 5 minutes
+	g_Model.timerCond = MDL_DEFAULT_THR_TIMER;	// more than 5% of throttle will start it...
+	g_Model.timerAlarmLimit = 15;				// 15 secs before
 
 }
 
