@@ -137,8 +137,10 @@ typedef struct
 	uint8_t 	selectedModel;
 
 	// Softstart speed ramp
+#ifdef F_SOFTSTART
 	uint16_t	softStartMax;
 	uint16_t    softStartIncEvery;
+#endif
 
 } SRadioConfig;
 

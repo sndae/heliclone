@@ -172,11 +172,13 @@ void load_defaults()
 	g_RadioConfig.message_box_timeout = 50;
 
 	g_RadioConfig.voltageWarning = 40;
-	g_RadioConfig.backlight = 2;
+	g_RadioConfig.backlight = 1;
 
+#ifdef F_SOFTSTART
 	// Softstart
 	g_RadioConfig.softStartMax = 50;
 	g_RadioConfig.softStartIncEvery = 1;
+#endif	
 }
 
 /*--------------------------------------------------------------------------------
@@ -184,7 +186,8 @@ void load_defaults()
  *--------------------------------------------------------------------------------*/
 void handle_timers()
 {
-	int16_t adcV;
+	int16_t thrValue;
+	int32_t adcV;
 	uint8_t timerTicking = 0;
 
 	if (g_RadioRuntime.modelTimer != 0)
@@ -192,15 +195,15 @@ void handle_timers()
 		if ((g_Model.timerCond > 0) && (g_Model.timerCond <= 100))
 		{
 			// Throttle % timer mode
-			adcV = g_RadioRuntime.adc_s[ADC_THR];
+			thrValue = mixer_get_output(MIX_OUT_THROTTLE);;
 			
 			// Convert to 0...200
-			adcV = adcV + 100;
+			thrValue = thrValue + 100;
 
 			// Convert to %
-			adcV = adcV / 2;
+			thrValue = thrValue / 2;
 
-			if (adcV >= g_Model.timerCond)
+			if (thrValue >= g_Model.timerCond)
 			{
 				g_RadioRuntime.modelTimer--;
 				timerTicking = 1;
@@ -252,7 +255,7 @@ void handle_timers()
 
 		if (adcV < g_RadioConfig.voltageWarning*10)
 		{
-			gui_beep(g_RadioConfig.alarmBeep);
+			gui_beep(/*g_RadioConfig.alarmBeep*/ 3);
 			lcd_backlight(LCD_BACKLIGHT_ON);
 		}
 		tick_volt_alarm = 5;
@@ -300,22 +303,6 @@ int main(void)
 	gui_init();
 	menu_init();
 
-	// Check for default SWITCHES settings.
-	hal_io_handle(IO_EVERY_TICK);
-	if (hal_io_sw_is_default() == 0)
-	{
-		menu_show_messagebox(0xFF, SWITCH_INFO_T, SWITCH_INFO_1, SWITCH_INFO_2, SWITCH_INFO_3, SWITCH_INFO_4);
-		gui_execute(GUI_EVERY_TICK);
-
-		// Stay here if we have switches in wrong pos
-		while (hal_io_sw_is_default() == 0)
-		{
-			hal_io_handle(IO_EVERY_TICK);
-		}
-
-		gui_screen_pop();
-	}
-
 	// Check EEPROM first, if not OK we must init it...
 	if (eeprom_check() == 0)
 	{
@@ -355,6 +342,21 @@ int main(void)
 		eeprom_load_model_config(g_RadioConfig.selectedModel);
 	}
 
+	// Check for default SWITCHES settings.
+	hal_io_handle(IO_EVERY_TICK);
+	if (hal_io_sw_is_default() == 0)
+	{
+		menu_show_messagebox(0xFF, SWITCH_INFO_T, SWITCH_INFO_1, SWITCH_INFO_2, SWITCH_INFO_3, SWITCH_INFO_4);
+		gui_execute(GUI_EVERY_TICK);
+
+		// Stay here if we have switches in wrong pos
+		while (hal_io_sw_is_default() == 0)
+		{
+			hal_io_handle(IO_EVERY_TICK);
+		}
+
+		gui_screen_pop();
+	}
 
 	// Check for THROTTLE HOLD
 	hal_io_handle(IO_EVERY_TICK);
