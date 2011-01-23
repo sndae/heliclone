@@ -467,6 +467,24 @@ void mixer_mix()
 	SMixer* mixer;
 	int16_t ailS, eleS, pitS;
 
+#ifdef F_SOFTSTART
+	if (g_RadioRuntime.softStartArmed == 1)
+	{
+		index = g_Model.functionToServoTable[MIX_OUT_THROTTLE];
+
+		// Has throttle increased?
+		if (g_RadioRuntime.srv_s[index] > -100)
+		{
+			// Go into SOFTSTART MODE!!!
+			g_RadioRuntime.softStart = 1;	
+			g_RadioRuntime.softStartArmed = 0;
+			g_RadioRuntime.softStartLastTHR = 0;
+			g_RadioRuntime.softStartTick = 0;
+		}
+
+	}
+#endif
+
 	for (i=0; i<MDL_MAX_CHANNELS; i++)
 	{
 		// Save values for servos
@@ -476,6 +494,7 @@ void mixer_mix()
 		// Clear values so mixers can do their job...
 		g_RadioRuntime.srv_s[i] = 0;
 	}
+
 
 	for (i=0; i<MDL_MAX_FUNCTIONS; i++)
 	{
@@ -566,6 +585,27 @@ void mixer_mix()
 		}
 	}
 
+#ifdef F_SOFTSTART
+	// Soft-start filter...
+	if (g_RadioRuntime.softStart == 1)
+	{
+		// Scale with the % softstart
+		index = g_Model.functionToServoTable[MIX_OUT_THROTTLE];
+		g_RadioRuntime.srv_s[index] = (g_RadioRuntime.srv_s[i] * g_RadioRuntime.softStartLastTHR)/100;
+		servoChanged[index] = 1;
+	}
+	// Arm the filter again???
+	if (g_RadioRuntime.softStart == 0)
+	{
+		// Only arm if the THR has been 0!!!
+		index = g_Model.functionToServoTable[MIX_OUT_THROTTLE];
+		if (g_RadioRuntime.srv_s[index] < -99)
+		{
+			g_RadioRuntime.softStartArmed = 1;
+		}
+	}
+#endif
+
 	// If we did not change the values...restore em
 	// else, handle direction.
 	for (i=0; i<MDL_MAX_CHANNELS; i++)
@@ -595,3 +635,33 @@ void mixer_mix()
 	}
 }
 
+/*--------------------------------------------------------------------------------
+ * mixer_soft_start_filter
+ *--------------------------------------------------------------------------------*/
+#ifdef F_SOFTSTART
+void mixer_soft_start_filter()
+{
+	// Soft-start filter...
+	if (g_RadioRuntime.softStart == 1)
+	{
+		g_RadioRuntime.softStartTick++;
+		if (g_RadioRuntime.softStartTick <= g_RadioConfig.softStartMax)
+		{
+			if ((g_RadioRuntime.softStartTick % g_RadioConfig.softStartIncEvery) == 0) 
+			{
+				g_RadioRuntime.softStartLastTHR += (100/g_RadioConfig.softStartMax);
+			}
+		}
+		else
+		{
+			g_RadioRuntime.softStart = 0;
+		}
+
+		// Break if larger than 100%
+		if (g_RadioRuntime.softStartLastTHR >= 100)
+		{
+			g_RadioRuntime.softStart = 0;
+		}
+	}
+}
+#endif

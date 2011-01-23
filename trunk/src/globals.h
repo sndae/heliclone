@@ -33,6 +33,11 @@
 // This eats a little RAM...remove me!
 #define USE_DEBUG_MODE
 
+
+// Enable this to have SOFTSTART filter
+//#define F_SOFTSTART
+
+
 #ifdef USE_DEBUG_MODE
 extern char debugLine1[20];
 extern char debugLine2[20];
@@ -131,6 +136,10 @@ typedef struct
 	// Selected model number
 	uint8_t 	selectedModel;
 
+	// Softstart speed ramp
+	uint16_t	softStartMax;
+	uint16_t    softStartIncEvery;
+
 } SRadioConfig;
 
 typedef struct
@@ -163,6 +172,14 @@ typedef struct
 
 	// Misc buffer...good to have ;-)
 	char buffer[16];
+
+#ifdef F_SOFTSTART
+	// Soft-start 
+	int16_t softStartLastTHR;
+	uint8_t softStart;
+	uint8_t softStartArmed;
+	uint16_t softStartTick;
+#endif
 
 } SRadioRuntime;
 
