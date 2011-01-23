@@ -76,6 +76,13 @@ char SWITCH_INFO_1[] 	PROGMEM = "                   ";
 char SWITCH_INFO_2[] 	PROGMEM = " Move all switches ";
 char SWITCH_INFO_3[] 	PROGMEM = " to back position! ";
 char SWITCH_INFO_4[] 	PROGMEM = "                   ";
+
+char SWITCH_THR_T[] 	PROGMEM = "   SAFETY CHECK!   ";
+char SWITCH_THR_1[] 	PROGMEM = "                   ";
+char SWITCH_THR_2[] 	PROGMEM = "  THR HOLD is not  ";
+char SWITCH_THR_3[] 	PROGMEM = "  enabled. Enable  ";
+char SWITCH_THR_4[] 	PROGMEM = "  to continue!     ";
+
 /*--------------------------------------------------------------------------------
  * init_main_tick
  *--------------------------------------------------------------------------------*/
@@ -346,6 +353,23 @@ int main(void)
 		// Load the user configs...
 		eeprom_load_radio_config();
 		eeprom_load_model_config(g_RadioConfig.selectedModel);
+	}
+
+
+	// Check for THROTTLE HOLD
+	hal_io_handle(IO_EVERY_TICK);
+	if (hal_io_get_sw(SW_THR) == 0)
+	{
+		menu_show_messagebox(0xFF, SWITCH_THR_T, SWITCH_THR_1, SWITCH_THR_2, SWITCH_THR_3, SWITCH_THR_4);
+		gui_execute(GUI_EVERY_TICK);
+
+		// Stay here if we have switches in wrong pos
+		while (hal_io_get_sw(SW_THR)== 0)
+		{
+			hal_io_handle(IO_EVERY_TICK);
+		}
+
+		gui_screen_pop();
 	}
 
 	// Turn on backlight (if config allows)
