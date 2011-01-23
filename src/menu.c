@@ -2745,6 +2745,7 @@ char MNU_MAIN_TIMER_OFF[] 	PROGMEM = "XX:XX";
 char MNU_MAIN_MODE_1[] 	PROGMEM = "Servo output:";
 char MNU_MAIN_MODE_2[] 	PROGMEM = "Stick input:";
 char MNU_MAIN_MODE_3[] 	PROGMEM = "ADC Raw input:";
+char MNU_MAIN_MODE_4_SS[] 	PROGMEM = "SOFTSTART";
 
 #ifdef USE_DEBUG_MODE
 char MNU_MAIN_MODE_10[] PROGMEM = "-- DEBUG MODE --";
@@ -2923,6 +2924,13 @@ uint8_t menu_main_screen(GUI_EVENT event, uint8_t elapsedTime)
 			{
 				lcd_putsAtt(6*LCD_FONT_WIDTH,  3*LCD_FONT_HEIGHT+5, MNU_MAIN_TIMER_OFF, LCD_NO_INV|LCD_DBLSIZE);
 			}
+
+#ifdef F_SOFTSTART
+			if (g_RadioRuntime.softStart == 1)
+			{
+				lcd_putsAtt(3*LCD_FONT_WIDTH,  5*LCD_FONT_HEIGHT+5, MNU_MAIN_MODE_4_SS, LCD_NO_INV|LCD_DBLSIZE);
+			}
+#endif
 
 			break;
 #ifdef USE_DEBUG_MODE

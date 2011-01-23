@@ -169,4 +169,8 @@ extern void mixer_mix();
 // For usage in menu to view the expo curve
 extern int16_t mixer_expo(MIX_INPUT source, int16_t value);
 
+#ifdef F_SOFTSTART
+extern void mixer_soft_start_filter();
+#endif
+
 #endif // _MIXER_H_

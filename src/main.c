@@ -167,6 +167,9 @@ void load_defaults()
 	g_RadioConfig.voltageWarning = 40;
 	g_RadioConfig.backlight = 2;
 
+	// Softstart
+	g_RadioConfig.softStartMax = 50;
+	g_RadioConfig.softStartIncEvery = 1;
 }
 
 /*--------------------------------------------------------------------------------
@@ -351,6 +354,11 @@ int main(void)
 	// Enable PPM
 	g_RadioRuntime.ppmActive = 1;
 
+#ifdef F_SOFTSTART
+	// Arm soft-start
+	g_RadioRuntime.softStartArmed = 1;
+#endif
+
 	// Main loop.
     while (1 == 1)
 	{
@@ -362,6 +370,11 @@ int main(void)
 		{
 			g_RadioRuntime.doSignal &= ~DO_IO;
 			hal_io_handle(IO_EVERY_TICK);
+
+#ifdef F_SOFTSTART
+			// SOFTSTART
+			mixer_soft_start_filter();
+#endif
 		}
 
 		// GUI
