@@ -2705,7 +2705,14 @@ void menu_main_draw_battey(uint8_t x, uint8_t y)
 		drawingMode = LCD_BSS_INVERS;
 	}
 
-	sprintf(buf, "%d.%dV", (uint16_t)(v/100), (uint16_t)(v%100));
+	if ((v%100) < 10)
+	{
+		sprintf(buf, "%d.0%dV", (uint16_t)(v/100), (uint16_t)(v%100));
+	}
+	else
+	{
+		sprintf(buf, "%d.%dV", (uint16_t)(v/100), (uint16_t)(v%100));
+	}
 	lcd_putsAtt(x - LCD_FONT_WIDTH*strlen(buf) - 2, y, buf, drawingMode);
 }
 

@@ -70,7 +70,9 @@ GUI_EVENT eventQueue[EVENT_QUEUE_LEN];
 uint8_t eventQueueWritePtr;
 uint8_t eventQueueReadPtr;
 
+// Last/Next POT7
 int16_t lastNextPrevious = 0;
+int8_t lastNextCounter = 0;
 
 /*--------------------------------------------------------------------------------
  * Constants
@@ -336,7 +338,25 @@ void gui_handle_keys(uint8_t elapsedTime)
 	// Use the ADC from POT7 to generate POT_MOVE events...for easier GUI.
 	if (g_RadioRuntime.adc_s[GUI_POT] != lastNextPrevious)
 	{
-		gui_event_put(GUI_EVT_POT_MOVE);
+		// Make sure we turn more than 3 first time!
+		if (abs(g_RadioRuntime.adc_s[GUI_POT] - lastNextPrevious) >= 3)
+		{
+			lastNextCounter = 50;
+		}
+
+		if (lastNextCounter >= 1)
+		{
+			lastNextCounter = 50;
+			gui_event_put(GUI_EVT_POT_MOVE);
+		}
+	}
+	else
+	{
+		lastNextCounter--;
+		if (lastNextCounter < 0)
+		{
+			lastNextCounter = 0;
+		}
 	}
 	lastNextPrevious = g_RadioRuntime.adc_s[GUI_POT];
 
