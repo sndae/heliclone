@@ -151,6 +151,7 @@ typedef struct
 	uint32_t secondTick;
 	uint32_t modelTimer;
 	uint8_t timerStarted;
+	uint8_t alarmCleared;
 
 	// Signals
 	uint8_t	doSignal;

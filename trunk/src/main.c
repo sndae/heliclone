@@ -207,6 +207,9 @@ void handle_timers()
 			{
 				g_RadioRuntime.modelTimer--;
 				timerTicking = 1;
+
+				// Each time throttle is on...unclear alarm...
+				g_RadioRuntime.alarmCleared = 0;
 			}
 		}
 		else if (g_Model.timerCond == 200)
@@ -215,13 +218,16 @@ void handle_timers()
 			{
 				g_RadioRuntime.modelTimer--;
 				timerTicking = 1;
+
+				// Unclear alarm...
+				g_RadioRuntime.alarmCleared = 0;
 			}
 		}
 	}
 
 
-	// Only sound Alarm if timer is active
-	if (timerTicking == 1)
+	// Only sound Alarm if not cleared
+	if (g_RadioRuntime.alarmCleared == 0)
 	{
 		if (g_RadioRuntime.modelTimer <= g_Model.timerAlarmLimit)
 		{
