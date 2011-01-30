@@ -402,6 +402,11 @@ void hal_io_handle(uint8_t elapsedTime)
 					g_RadioRuntime.timerStarted = 0;
 				}
 			}
+			else
+			{	
+				// Throttle mode...used to "clear" alarm
+				g_RadioRuntime.alarmCleared = 1;
+			}
 		}
 
 		timerKeyTicks = 0;
