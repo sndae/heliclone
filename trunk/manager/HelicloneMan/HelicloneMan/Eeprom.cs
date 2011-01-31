@@ -437,6 +437,50 @@ namespace HelicloneMan
             }
         }
 
+
+        public SByte[] MC_SwashThrow
+        {
+            get
+            {
+                SByte[] swash = new SByte[3];
+                for (int i = 0; i < 3; i++)
+                {
+                    swash[i] = (SByte)eepromData[Eeprom_Model_Offset() + 160 + i];
+                }
+
+                return swash;
+            }
+            set
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    eepromData[Eeprom_Model_Offset() + 160 + i] = (Byte)value[i];
+                }
+            }
+        }
+
+        public SByte[] MC_GyroGain
+        {
+            get
+            {
+                SByte[] gyro = new SByte[2];
+                for (int i = 0; i < 2; i++)
+                {
+                    gyro[i] = (SByte)eepromData[Eeprom_Model_Offset() + 163 + i];
+                }
+
+                return gyro;
+            }
+            set
+            {
+                for (int i = 0; i < 2; i++)
+                {
+                    eepromData[Eeprom_Model_Offset() + 163 + i] = (Byte)value[i];
+                }
+            }
+        }
+
+
         // Containers
         Byte[] eepromData = new Byte[2048];
 

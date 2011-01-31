@@ -31,6 +31,10 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.tabSettings = new System.Windows.Forms.TabControl();
             this.tabRadioConfig = new System.Windows.Forms.TabPage();
+            this.label26 = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
+            this.label24 = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
             this.udAdc_C_7_2 = new System.Windows.Forms.NumericUpDown();
             this.udAdc_C_7_1 = new System.Windows.Forms.NumericUpDown();
@@ -83,38 +87,35 @@
             this.udContrast = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.tabModelConfig = new System.Windows.Forms.TabPage();
-            this.cbSelectedModel = new System.Windows.Forms.ComboBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.tabSimulate = new System.Windows.Forms.TabPage();
-            this.tabTemplate = new System.Windows.Forms.TabPage();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.btnReadEeprom = new System.Windows.Forms.ToolStripButton();
-            this.btnWriteEeprom = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.btnReadFlash = new System.Windows.Forms.ToolStripButton();
-            this.btnWriteFlash = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.btnSettings = new System.Windows.Forms.ToolStripButton();
-            this.btnClose = new System.Windows.Forms.ToolStripButton();
-            this.tbLog = new System.Windows.Forms.TextBox();
-            this.saveFileDlg = new System.Windows.Forms.SaveFileDialog();
-            this.label23 = new System.Windows.Forms.Label();
-            this.label24 = new System.Windows.Forms.Label();
-            this.label25 = new System.Windows.Forms.Label();
-            this.label26 = new System.Windows.Forms.Label();
-            this.label27 = new System.Windows.Forms.Label();
-            this.tbM_Name = new System.Windows.Forms.TextBox();
-            this.label28 = new System.Windows.Forms.Label();
-            this.cbM_Type = new System.Windows.Forms.ComboBox();
-            this.udM_trim_0 = new System.Windows.Forms.NumericUpDown();
-            this.label29 = new System.Windows.Forms.Label();
-            this.label30 = new System.Windows.Forms.Label();
-            this.label31 = new System.Windows.Forms.Label();
-            this.udM_trim_1 = new System.Windows.Forms.NumericUpDown();
-            this.label32 = new System.Windows.Forms.Label();
-            this.udM_trim_2 = new System.Windows.Forms.NumericUpDown();
-            this.label33 = new System.Windows.Forms.Label();
-            this.udM_trim_3 = new System.Windows.Forms.NumericUpDown();
+            this.label41 = new System.Windows.Forms.Label();
+            this.udM_expo_DR_3 = new System.Windows.Forms.NumericUpDown();
+            this.udM_expo_DR_2 = new System.Windows.Forms.NumericUpDown();
+            this.udM_expo_DR_1 = new System.Windows.Forms.NumericUpDown();
+            this.udM_expo_DR_0 = new System.Windows.Forms.NumericUpDown();
+            this.label36 = new System.Windows.Forms.Label();
+            this.udM_expo_N_3 = new System.Windows.Forms.NumericUpDown();
+            this.label37 = new System.Windows.Forms.Label();
+            this.udM_expo_N_2 = new System.Windows.Forms.NumericUpDown();
+            this.label38 = new System.Windows.Forms.Label();
+            this.udM_expo_N_1 = new System.Windows.Forms.NumericUpDown();
+            this.label39 = new System.Windows.Forms.Label();
+            this.label40 = new System.Windows.Forms.Label();
+            this.udM_expo_N_0 = new System.Windows.Forms.NumericUpDown();
+            this.cbServoDir7 = new System.Windows.Forms.ComboBox();
+            this.cbServoDir6 = new System.Windows.Forms.ComboBox();
+            this.cbServoDir5 = new System.Windows.Forms.ComboBox();
+            this.cbServoDir4 = new System.Windows.Forms.ComboBox();
+            this.cbServoDir3 = new System.Windows.Forms.ComboBox();
+            this.cbServoDir2 = new System.Windows.Forms.ComboBox();
+            this.cbServoDir1 = new System.Windows.Forms.ComboBox();
+            this.cbServoDir0 = new System.Windows.Forms.ComboBox();
+            this.label35 = new System.Windows.Forms.Label();
+            this.cbServoMap = new System.Windows.Forms.ComboBox();
+            this.label34 = new System.Windows.Forms.Label();
+            this.lCh7 = new System.Windows.Forms.Label();
+            this.udEpH7 = new System.Windows.Forms.NumericUpDown();
+            this.udEpL7 = new System.Windows.Forms.NumericUpDown();
+            this.udSubtrim7 = new System.Windows.Forms.NumericUpDown();
             this.lCh6 = new System.Windows.Forms.Label();
             this.udEpH6 = new System.Windows.Forms.NumericUpDown();
             this.udEpL6 = new System.Windows.Forms.NumericUpDown();
@@ -146,38 +147,49 @@
             this.udEpH0 = new System.Windows.Forms.NumericUpDown();
             this.udEpL0 = new System.Windows.Forms.NumericUpDown();
             this.udSubtrim0 = new System.Windows.Forms.NumericUpDown();
-            this.lCh7 = new System.Windows.Forms.Label();
-            this.udEpH7 = new System.Windows.Forms.NumericUpDown();
-            this.udEpL7 = new System.Windows.Forms.NumericUpDown();
-            this.udSubtrim7 = new System.Windows.Forms.NumericUpDown();
-            this.cbServoMap = new System.Windows.Forms.ComboBox();
-            this.label34 = new System.Windows.Forms.Label();
-            this.label35 = new System.Windows.Forms.Label();
-            this.cbServoDir0 = new System.Windows.Forms.ComboBox();
-            this.cbServoDir1 = new System.Windows.Forms.ComboBox();
-            this.cbServoDir2 = new System.Windows.Forms.ComboBox();
-            this.cbServoDir3 = new System.Windows.Forms.ComboBox();
-            this.cbServoDir4 = new System.Windows.Forms.ComboBox();
-            this.cbServoDir5 = new System.Windows.Forms.ComboBox();
-            this.cbServoDir6 = new System.Windows.Forms.ComboBox();
-            this.cbServoDir7 = new System.Windows.Forms.ComboBox();
-            this.label36 = new System.Windows.Forms.Label();
-            this.udM_expo_N_3 = new System.Windows.Forms.NumericUpDown();
-            this.label37 = new System.Windows.Forms.Label();
-            this.udM_expo_N_2 = new System.Windows.Forms.NumericUpDown();
-            this.label38 = new System.Windows.Forms.Label();
-            this.udM_expo_N_1 = new System.Windows.Forms.NumericUpDown();
-            this.label39 = new System.Windows.Forms.Label();
-            this.label40 = new System.Windows.Forms.Label();
-            this.udM_expo_N_0 = new System.Windows.Forms.NumericUpDown();
-            this.udM_expo_DR_3 = new System.Windows.Forms.NumericUpDown();
-            this.udM_expo_DR_2 = new System.Windows.Forms.NumericUpDown();
-            this.udM_expo_DR_1 = new System.Windows.Forms.NumericUpDown();
-            this.udM_expo_DR_0 = new System.Windows.Forms.NumericUpDown();
-            this.label41 = new System.Windows.Forms.Label();
+            this.label33 = new System.Windows.Forms.Label();
+            this.udM_trim_3 = new System.Windows.Forms.NumericUpDown();
+            this.label32 = new System.Windows.Forms.Label();
+            this.udM_trim_2 = new System.Windows.Forms.NumericUpDown();
+            this.label31 = new System.Windows.Forms.Label();
+            this.udM_trim_1 = new System.Windows.Forms.NumericUpDown();
+            this.label30 = new System.Windows.Forms.Label();
+            this.label29 = new System.Windows.Forms.Label();
+            this.udM_trim_0 = new System.Windows.Forms.NumericUpDown();
+            this.cbM_Type = new System.Windows.Forms.ComboBox();
+            this.label28 = new System.Windows.Forms.Label();
+            this.tbM_Name = new System.Windows.Forms.TextBox();
+            this.label27 = new System.Windows.Forms.Label();
+            this.cbSelectedModel = new System.Windows.Forms.ComboBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.tabSimulate = new System.Windows.Forms.TabPage();
+            this.tabTemplate = new System.Windows.Forms.TabPage();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.btnReadEeprom = new System.Windows.Forms.ToolStripButton();
+            this.btnWriteEeprom = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnReadFlash = new System.Windows.Forms.ToolStripButton();
+            this.btnWriteFlash = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnSettings = new System.Windows.Forms.ToolStripButton();
+            this.btnClose = new System.Windows.Forms.ToolStripButton();
+            this.tbLog = new System.Windows.Forms.TextBox();
+            this.saveFileDlg = new System.Windows.Forms.SaveFileDialog();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.btnLoadEeprom = new System.Windows.Forms.ToolStripButton();
             this.openFileDlg = new System.Windows.Forms.OpenFileDialog();
+            this.udSwash2 = new System.Windows.Forms.NumericUpDown();
+            this.udSwash1 = new System.Windows.Forms.NumericUpDown();
+            this.label42 = new System.Windows.Forms.Label();
+            this.udSwash0 = new System.Windows.Forms.NumericUpDown();
+            this.label43 = new System.Windows.Forms.Label();
+            this.label44 = new System.Windows.Forms.Label();
+            this.label48 = new System.Windows.Forms.Label();
+            this.label49 = new System.Windows.Forms.Label();
+            this.label50 = new System.Windows.Forms.Label();
+            this.udGyro1 = new System.Windows.Forms.NumericUpDown();
+            this.label51 = new System.Windows.Forms.Label();
+            this.udGyro0 = new System.Windows.Forms.NumericUpDown();
             this.tabSettings.SuspendLayout();
             this.tabRadioConfig.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udAdc_C_7_2)).BeginInit();
@@ -208,11 +220,17 @@
             ((System.ComponentModel.ISupportInitialize)(this.udMboxTimeout)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udContrast)).BeginInit();
             this.tabModelConfig.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.udM_trim_0)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udM_trim_1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udM_trim_2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udM_trim_3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udM_expo_DR_3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udM_expo_DR_2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udM_expo_DR_1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udM_expo_DR_0)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udM_expo_N_3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udM_expo_N_2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udM_expo_N_1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udM_expo_N_0)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udEpH7)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udEpL7)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udSubtrim7)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udEpH6)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udEpL6)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udSubtrim6)).BeginInit();
@@ -234,18 +252,17 @@
             ((System.ComponentModel.ISupportInitialize)(this.udEpH0)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udEpL0)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udSubtrim0)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udEpH7)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udEpL7)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udSubtrim7)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udM_expo_N_3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udM_expo_N_2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udM_expo_N_1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udM_expo_N_0)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udM_expo_DR_3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udM_expo_DR_2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udM_expo_DR_1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udM_expo_DR_0)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udM_trim_3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udM_trim_2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udM_trim_1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udM_trim_0)).BeginInit();
+            this.toolStrip1.SuspendLayout();
             this.toolStrip2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.udSwash2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udSwash1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udSwash0)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udGyro1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udGyro0)).BeginInit();
             this.SuspendLayout();
             // 
             // tabSettings
@@ -254,10 +271,10 @@
             this.tabSettings.Controls.Add(this.tabModelConfig);
             this.tabSettings.Controls.Add(this.tabSimulate);
             this.tabSettings.Controls.Add(this.tabTemplate);
-            this.tabSettings.Location = new System.Drawing.Point(12, 77);
+            this.tabSettings.Location = new System.Drawing.Point(12, 53);
             this.tabSettings.Name = "tabSettings";
             this.tabSettings.SelectedIndex = 0;
-            this.tabSettings.Size = new System.Drawing.Size(984, 334);
+            this.tabSettings.Size = new System.Drawing.Size(760, 358);
             this.tabSettings.TabIndex = 0;
             // 
             // tabRadioConfig
@@ -324,6 +341,42 @@
             this.tabRadioConfig.TabIndex = 0;
             this.tabRadioConfig.Text = "Radio Config";
             this.tabRadioConfig.UseVisualStyleBackColor = true;
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(6, 3);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(88, 13);
+            this.label26.TabIndex = 55;
+            this.label26.Text = "General Settings:";
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(638, 228);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(40, 13);
+            this.label25.TabIndex = 54;
+            this.label25.Text = "12 Volt";
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(575, 228);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(34, 13);
+            this.label24.TabIndex = 53;
+            this.label24.Text = "9 Volt";
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(511, 228);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(34, 13);
+            this.label23.TabIndex = 52;
+            this.label23.Text = "5 Volt";
             // 
             // label22
             // 
@@ -892,6 +945,18 @@
             // 
             // tabModelConfig
             // 
+            this.tabModelConfig.Controls.Add(this.label49);
+            this.tabModelConfig.Controls.Add(this.label50);
+            this.tabModelConfig.Controls.Add(this.udGyro1);
+            this.tabModelConfig.Controls.Add(this.label51);
+            this.tabModelConfig.Controls.Add(this.udGyro0);
+            this.tabModelConfig.Controls.Add(this.label43);
+            this.tabModelConfig.Controls.Add(this.label44);
+            this.tabModelConfig.Controls.Add(this.label48);
+            this.tabModelConfig.Controls.Add(this.udSwash2);
+            this.tabModelConfig.Controls.Add(this.udSwash1);
+            this.tabModelConfig.Controls.Add(this.label42);
+            this.tabModelConfig.Controls.Add(this.udSwash0);
             this.tabModelConfig.Controls.Add(this.label41);
             this.tabModelConfig.Controls.Add(this.udM_expo_DR_3);
             this.tabModelConfig.Controls.Add(this.udM_expo_DR_2);
@@ -970,340 +1035,394 @@
             this.tabModelConfig.Location = new System.Drawing.Point(4, 22);
             this.tabModelConfig.Name = "tabModelConfig";
             this.tabModelConfig.Padding = new System.Windows.Forms.Padding(3);
-            this.tabModelConfig.Size = new System.Drawing.Size(976, 308);
+            this.tabModelConfig.Size = new System.Drawing.Size(752, 332);
             this.tabModelConfig.TabIndex = 1;
             this.tabModelConfig.Text = "Model Config";
             this.tabModelConfig.UseVisualStyleBackColor = true;
             // 
-            // cbSelectedModel
+            // label41
             // 
-            this.cbSelectedModel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbSelectedModel.FormattingEnabled = true;
-            this.cbSelectedModel.Items.AddRange(new object[] {
-            "Model 1",
-            "Model 2",
-            "Model 3",
-            "Model 4",
-            "Model 5",
-            "Model 6",
-            "Model 7",
-            "Model 8"});
-            this.cbSelectedModel.Location = new System.Drawing.Point(131, 14);
-            this.cbSelectedModel.Name = "cbSelectedModel";
-            this.cbSelectedModel.Size = new System.Drawing.Size(81, 21);
-            this.cbSelectedModel.TabIndex = 5;
-            this.cbSelectedModel.SelectedIndexChanged += new System.EventHandler(this.cbSelectedModel_SelectedIndexChanged);
+            this.label41.AutoSize = true;
+            this.label41.Location = new System.Drawing.Point(20, 280);
+            this.label41.Name = "label41";
+            this.label41.Size = new System.Drawing.Size(58, 13);
+            this.label41.TabIndex = 115;
+            this.label41.Text = "Expo D/R:";
             // 
-            // label10
+            // udM_expo_DR_3
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(19, 17);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(84, 13);
-            this.label10.TabIndex = 4;
-            this.label10.Text = "Selected Model:";
-            // 
-            // tabSimulate
-            // 
-            this.tabSimulate.Location = new System.Drawing.Point(4, 22);
-            this.tabSimulate.Name = "tabSimulate";
-            this.tabSimulate.Padding = new System.Windows.Forms.Padding(3);
-            this.tabSimulate.Size = new System.Drawing.Size(976, 342);
-            this.tabSimulate.TabIndex = 2;
-            this.tabSimulate.Text = "Simulate";
-            this.tabSimulate.UseVisualStyleBackColor = true;
-            // 
-            // tabTemplate
-            // 
-            this.tabTemplate.Location = new System.Drawing.Point(4, 22);
-            this.tabTemplate.Name = "tabTemplate";
-            this.tabTemplate.Size = new System.Drawing.Size(976, 342);
-            this.tabTemplate.TabIndex = 3;
-            this.tabTemplate.Text = "Templates";
-            this.tabTemplate.UseVisualStyleBackColor = true;
-            // 
-            // toolStrip1
-            // 
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btnReadEeprom,
-            this.btnWriteEeprom,
-            this.toolStripSeparator1,
-            this.btnReadFlash,
-            this.btnWriteFlash,
-            this.toolStripSeparator2,
-            this.btnSettings,
-            this.btnClose});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1008, 25);
-            this.toolStrip1.Stretch = true;
-            this.toolStrip1.TabIndex = 1;
-            this.toolStrip1.Text = "toolStrip1";
-            // 
-            // btnReadEeprom
-            // 
-            this.btnReadEeprom.Image = ((System.Drawing.Image)(resources.GetObject("btnReadEeprom.Image")));
-            this.btnReadEeprom.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnReadEeprom.Name = "btnReadEeprom";
-            this.btnReadEeprom.Size = new System.Drawing.Size(97, 22);
-            this.btnReadEeprom.Text = "Read Eeprom";
-            this.btnReadEeprom.Click += new System.EventHandler(this.btnReadEeprom_Click);
-            // 
-            // btnWriteEeprom
-            // 
-            this.btnWriteEeprom.Image = ((System.Drawing.Image)(resources.GetObject("btnWriteEeprom.Image")));
-            this.btnWriteEeprom.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnWriteEeprom.Name = "btnWriteEeprom";
-            this.btnWriteEeprom.Size = new System.Drawing.Size(99, 22);
-            this.btnWriteEeprom.Text = "Write Eeprom";
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
-            // 
-            // btnReadFlash
-            // 
-            this.btnReadFlash.Image = ((System.Drawing.Image)(resources.GetObject("btnReadFlash.Image")));
-            this.btnReadFlash.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnReadFlash.Name = "btnReadFlash";
-            this.btnReadFlash.Size = new System.Drawing.Size(83, 22);
-            this.btnReadFlash.Text = "Read Flash";
-            this.btnReadFlash.Click += new System.EventHandler(this.btnReadFlash_Click);
-            // 
-            // btnWriteFlash
-            // 
-            this.btnWriteFlash.Image = ((System.Drawing.Image)(resources.GetObject("btnWriteFlash.Image")));
-            this.btnWriteFlash.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnWriteFlash.Name = "btnWriteFlash";
-            this.btnWriteFlash.Size = new System.Drawing.Size(85, 22);
-            this.btnWriteFlash.Text = "Write Flash";
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
-            // 
-            // btnSettings
-            // 
-            this.btnSettings.Image = ((System.Drawing.Image)(resources.GetObject("btnSettings.Image")));
-            this.btnSettings.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnSettings.Name = "btnSettings";
-            this.btnSettings.Size = new System.Drawing.Size(69, 22);
-            this.btnSettings.Text = "Settings";
-            // 
-            // btnClose
-            // 
-            this.btnClose.Image = ((System.Drawing.Image)(resources.GetObject("btnClose.Image")));
-            this.btnClose.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(56, 22);
-            this.btnClose.Text = "Close";
-            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
-            // 
-            // tbLog
-            // 
-            this.tbLog.Location = new System.Drawing.Point(12, 417);
-            this.tbLog.Multiline = true;
-            this.tbLog.Name = "tbLog";
-            this.tbLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.tbLog.Size = new System.Drawing.Size(980, 124);
-            this.tbLog.TabIndex = 2;
-            // 
-            // saveFileDlg
-            // 
-            this.saveFileDlg.DefaultExt = "hex";
-            this.saveFileDlg.Filter = "Hex file (*.hex)|*.hex|All files (*.*)|*.*";
-            // 
-            // label23
-            // 
-            this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(511, 228);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(34, 13);
-            this.label23.TabIndex = 52;
-            this.label23.Text = "5 Volt";
-            // 
-            // label24
-            // 
-            this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(575, 228);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(34, 13);
-            this.label24.TabIndex = 53;
-            this.label24.Text = "9 Volt";
-            // 
-            // label25
-            // 
-            this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(638, 228);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(40, 13);
-            this.label25.TabIndex = 54;
-            this.label25.Text = "12 Volt";
-            // 
-            // label26
-            // 
-            this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(6, 3);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(88, 13);
-            this.label26.TabIndex = 55;
-            this.label26.Text = "General Settings:";
-            // 
-            // label27
-            // 
-            this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(19, 88);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(38, 13);
-            this.label27.TabIndex = 6;
-            this.label27.Text = "Name:";
-            // 
-            // tbM_Name
-            // 
-            this.tbM_Name.Location = new System.Drawing.Point(101, 85);
-            this.tbM_Name.Name = "tbM_Name";
-            this.tbM_Name.Size = new System.Drawing.Size(100, 20);
-            this.tbM_Name.TabIndex = 7;
-            // 
-            // label28
-            // 
-            this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(19, 117);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(34, 13);
-            this.label28.TabIndex = 8;
-            this.label28.Text = "Type:";
-            // 
-            // cbM_Type
-            // 
-            this.cbM_Type.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbM_Type.FormattingEnabled = true;
-            this.cbM_Type.Items.AddRange(new object[] {
-            "Simulator",
-            "Flybarless",
-            "Swash 120 deg",
-            "Swash 140 deg",
-            "Generic"});
-            this.cbM_Type.Location = new System.Drawing.Point(101, 114);
-            this.cbM_Type.Name = "cbM_Type";
-            this.cbM_Type.Size = new System.Drawing.Size(100, 21);
-            this.cbM_Type.TabIndex = 9;
-            // 
-            // udM_trim_0
-            // 
-            this.udM_trim_0.BackColor = System.Drawing.SystemColors.Window;
-            this.udM_trim_0.Increment = new decimal(new int[] {
+            this.udM_expo_DR_3.Increment = new decimal(new int[] {
             4,
             0,
             0,
             0});
-            this.udM_trim_0.Location = new System.Drawing.Point(101, 161);
-            this.udM_trim_0.Minimum = new decimal(new int[] {
+            this.udM_expo_DR_3.Location = new System.Drawing.Point(290, 278);
+            this.udM_expo_DR_3.Minimum = new decimal(new int[] {
             100,
             0,
             0,
             -2147483648});
-            this.udM_trim_0.Name = "udM_trim_0";
-            this.udM_trim_0.Size = new System.Drawing.Size(57, 20);
-            this.udM_trim_0.TabIndex = 19;
+            this.udM_expo_DR_3.Name = "udM_expo_DR_3";
+            this.udM_expo_DR_3.Size = new System.Drawing.Size(57, 20);
+            this.udM_expo_DR_3.TabIndex = 114;
             // 
-            // label29
+            // udM_expo_DR_2
             // 
-            this.label29.AutoSize = true;
-            this.label29.Location = new System.Drawing.Point(19, 163);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(35, 13);
-            this.label29.TabIndex = 22;
-            this.label29.Text = "Trims:";
-            // 
-            // label30
-            // 
-            this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(101, 145);
-            this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(57, 13);
-            this.label30.TabIndex = 23;
-            this.label30.Text = "Right L/R:";
-            // 
-            // label31
-            // 
-            this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(164, 145);
-            this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(52, 13);
-            this.label31.TabIndex = 25;
-            this.label31.Text = "Left U/D:";
-            // 
-            // udM_trim_1
-            // 
-            this.udM_trim_1.Increment = new decimal(new int[] {
+            this.udM_expo_DR_2.Increment = new decimal(new int[] {
             4,
             0,
             0,
             0});
-            this.udM_trim_1.Location = new System.Drawing.Point(167, 161);
-            this.udM_trim_1.Minimum = new decimal(new int[] {
+            this.udM_expo_DR_2.Location = new System.Drawing.Point(227, 278);
+            this.udM_expo_DR_2.Minimum = new decimal(new int[] {
             100,
             0,
             0,
             -2147483648});
-            this.udM_trim_1.Name = "udM_trim_1";
-            this.udM_trim_1.Size = new System.Drawing.Size(57, 20);
-            this.udM_trim_1.TabIndex = 24;
+            this.udM_expo_DR_2.Name = "udM_expo_DR_2";
+            this.udM_expo_DR_2.Size = new System.Drawing.Size(57, 20);
+            this.udM_expo_DR_2.TabIndex = 113;
             // 
-            // label32
+            // udM_expo_DR_1
             // 
-            this.label32.AutoSize = true;
-            this.label32.Location = new System.Drawing.Point(225, 145);
-            this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(59, 13);
-            this.label32.TabIndex = 27;
-            this.label32.Text = "Right U/D:";
-            // 
-            // udM_trim_2
-            // 
-            this.udM_trim_2.Increment = new decimal(new int[] {
+            this.udM_expo_DR_1.Increment = new decimal(new int[] {
             4,
             0,
             0,
             0});
-            this.udM_trim_2.Location = new System.Drawing.Point(227, 161);
-            this.udM_trim_2.Minimum = new decimal(new int[] {
+            this.udM_expo_DR_1.Location = new System.Drawing.Point(167, 278);
+            this.udM_expo_DR_1.Minimum = new decimal(new int[] {
             100,
             0,
             0,
             -2147483648});
-            this.udM_trim_2.Name = "udM_trim_2";
-            this.udM_trim_2.Size = new System.Drawing.Size(57, 20);
-            this.udM_trim_2.TabIndex = 26;
+            this.udM_expo_DR_1.Name = "udM_expo_DR_1";
+            this.udM_expo_DR_1.Size = new System.Drawing.Size(57, 20);
+            this.udM_expo_DR_1.TabIndex = 112;
             // 
-            // label33
+            // udM_expo_DR_0
             // 
-            this.label33.AutoSize = true;
-            this.label33.Location = new System.Drawing.Point(290, 145);
-            this.label33.Name = "label33";
-            this.label33.Size = new System.Drawing.Size(50, 13);
-            this.label33.TabIndex = 29;
-            this.label33.Text = "Left R/L:";
-            // 
-            // udM_trim_3
-            // 
-            this.udM_trim_3.Increment = new decimal(new int[] {
+            this.udM_expo_DR_0.BackColor = System.Drawing.SystemColors.Window;
+            this.udM_expo_DR_0.Increment = new decimal(new int[] {
             4,
             0,
             0,
             0});
-            this.udM_trim_3.Location = new System.Drawing.Point(290, 161);
-            this.udM_trim_3.Minimum = new decimal(new int[] {
+            this.udM_expo_DR_0.Location = new System.Drawing.Point(101, 278);
+            this.udM_expo_DR_0.Minimum = new decimal(new int[] {
             100,
             0,
             0,
             -2147483648});
-            this.udM_trim_3.Name = "udM_trim_3";
-            this.udM_trim_3.Size = new System.Drawing.Size(57, 20);
-            this.udM_trim_3.TabIndex = 28;
+            this.udM_expo_DR_0.Name = "udM_expo_DR_0";
+            this.udM_expo_DR_0.Size = new System.Drawing.Size(57, 20);
+            this.udM_expo_DR_0.TabIndex = 111;
+            // 
+            // label36
+            // 
+            this.label36.AutoSize = true;
+            this.label36.Location = new System.Drawing.Point(290, 236);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(50, 13);
+            this.label36.TabIndex = 110;
+            this.label36.Text = "Left R/L:";
+            // 
+            // udM_expo_N_3
+            // 
+            this.udM_expo_N_3.Increment = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.udM_expo_N_3.Location = new System.Drawing.Point(290, 252);
+            this.udM_expo_N_3.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.udM_expo_N_3.Name = "udM_expo_N_3";
+            this.udM_expo_N_3.Size = new System.Drawing.Size(57, 20);
+            this.udM_expo_N_3.TabIndex = 109;
+            // 
+            // label37
+            // 
+            this.label37.AutoSize = true;
+            this.label37.Location = new System.Drawing.Point(225, 236);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(59, 13);
+            this.label37.TabIndex = 108;
+            this.label37.Text = "Right U/D:";
+            // 
+            // udM_expo_N_2
+            // 
+            this.udM_expo_N_2.Increment = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.udM_expo_N_2.Location = new System.Drawing.Point(227, 252);
+            this.udM_expo_N_2.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.udM_expo_N_2.Name = "udM_expo_N_2";
+            this.udM_expo_N_2.Size = new System.Drawing.Size(57, 20);
+            this.udM_expo_N_2.TabIndex = 107;
+            // 
+            // label38
+            // 
+            this.label38.AutoSize = true;
+            this.label38.Location = new System.Drawing.Point(164, 236);
+            this.label38.Name = "label38";
+            this.label38.Size = new System.Drawing.Size(52, 13);
+            this.label38.TabIndex = 106;
+            this.label38.Text = "Left U/D:";
+            // 
+            // udM_expo_N_1
+            // 
+            this.udM_expo_N_1.Increment = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.udM_expo_N_1.Location = new System.Drawing.Point(167, 252);
+            this.udM_expo_N_1.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.udM_expo_N_1.Name = "udM_expo_N_1";
+            this.udM_expo_N_1.Size = new System.Drawing.Size(57, 20);
+            this.udM_expo_N_1.TabIndex = 105;
+            // 
+            // label39
+            // 
+            this.label39.AutoSize = true;
+            this.label39.Location = new System.Drawing.Point(101, 236);
+            this.label39.Name = "label39";
+            this.label39.Size = new System.Drawing.Size(57, 13);
+            this.label39.TabIndex = 104;
+            this.label39.Text = "Right L/R:";
+            // 
+            // label40
+            // 
+            this.label40.AutoSize = true;
+            this.label40.Location = new System.Drawing.Point(19, 254);
+            this.label40.Name = "label40";
+            this.label40.Size = new System.Drawing.Size(61, 13);
+            this.label40.TabIndex = 103;
+            this.label40.Text = "Expo NOR:";
+            // 
+            // udM_expo_N_0
+            // 
+            this.udM_expo_N_0.BackColor = System.Drawing.SystemColors.Window;
+            this.udM_expo_N_0.Increment = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.udM_expo_N_0.Location = new System.Drawing.Point(101, 252);
+            this.udM_expo_N_0.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.udM_expo_N_0.Name = "udM_expo_N_0";
+            this.udM_expo_N_0.Size = new System.Drawing.Size(57, 20);
+            this.udM_expo_N_0.TabIndex = 102;
+            // 
+            // cbServoDir7
+            // 
+            this.cbServoDir7.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbServoDir7.FormattingEnabled = true;
+            this.cbServoDir7.Items.AddRange(new object[] {
+            "Normal",
+            "Reverse"});
+            this.cbServoDir7.Location = new System.Drawing.Point(470, 202);
+            this.cbServoDir7.Name = "cbServoDir7";
+            this.cbServoDir7.Size = new System.Drawing.Size(67, 21);
+            this.cbServoDir7.TabIndex = 101;
+            // 
+            // cbServoDir6
+            // 
+            this.cbServoDir6.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbServoDir6.FormattingEnabled = true;
+            this.cbServoDir6.Items.AddRange(new object[] {
+            "Normal",
+            "Reverse"});
+            this.cbServoDir6.Location = new System.Drawing.Point(470, 176);
+            this.cbServoDir6.Name = "cbServoDir6";
+            this.cbServoDir6.Size = new System.Drawing.Size(67, 21);
+            this.cbServoDir6.TabIndex = 100;
+            // 
+            // cbServoDir5
+            // 
+            this.cbServoDir5.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbServoDir5.FormattingEnabled = true;
+            this.cbServoDir5.Items.AddRange(new object[] {
+            "Normal",
+            "Reverse"});
+            this.cbServoDir5.Location = new System.Drawing.Point(470, 150);
+            this.cbServoDir5.Name = "cbServoDir5";
+            this.cbServoDir5.Size = new System.Drawing.Size(67, 21);
+            this.cbServoDir5.TabIndex = 99;
+            // 
+            // cbServoDir4
+            // 
+            this.cbServoDir4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbServoDir4.FormattingEnabled = true;
+            this.cbServoDir4.Items.AddRange(new object[] {
+            "Normal",
+            "Reverse"});
+            this.cbServoDir4.Location = new System.Drawing.Point(470, 124);
+            this.cbServoDir4.Name = "cbServoDir4";
+            this.cbServoDir4.Size = new System.Drawing.Size(67, 21);
+            this.cbServoDir4.TabIndex = 98;
+            // 
+            // cbServoDir3
+            // 
+            this.cbServoDir3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbServoDir3.FormattingEnabled = true;
+            this.cbServoDir3.Items.AddRange(new object[] {
+            "Normal",
+            "Reverse"});
+            this.cbServoDir3.Location = new System.Drawing.Point(470, 98);
+            this.cbServoDir3.Name = "cbServoDir3";
+            this.cbServoDir3.Size = new System.Drawing.Size(67, 21);
+            this.cbServoDir3.TabIndex = 97;
+            // 
+            // cbServoDir2
+            // 
+            this.cbServoDir2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbServoDir2.FormattingEnabled = true;
+            this.cbServoDir2.Items.AddRange(new object[] {
+            "Normal",
+            "Reverse"});
+            this.cbServoDir2.Location = new System.Drawing.Point(470, 71);
+            this.cbServoDir2.Name = "cbServoDir2";
+            this.cbServoDir2.Size = new System.Drawing.Size(67, 21);
+            this.cbServoDir2.TabIndex = 96;
+            // 
+            // cbServoDir1
+            // 
+            this.cbServoDir1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbServoDir1.FormattingEnabled = true;
+            this.cbServoDir1.Items.AddRange(new object[] {
+            "Normal",
+            "Reverse"});
+            this.cbServoDir1.Location = new System.Drawing.Point(470, 45);
+            this.cbServoDir1.Name = "cbServoDir1";
+            this.cbServoDir1.Size = new System.Drawing.Size(67, 21);
+            this.cbServoDir1.TabIndex = 95;
+            // 
+            // cbServoDir0
+            // 
+            this.cbServoDir0.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbServoDir0.FormattingEnabled = true;
+            this.cbServoDir0.Items.AddRange(new object[] {
+            "Normal",
+            "Reverse"});
+            this.cbServoDir0.Location = new System.Drawing.Point(470, 19);
+            this.cbServoDir0.Name = "cbServoDir0";
+            this.cbServoDir0.Size = new System.Drawing.Size(67, 21);
+            this.cbServoDir0.TabIndex = 94;
+            // 
+            // label35
+            // 
+            this.label35.AutoSize = true;
+            this.label35.Location = new System.Drawing.Point(467, 4);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(49, 13);
+            this.label35.TabIndex = 93;
+            this.label35.Text = "Direction";
+            // 
+            // cbServoMap
+            // 
+            this.cbServoMap.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbServoMap.FormattingEnabled = true;
+            this.cbServoMap.Items.AddRange(new object[] {
+            "Futaba",
+            "Spektrum"});
+            this.cbServoMap.Location = new System.Drawing.Point(101, 197);
+            this.cbServoMap.Name = "cbServoMap";
+            this.cbServoMap.Size = new System.Drawing.Size(100, 21);
+            this.cbServoMap.TabIndex = 91;
+            this.cbServoMap.SelectedIndexChanged += new System.EventHandler(this.cbServoMap_SelectedIndexChanged);
+            // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.Location = new System.Drawing.Point(19, 200);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(62, 13);
+            this.label34.TabIndex = 90;
+            this.label34.Text = "Servo Map:";
+            // 
+            // lCh7
+            // 
+            this.lCh7.AutoSize = true;
+            this.lCh7.Location = new System.Drawing.Point(382, 205);
+            this.lCh7.Name = "lCh7";
+            this.lCh7.Size = new System.Drawing.Size(55, 13);
+            this.lCh7.TabIndex = 89;
+            this.lCh7.Text = "Channel 8";
+            // 
+            // udEpH7
+            // 
+            this.udEpH7.Location = new System.Drawing.Point(669, 203);
+            this.udEpH7.Maximum = new decimal(new int[] {
+            120,
+            0,
+            0,
+            0});
+            this.udEpH7.Minimum = new decimal(new int[] {
+            80,
+            0,
+            0,
+            0});
+            this.udEpH7.Name = "udEpH7";
+            this.udEpH7.Size = new System.Drawing.Size(57, 20);
+            this.udEpH7.TabIndex = 88;
+            this.udEpH7.Value = new decimal(new int[] {
+            80,
+            0,
+            0,
+            0});
+            // 
+            // udEpL7
+            // 
+            this.udEpL7.Location = new System.Drawing.Point(606, 203);
+            this.udEpL7.Maximum = new decimal(new int[] {
+            120,
+            0,
+            0,
+            0});
+            this.udEpL7.Minimum = new decimal(new int[] {
+            80,
+            0,
+            0,
+            0});
+            this.udEpL7.Name = "udEpL7";
+            this.udEpL7.Size = new System.Drawing.Size(57, 20);
+            this.udEpL7.TabIndex = 87;
+            this.udEpL7.Value = new decimal(new int[] {
+            80,
+            0,
+            0,
+            0});
+            // 
+            // udSubtrim7
+            // 
+            this.udSubtrim7.Location = new System.Drawing.Point(543, 203);
+            this.udSubtrim7.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.udSubtrim7.Name = "udSubtrim7";
+            this.udSubtrim7.Size = new System.Drawing.Size(57, 20);
+            this.udSubtrim7.TabIndex = 86;
             // 
             // lCh6
             // 
@@ -1787,389 +1906,299 @@
             this.udSubtrim0.Size = new System.Drawing.Size(57, 20);
             this.udSubtrim0.TabIndex = 55;
             // 
-            // lCh7
+            // label33
             // 
-            this.lCh7.AutoSize = true;
-            this.lCh7.Location = new System.Drawing.Point(382, 205);
-            this.lCh7.Name = "lCh7";
-            this.lCh7.Size = new System.Drawing.Size(55, 13);
-            this.lCh7.TabIndex = 89;
-            this.lCh7.Text = "Channel 8";
+            this.label33.AutoSize = true;
+            this.label33.Location = new System.Drawing.Point(290, 145);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(50, 13);
+            this.label33.TabIndex = 29;
+            this.label33.Text = "Left R/L:";
             // 
-            // udEpH7
+            // udM_trim_3
             // 
-            this.udEpH7.Location = new System.Drawing.Point(669, 203);
-            this.udEpH7.Maximum = new decimal(new int[] {
-            120,
-            0,
-            0,
-            0});
-            this.udEpH7.Minimum = new decimal(new int[] {
-            80,
-            0,
-            0,
-            0});
-            this.udEpH7.Name = "udEpH7";
-            this.udEpH7.Size = new System.Drawing.Size(57, 20);
-            this.udEpH7.TabIndex = 88;
-            this.udEpH7.Value = new decimal(new int[] {
-            80,
-            0,
-            0,
-            0});
-            // 
-            // udEpL7
-            // 
-            this.udEpL7.Location = new System.Drawing.Point(606, 203);
-            this.udEpL7.Maximum = new decimal(new int[] {
-            120,
-            0,
-            0,
-            0});
-            this.udEpL7.Minimum = new decimal(new int[] {
-            80,
-            0,
-            0,
-            0});
-            this.udEpL7.Name = "udEpL7";
-            this.udEpL7.Size = new System.Drawing.Size(57, 20);
-            this.udEpL7.TabIndex = 87;
-            this.udEpL7.Value = new decimal(new int[] {
-            80,
-            0,
-            0,
-            0});
-            // 
-            // udSubtrim7
-            // 
-            this.udSubtrim7.Location = new System.Drawing.Point(543, 203);
-            this.udSubtrim7.Minimum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            -2147483648});
-            this.udSubtrim7.Name = "udSubtrim7";
-            this.udSubtrim7.Size = new System.Drawing.Size(57, 20);
-            this.udSubtrim7.TabIndex = 86;
-            // 
-            // cbServoMap
-            // 
-            this.cbServoMap.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbServoMap.FormattingEnabled = true;
-            this.cbServoMap.Items.AddRange(new object[] {
-            "Futaba",
-            "Spektrum"});
-            this.cbServoMap.Location = new System.Drawing.Point(101, 197);
-            this.cbServoMap.Name = "cbServoMap";
-            this.cbServoMap.Size = new System.Drawing.Size(100, 21);
-            this.cbServoMap.TabIndex = 91;
-            this.cbServoMap.SelectedIndexChanged += new System.EventHandler(this.cbServoMap_SelectedIndexChanged);
-            // 
-            // label34
-            // 
-            this.label34.AutoSize = true;
-            this.label34.Location = new System.Drawing.Point(19, 200);
-            this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(62, 13);
-            this.label34.TabIndex = 90;
-            this.label34.Text = "Servo Map:";
-            // 
-            // label35
-            // 
-            this.label35.AutoSize = true;
-            this.label35.Location = new System.Drawing.Point(467, 4);
-            this.label35.Name = "label35";
-            this.label35.Size = new System.Drawing.Size(49, 13);
-            this.label35.TabIndex = 93;
-            this.label35.Text = "Direction";
-            // 
-            // cbServoDir0
-            // 
-            this.cbServoDir0.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbServoDir0.FormattingEnabled = true;
-            this.cbServoDir0.Items.AddRange(new object[] {
-            "Normal",
-            "Reverse"});
-            this.cbServoDir0.Location = new System.Drawing.Point(470, 19);
-            this.cbServoDir0.Name = "cbServoDir0";
-            this.cbServoDir0.Size = new System.Drawing.Size(67, 21);
-            this.cbServoDir0.TabIndex = 94;
-            // 
-            // cbServoDir1
-            // 
-            this.cbServoDir1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbServoDir1.FormattingEnabled = true;
-            this.cbServoDir1.Items.AddRange(new object[] {
-            "Normal",
-            "Reverse"});
-            this.cbServoDir1.Location = new System.Drawing.Point(470, 45);
-            this.cbServoDir1.Name = "cbServoDir1";
-            this.cbServoDir1.Size = new System.Drawing.Size(67, 21);
-            this.cbServoDir1.TabIndex = 95;
-            // 
-            // cbServoDir2
-            // 
-            this.cbServoDir2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbServoDir2.FormattingEnabled = true;
-            this.cbServoDir2.Items.AddRange(new object[] {
-            "Normal",
-            "Reverse"});
-            this.cbServoDir2.Location = new System.Drawing.Point(470, 71);
-            this.cbServoDir2.Name = "cbServoDir2";
-            this.cbServoDir2.Size = new System.Drawing.Size(67, 21);
-            this.cbServoDir2.TabIndex = 96;
-            // 
-            // cbServoDir3
-            // 
-            this.cbServoDir3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbServoDir3.FormattingEnabled = true;
-            this.cbServoDir3.Items.AddRange(new object[] {
-            "Normal",
-            "Reverse"});
-            this.cbServoDir3.Location = new System.Drawing.Point(470, 98);
-            this.cbServoDir3.Name = "cbServoDir3";
-            this.cbServoDir3.Size = new System.Drawing.Size(67, 21);
-            this.cbServoDir3.TabIndex = 97;
-            // 
-            // cbServoDir4
-            // 
-            this.cbServoDir4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbServoDir4.FormattingEnabled = true;
-            this.cbServoDir4.Items.AddRange(new object[] {
-            "Normal",
-            "Reverse"});
-            this.cbServoDir4.Location = new System.Drawing.Point(470, 124);
-            this.cbServoDir4.Name = "cbServoDir4";
-            this.cbServoDir4.Size = new System.Drawing.Size(67, 21);
-            this.cbServoDir4.TabIndex = 98;
-            // 
-            // cbServoDir5
-            // 
-            this.cbServoDir5.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbServoDir5.FormattingEnabled = true;
-            this.cbServoDir5.Items.AddRange(new object[] {
-            "Normal",
-            "Reverse"});
-            this.cbServoDir5.Location = new System.Drawing.Point(470, 150);
-            this.cbServoDir5.Name = "cbServoDir5";
-            this.cbServoDir5.Size = new System.Drawing.Size(67, 21);
-            this.cbServoDir5.TabIndex = 99;
-            // 
-            // cbServoDir6
-            // 
-            this.cbServoDir6.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbServoDir6.FormattingEnabled = true;
-            this.cbServoDir6.Items.AddRange(new object[] {
-            "Normal",
-            "Reverse"});
-            this.cbServoDir6.Location = new System.Drawing.Point(470, 176);
-            this.cbServoDir6.Name = "cbServoDir6";
-            this.cbServoDir6.Size = new System.Drawing.Size(67, 21);
-            this.cbServoDir6.TabIndex = 100;
-            // 
-            // cbServoDir7
-            // 
-            this.cbServoDir7.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbServoDir7.FormattingEnabled = true;
-            this.cbServoDir7.Items.AddRange(new object[] {
-            "Normal",
-            "Reverse"});
-            this.cbServoDir7.Location = new System.Drawing.Point(470, 202);
-            this.cbServoDir7.Name = "cbServoDir7";
-            this.cbServoDir7.Size = new System.Drawing.Size(67, 21);
-            this.cbServoDir7.TabIndex = 101;
-            // 
-            // label36
-            // 
-            this.label36.AutoSize = true;
-            this.label36.Location = new System.Drawing.Point(290, 236);
-            this.label36.Name = "label36";
-            this.label36.Size = new System.Drawing.Size(50, 13);
-            this.label36.TabIndex = 110;
-            this.label36.Text = "Left R/L:";
-            // 
-            // udM_expo_N_3
-            // 
-            this.udM_expo_N_3.Increment = new decimal(new int[] {
+            this.udM_trim_3.Increment = new decimal(new int[] {
             4,
             0,
             0,
             0});
-            this.udM_expo_N_3.Location = new System.Drawing.Point(290, 252);
-            this.udM_expo_N_3.Minimum = new decimal(new int[] {
+            this.udM_trim_3.Location = new System.Drawing.Point(290, 161);
+            this.udM_trim_3.Minimum = new decimal(new int[] {
             100,
             0,
             0,
             -2147483648});
-            this.udM_expo_N_3.Name = "udM_expo_N_3";
-            this.udM_expo_N_3.Size = new System.Drawing.Size(57, 20);
-            this.udM_expo_N_3.TabIndex = 109;
+            this.udM_trim_3.Name = "udM_trim_3";
+            this.udM_trim_3.Size = new System.Drawing.Size(57, 20);
+            this.udM_trim_3.TabIndex = 28;
             // 
-            // label37
+            // label32
             // 
-            this.label37.AutoSize = true;
-            this.label37.Location = new System.Drawing.Point(225, 236);
-            this.label37.Name = "label37";
-            this.label37.Size = new System.Drawing.Size(59, 13);
-            this.label37.TabIndex = 108;
-            this.label37.Text = "Right U/D:";
+            this.label32.AutoSize = true;
+            this.label32.Location = new System.Drawing.Point(225, 145);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(59, 13);
+            this.label32.TabIndex = 27;
+            this.label32.Text = "Right U/D:";
             // 
-            // udM_expo_N_2
+            // udM_trim_2
             // 
-            this.udM_expo_N_2.Increment = new decimal(new int[] {
+            this.udM_trim_2.Increment = new decimal(new int[] {
             4,
             0,
             0,
             0});
-            this.udM_expo_N_2.Location = new System.Drawing.Point(227, 252);
-            this.udM_expo_N_2.Minimum = new decimal(new int[] {
+            this.udM_trim_2.Location = new System.Drawing.Point(227, 161);
+            this.udM_trim_2.Minimum = new decimal(new int[] {
             100,
             0,
             0,
             -2147483648});
-            this.udM_expo_N_2.Name = "udM_expo_N_2";
-            this.udM_expo_N_2.Size = new System.Drawing.Size(57, 20);
-            this.udM_expo_N_2.TabIndex = 107;
+            this.udM_trim_2.Name = "udM_trim_2";
+            this.udM_trim_2.Size = new System.Drawing.Size(57, 20);
+            this.udM_trim_2.TabIndex = 26;
             // 
-            // label38
+            // label31
             // 
-            this.label38.AutoSize = true;
-            this.label38.Location = new System.Drawing.Point(164, 236);
-            this.label38.Name = "label38";
-            this.label38.Size = new System.Drawing.Size(52, 13);
-            this.label38.TabIndex = 106;
-            this.label38.Text = "Left U/D:";
+            this.label31.AutoSize = true;
+            this.label31.Location = new System.Drawing.Point(164, 145);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(52, 13);
+            this.label31.TabIndex = 25;
+            this.label31.Text = "Left U/D:";
             // 
-            // udM_expo_N_1
+            // udM_trim_1
             // 
-            this.udM_expo_N_1.Increment = new decimal(new int[] {
+            this.udM_trim_1.Increment = new decimal(new int[] {
             4,
             0,
             0,
             0});
-            this.udM_expo_N_1.Location = new System.Drawing.Point(167, 252);
-            this.udM_expo_N_1.Minimum = new decimal(new int[] {
+            this.udM_trim_1.Location = new System.Drawing.Point(167, 161);
+            this.udM_trim_1.Minimum = new decimal(new int[] {
             100,
             0,
             0,
             -2147483648});
-            this.udM_expo_N_1.Name = "udM_expo_N_1";
-            this.udM_expo_N_1.Size = new System.Drawing.Size(57, 20);
-            this.udM_expo_N_1.TabIndex = 105;
+            this.udM_trim_1.Name = "udM_trim_1";
+            this.udM_trim_1.Size = new System.Drawing.Size(57, 20);
+            this.udM_trim_1.TabIndex = 24;
             // 
-            // label39
+            // label30
             // 
-            this.label39.AutoSize = true;
-            this.label39.Location = new System.Drawing.Point(101, 236);
-            this.label39.Name = "label39";
-            this.label39.Size = new System.Drawing.Size(57, 13);
-            this.label39.TabIndex = 104;
-            this.label39.Text = "Right L/R:";
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(101, 145);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(57, 13);
+            this.label30.TabIndex = 23;
+            this.label30.Text = "Right L/R:";
             // 
-            // label40
+            // label29
             // 
-            this.label40.AutoSize = true;
-            this.label40.Location = new System.Drawing.Point(19, 254);
-            this.label40.Name = "label40";
-            this.label40.Size = new System.Drawing.Size(61, 13);
-            this.label40.TabIndex = 103;
-            this.label40.Text = "Expo NOR:";
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(19, 163);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(35, 13);
+            this.label29.TabIndex = 22;
+            this.label29.Text = "Trims:";
             // 
-            // udM_expo_N_0
+            // udM_trim_0
             // 
-            this.udM_expo_N_0.BackColor = System.Drawing.SystemColors.Window;
-            this.udM_expo_N_0.Increment = new decimal(new int[] {
+            this.udM_trim_0.BackColor = System.Drawing.SystemColors.Window;
+            this.udM_trim_0.Increment = new decimal(new int[] {
             4,
             0,
             0,
             0});
-            this.udM_expo_N_0.Location = new System.Drawing.Point(101, 252);
-            this.udM_expo_N_0.Minimum = new decimal(new int[] {
+            this.udM_trim_0.Location = new System.Drawing.Point(101, 161);
+            this.udM_trim_0.Minimum = new decimal(new int[] {
             100,
             0,
             0,
             -2147483648});
-            this.udM_expo_N_0.Name = "udM_expo_N_0";
-            this.udM_expo_N_0.Size = new System.Drawing.Size(57, 20);
-            this.udM_expo_N_0.TabIndex = 102;
+            this.udM_trim_0.Name = "udM_trim_0";
+            this.udM_trim_0.Size = new System.Drawing.Size(57, 20);
+            this.udM_trim_0.TabIndex = 19;
             // 
-            // udM_expo_DR_3
+            // cbM_Type
             // 
-            this.udM_expo_DR_3.Increment = new decimal(new int[] {
-            4,
-            0,
-            0,
-            0});
-            this.udM_expo_DR_3.Location = new System.Drawing.Point(290, 278);
-            this.udM_expo_DR_3.Minimum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            -2147483648});
-            this.udM_expo_DR_3.Name = "udM_expo_DR_3";
-            this.udM_expo_DR_3.Size = new System.Drawing.Size(57, 20);
-            this.udM_expo_DR_3.TabIndex = 114;
+            this.cbM_Type.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbM_Type.FormattingEnabled = true;
+            this.cbM_Type.Items.AddRange(new object[] {
+            "Simulator",
+            "Flybarless",
+            "Swash 120 deg",
+            "Swash 140 deg",
+            "Generic"});
+            this.cbM_Type.Location = new System.Drawing.Point(101, 114);
+            this.cbM_Type.Name = "cbM_Type";
+            this.cbM_Type.Size = new System.Drawing.Size(100, 21);
+            this.cbM_Type.TabIndex = 9;
             // 
-            // udM_expo_DR_2
+            // label28
             // 
-            this.udM_expo_DR_2.Increment = new decimal(new int[] {
-            4,
-            0,
-            0,
-            0});
-            this.udM_expo_DR_2.Location = new System.Drawing.Point(227, 278);
-            this.udM_expo_DR_2.Minimum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            -2147483648});
-            this.udM_expo_DR_2.Name = "udM_expo_DR_2";
-            this.udM_expo_DR_2.Size = new System.Drawing.Size(57, 20);
-            this.udM_expo_DR_2.TabIndex = 113;
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(19, 117);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(34, 13);
+            this.label28.TabIndex = 8;
+            this.label28.Text = "Type:";
             // 
-            // udM_expo_DR_1
+            // tbM_Name
             // 
-            this.udM_expo_DR_1.Increment = new decimal(new int[] {
-            4,
-            0,
-            0,
-            0});
-            this.udM_expo_DR_1.Location = new System.Drawing.Point(167, 278);
-            this.udM_expo_DR_1.Minimum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            -2147483648});
-            this.udM_expo_DR_1.Name = "udM_expo_DR_1";
-            this.udM_expo_DR_1.Size = new System.Drawing.Size(57, 20);
-            this.udM_expo_DR_1.TabIndex = 112;
+            this.tbM_Name.Location = new System.Drawing.Point(101, 85);
+            this.tbM_Name.Name = "tbM_Name";
+            this.tbM_Name.Size = new System.Drawing.Size(100, 20);
+            this.tbM_Name.TabIndex = 7;
             // 
-            // udM_expo_DR_0
+            // label27
             // 
-            this.udM_expo_DR_0.BackColor = System.Drawing.SystemColors.Window;
-            this.udM_expo_DR_0.Increment = new decimal(new int[] {
-            4,
-            0,
-            0,
-            0});
-            this.udM_expo_DR_0.Location = new System.Drawing.Point(101, 278);
-            this.udM_expo_DR_0.Minimum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            -2147483648});
-            this.udM_expo_DR_0.Name = "udM_expo_DR_0";
-            this.udM_expo_DR_0.Size = new System.Drawing.Size(57, 20);
-            this.udM_expo_DR_0.TabIndex = 111;
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(19, 88);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(38, 13);
+            this.label27.TabIndex = 6;
+            this.label27.Text = "Name:";
             // 
-            // label41
+            // cbSelectedModel
             // 
-            this.label41.AutoSize = true;
-            this.label41.Location = new System.Drawing.Point(20, 280);
-            this.label41.Name = "label41";
-            this.label41.Size = new System.Drawing.Size(58, 13);
-            this.label41.TabIndex = 115;
-            this.label41.Text = "Expo D/R:";
+            this.cbSelectedModel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbSelectedModel.FormattingEnabled = true;
+            this.cbSelectedModel.Items.AddRange(new object[] {
+            "Model 1",
+            "Model 2",
+            "Model 3",
+            "Model 4",
+            "Model 5",
+            "Model 6",
+            "Model 7",
+            "Model 8"});
+            this.cbSelectedModel.Location = new System.Drawing.Point(131, 14);
+            this.cbSelectedModel.Name = "cbSelectedModel";
+            this.cbSelectedModel.Size = new System.Drawing.Size(81, 21);
+            this.cbSelectedModel.TabIndex = 5;
+            this.cbSelectedModel.SelectedIndexChanged += new System.EventHandler(this.cbSelectedModel_SelectedIndexChanged);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(19, 17);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(84, 13);
+            this.label10.TabIndex = 4;
+            this.label10.Text = "Selected Model:";
+            // 
+            // tabSimulate
+            // 
+            this.tabSimulate.Location = new System.Drawing.Point(4, 22);
+            this.tabSimulate.Name = "tabSimulate";
+            this.tabSimulate.Padding = new System.Windows.Forms.Padding(3);
+            this.tabSimulate.Size = new System.Drawing.Size(976, 308);
+            this.tabSimulate.TabIndex = 2;
+            this.tabSimulate.Text = "Simulate";
+            this.tabSimulate.UseVisualStyleBackColor = true;
+            // 
+            // tabTemplate
+            // 
+            this.tabTemplate.Location = new System.Drawing.Point(4, 22);
+            this.tabTemplate.Name = "tabTemplate";
+            this.tabTemplate.Size = new System.Drawing.Size(976, 308);
+            this.tabTemplate.TabIndex = 3;
+            this.tabTemplate.Text = "Templates";
+            this.tabTemplate.UseVisualStyleBackColor = true;
+            // 
+            // toolStrip1
+            // 
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnReadEeprom,
+            this.btnWriteEeprom,
+            this.toolStripSeparator1,
+            this.btnReadFlash,
+            this.btnWriteFlash,
+            this.toolStripSeparator2,
+            this.btnSettings,
+            this.btnClose});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(789, 25);
+            this.toolStrip1.Stretch = true;
+            this.toolStrip1.TabIndex = 1;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // btnReadEeprom
+            // 
+            this.btnReadEeprom.Image = ((System.Drawing.Image)(resources.GetObject("btnReadEeprom.Image")));
+            this.btnReadEeprom.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnReadEeprom.Name = "btnReadEeprom";
+            this.btnReadEeprom.Size = new System.Drawing.Size(97, 22);
+            this.btnReadEeprom.Text = "Read Eeprom";
+            this.btnReadEeprom.Click += new System.EventHandler(this.btnReadEeprom_Click);
+            // 
+            // btnWriteEeprom
+            // 
+            this.btnWriteEeprom.Image = ((System.Drawing.Image)(resources.GetObject("btnWriteEeprom.Image")));
+            this.btnWriteEeprom.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnWriteEeprom.Name = "btnWriteEeprom";
+            this.btnWriteEeprom.Size = new System.Drawing.Size(99, 22);
+            this.btnWriteEeprom.Text = "Write Eeprom";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // btnReadFlash
+            // 
+            this.btnReadFlash.Image = ((System.Drawing.Image)(resources.GetObject("btnReadFlash.Image")));
+            this.btnReadFlash.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnReadFlash.Name = "btnReadFlash";
+            this.btnReadFlash.Size = new System.Drawing.Size(83, 22);
+            this.btnReadFlash.Text = "Read Flash";
+            this.btnReadFlash.Click += new System.EventHandler(this.btnReadFlash_Click);
+            // 
+            // btnWriteFlash
+            // 
+            this.btnWriteFlash.Image = ((System.Drawing.Image)(resources.GetObject("btnWriteFlash.Image")));
+            this.btnWriteFlash.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnWriteFlash.Name = "btnWriteFlash";
+            this.btnWriteFlash.Size = new System.Drawing.Size(85, 22);
+            this.btnWriteFlash.Text = "Write Flash";
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
+            // btnSettings
+            // 
+            this.btnSettings.Image = ((System.Drawing.Image)(resources.GetObject("btnSettings.Image")));
+            this.btnSettings.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnSettings.Name = "btnSettings";
+            this.btnSettings.Size = new System.Drawing.Size(69, 22);
+            this.btnSettings.Text = "Settings";
+            // 
+            // btnClose
+            // 
+            this.btnClose.Image = ((System.Drawing.Image)(resources.GetObject("btnClose.Image")));
+            this.btnClose.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnClose.Name = "btnClose";
+            this.btnClose.Size = new System.Drawing.Size(56, 22);
+            this.btnClose.Text = "Close";
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
+            // 
+            // tbLog
+            // 
+            this.tbLog.Location = new System.Drawing.Point(12, 417);
+            this.tbLog.Multiline = true;
+            this.tbLog.Name = "tbLog";
+            this.tbLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.tbLog.Size = new System.Drawing.Size(760, 124);
+            this.tbLog.TabIndex = 2;
+            // 
+            // saveFileDlg
+            // 
+            this.saveFileDlg.DefaultExt = "hex";
+            this.saveFileDlg.Filter = "Hex file (*.hex)|*.hex|All files (*.*)|*.*";
             // 
             // toolStrip2
             // 
@@ -2177,7 +2206,7 @@
             this.btnLoadEeprom});
             this.toolStrip2.Location = new System.Drawing.Point(0, 25);
             this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(1008, 25);
+            this.toolStrip2.Size = new System.Drawing.Size(789, 25);
             this.toolStrip2.TabIndex = 3;
             this.toolStrip2.Text = "toolStrip2";
             // 
@@ -2194,11 +2223,161 @@
             // 
             this.openFileDlg.FileName = "openFileDialog1";
             // 
+            // udSwash2
+            // 
+            this.udSwash2.Increment = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.udSwash2.Location = new System.Drawing.Point(590, 252);
+            this.udSwash2.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.udSwash2.Name = "udSwash2";
+            this.udSwash2.Size = new System.Drawing.Size(57, 20);
+            this.udSwash2.TabIndex = 119;
+            // 
+            // udSwash1
+            // 
+            this.udSwash1.Increment = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.udSwash1.Location = new System.Drawing.Point(530, 252);
+            this.udSwash1.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.udSwash1.Name = "udSwash1";
+            this.udSwash1.Size = new System.Drawing.Size(57, 20);
+            this.udSwash1.TabIndex = 118;
+            // 
+            // label42
+            // 
+            this.label42.AutoSize = true;
+            this.label42.Location = new System.Drawing.Point(382, 254);
+            this.label42.Name = "label42";
+            this.label42.Size = new System.Drawing.Size(75, 13);
+            this.label42.TabIndex = 117;
+            this.label42.Text = "Swash Throw:";
+            // 
+            // udSwash0
+            // 
+            this.udSwash0.BackColor = System.Drawing.SystemColors.Window;
+            this.udSwash0.Increment = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.udSwash0.Location = new System.Drawing.Point(464, 252);
+            this.udSwash0.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.udSwash0.Name = "udSwash0";
+            this.udSwash0.Size = new System.Drawing.Size(57, 20);
+            this.udSwash0.TabIndex = 116;
+            // 
+            // label43
+            // 
+            this.label43.AutoSize = true;
+            this.label43.Location = new System.Drawing.Point(587, 236);
+            this.label43.Name = "label43";
+            this.label43.Size = new System.Drawing.Size(34, 13);
+            this.label43.TabIndex = 122;
+            this.label43.Text = "Pitch:";
+            // 
+            // label44
+            // 
+            this.label44.AutoSize = true;
+            this.label44.Location = new System.Drawing.Point(527, 236);
+            this.label44.Name = "label44";
+            this.label44.Size = new System.Drawing.Size(49, 13);
+            this.label44.TabIndex = 121;
+            this.label44.Text = "Elevator:";
+            // 
+            // label48
+            // 
+            this.label48.AutoSize = true;
+            this.label48.Location = new System.Drawing.Point(461, 236);
+            this.label48.Name = "label48";
+            this.label48.Size = new System.Drawing.Size(42, 13);
+            this.label48.TabIndex = 120;
+            this.label48.Text = "Aileron:";
+            // 
+            // label49
+            // 
+            this.label49.AutoSize = true;
+            this.label49.Location = new System.Drawing.Point(527, 280);
+            this.label49.Name = "label49";
+            this.label49.Size = new System.Drawing.Size(39, 13);
+            this.label49.TabIndex = 127;
+            this.label49.Text = "RATE:";
+            // 
+            // label50
+            // 
+            this.label50.AutoSize = true;
+            this.label50.Location = new System.Drawing.Point(461, 280);
+            this.label50.Name = "label50";
+            this.label50.Size = new System.Drawing.Size(38, 13);
+            this.label50.TabIndex = 126;
+            this.label50.Text = "AVCS:";
+            // 
+            // udGyro1
+            // 
+            this.udGyro1.Increment = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.udGyro1.Location = new System.Drawing.Point(530, 296);
+            this.udGyro1.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.udGyro1.Name = "udGyro1";
+            this.udGyro1.Size = new System.Drawing.Size(57, 20);
+            this.udGyro1.TabIndex = 125;
+            // 
+            // label51
+            // 
+            this.label51.AutoSize = true;
+            this.label51.Location = new System.Drawing.Point(382, 298);
+            this.label51.Name = "label51";
+            this.label51.Size = new System.Drawing.Size(57, 13);
+            this.label51.TabIndex = 124;
+            this.label51.Text = "Gyro Gain:";
+            // 
+            // udGyro0
+            // 
+            this.udGyro0.BackColor = System.Drawing.SystemColors.Window;
+            this.udGyro0.Increment = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.udGyro0.Location = new System.Drawing.Point(464, 296);
+            this.udGyro0.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.udGyro0.Name = "udGyro0";
+            this.udGyro0.Size = new System.Drawing.Size(57, 20);
+            this.udGyro0.TabIndex = 123;
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1008, 553);
+            this.ClientSize = new System.Drawing.Size(789, 553);
             this.Controls.Add(this.toolStrip2);
             this.Controls.Add(this.tbLog);
             this.Controls.Add(this.toolStrip1);
@@ -2237,12 +2416,17 @@
             ((System.ComponentModel.ISupportInitialize)(this.udContrast)).EndInit();
             this.tabModelConfig.ResumeLayout(false);
             this.tabModelConfig.PerformLayout();
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.udM_trim_0)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udM_trim_1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udM_trim_2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udM_trim_3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udM_expo_DR_3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udM_expo_DR_2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udM_expo_DR_1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udM_expo_DR_0)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udM_expo_N_3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udM_expo_N_2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udM_expo_N_1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udM_expo_N_0)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udEpH7)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udEpL7)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udSubtrim7)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udEpH6)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udEpL6)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udSubtrim6)).EndInit();
@@ -2264,19 +2448,19 @@
             ((System.ComponentModel.ISupportInitialize)(this.udEpH0)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udEpL0)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udSubtrim0)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udEpH7)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udEpL7)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udSubtrim7)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udM_expo_N_3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udM_expo_N_2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udM_expo_N_1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udM_expo_N_0)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udM_expo_DR_3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udM_expo_DR_2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udM_expo_DR_1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udM_expo_DR_0)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udM_trim_3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udM_trim_2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udM_trim_1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udM_trim_0)).EndInit();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.toolStrip2.ResumeLayout(false);
             this.toolStrip2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.udSwash2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udSwash1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udSwash0)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udGyro1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udGyro0)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2433,6 +2617,18 @@
         private System.Windows.Forms.ToolStrip toolStrip2;
         private System.Windows.Forms.ToolStripButton btnLoadEeprom;
         private System.Windows.Forms.OpenFileDialog openFileDlg;
+        private System.Windows.Forms.Label label43;
+        private System.Windows.Forms.Label label44;
+        private System.Windows.Forms.Label label48;
+        private System.Windows.Forms.NumericUpDown udSwash2;
+        private System.Windows.Forms.NumericUpDown udSwash1;
+        private System.Windows.Forms.Label label42;
+        private System.Windows.Forms.NumericUpDown udSwash0;
+        private System.Windows.Forms.Label label49;
+        private System.Windows.Forms.Label label50;
+        private System.Windows.Forms.NumericUpDown udGyro1;
+        private System.Windows.Forms.Label label51;
+        private System.Windows.Forms.NumericUpDown udGyro0;
     }
 }
 
