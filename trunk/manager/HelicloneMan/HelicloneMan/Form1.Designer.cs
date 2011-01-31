@@ -190,6 +190,14 @@
             this.udGyro1 = new System.Windows.Forms.NumericUpDown();
             this.label51 = new System.Windows.Forms.Label();
             this.udGyro0 = new System.Windows.Forms.NumericUpDown();
+            this.tabCurves = new System.Windows.Forms.TabPage();
+            this.udCurve0 = new System.Windows.Forms.NumericUpDown();
+            this.udCurve1 = new System.Windows.Forms.NumericUpDown();
+            this.udCurve2 = new System.Windows.Forms.NumericUpDown();
+            this.udCurve3 = new System.Windows.Forms.NumericUpDown();
+            this.udCurve4 = new System.Windows.Forms.NumericUpDown();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.label52 = new System.Windows.Forms.Label();
             this.tabSettings.SuspendLayout();
             this.tabRadioConfig.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udAdc_C_7_2)).BeginInit();
@@ -263,12 +271,19 @@
             ((System.ComponentModel.ISupportInitialize)(this.udSwash0)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udGyro1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udGyro0)).BeginInit();
+            this.tabCurves.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.udCurve0)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udCurve1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udCurve2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udCurve3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udCurve4)).BeginInit();
             this.SuspendLayout();
             // 
             // tabSettings
             // 
             this.tabSettings.Controls.Add(this.tabRadioConfig);
             this.tabSettings.Controls.Add(this.tabModelConfig);
+            this.tabSettings.Controls.Add(this.tabCurves);
             this.tabSettings.Controls.Add(this.tabSimulate);
             this.tabSettings.Controls.Add(this.tabTemplate);
             this.tabSettings.Location = new System.Drawing.Point(12, 53);
@@ -337,7 +352,7 @@
             this.tabRadioConfig.Location = new System.Drawing.Point(4, 22);
             this.tabRadioConfig.Name = "tabRadioConfig";
             this.tabRadioConfig.Padding = new System.Windows.Forms.Padding(3);
-            this.tabRadioConfig.Size = new System.Drawing.Size(976, 308);
+            this.tabRadioConfig.Size = new System.Drawing.Size(752, 332);
             this.tabRadioConfig.TabIndex = 0;
             this.tabRadioConfig.Text = "Radio Config";
             this.tabRadioConfig.UseVisualStyleBackColor = true;
@@ -2093,7 +2108,7 @@
             this.tabSimulate.Location = new System.Drawing.Point(4, 22);
             this.tabSimulate.Name = "tabSimulate";
             this.tabSimulate.Padding = new System.Windows.Forms.Padding(3);
-            this.tabSimulate.Size = new System.Drawing.Size(976, 308);
+            this.tabSimulate.Size = new System.Drawing.Size(752, 332);
             this.tabSimulate.TabIndex = 2;
             this.tabSimulate.Text = "Simulate";
             this.tabSimulate.UseVisualStyleBackColor = true;
@@ -2102,7 +2117,7 @@
             // 
             this.tabTemplate.Location = new System.Drawing.Point(4, 22);
             this.tabTemplate.Name = "tabTemplate";
-            this.tabTemplate.Size = new System.Drawing.Size(976, 308);
+            this.tabTemplate.Size = new System.Drawing.Size(752, 332);
             this.tabTemplate.TabIndex = 3;
             this.tabTemplate.Text = "Templates";
             this.tabTemplate.UseVisualStyleBackColor = true;
@@ -2373,6 +2388,109 @@
             this.udGyro0.Size = new System.Drawing.Size(57, 20);
             this.udGyro0.TabIndex = 123;
             // 
+            // tabCurves
+            // 
+            this.tabCurves.Controls.Add(this.label52);
+            this.tabCurves.Controls.Add(this.comboBox1);
+            this.tabCurves.Controls.Add(this.udCurve0);
+            this.tabCurves.Controls.Add(this.udCurve1);
+            this.tabCurves.Controls.Add(this.udCurve2);
+            this.tabCurves.Controls.Add(this.udCurve3);
+            this.tabCurves.Controls.Add(this.udCurve4);
+            this.tabCurves.Location = new System.Drawing.Point(4, 22);
+            this.tabCurves.Name = "tabCurves";
+            this.tabCurves.Size = new System.Drawing.Size(752, 332);
+            this.tabCurves.TabIndex = 4;
+            this.tabCurves.Text = "Model Curves";
+            this.tabCurves.UseVisualStyleBackColor = true;
+            // 
+            // udCurve0
+            // 
+            this.udCurve0.Location = new System.Drawing.Point(24, 163);
+            this.udCurve0.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.udCurve0.Name = "udCurve0";
+            this.udCurve0.Size = new System.Drawing.Size(57, 20);
+            this.udCurve0.TabIndex = 79;
+            // 
+            // udCurve1
+            // 
+            this.udCurve1.Location = new System.Drawing.Point(24, 137);
+            this.udCurve1.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.udCurve1.Name = "udCurve1";
+            this.udCurve1.Size = new System.Drawing.Size(57, 20);
+            this.udCurve1.TabIndex = 78;
+            // 
+            // udCurve2
+            // 
+            this.udCurve2.Location = new System.Drawing.Point(24, 111);
+            this.udCurve2.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.udCurve2.Name = "udCurve2";
+            this.udCurve2.Size = new System.Drawing.Size(57, 20);
+            this.udCurve2.TabIndex = 77;
+            // 
+            // udCurve3
+            // 
+            this.udCurve3.Location = new System.Drawing.Point(24, 84);
+            this.udCurve3.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.udCurve3.Name = "udCurve3";
+            this.udCurve3.Size = new System.Drawing.Size(57, 20);
+            this.udCurve3.TabIndex = 76;
+            // 
+            // udCurve4
+            // 
+            this.udCurve4.Location = new System.Drawing.Point(24, 58);
+            this.udCurve4.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.udCurve4.Name = "udCurve4";
+            this.udCurve4.Size = new System.Drawing.Size(57, 20);
+            this.udCurve4.TabIndex = 75;
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "Throttle Curve - ID0",
+            "Throttle Curve - ID1",
+            "Throttle Curve - ID2",
+            "Throttle Curve - HOLD",
+            "Pitch Curve - ID0",
+            "Pitch Curve - ID1",
+            "Pitch Curve - ID2",
+            "Pitch Curve - HOLD"});
+            this.comboBox1.Location = new System.Drawing.Point(111, 22);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(133, 21);
+            this.comboBox1.TabIndex = 80;
+            // 
+            // label52
+            // 
+            this.label52.AutoSize = true;
+            this.label52.Location = new System.Drawing.Point(21, 25);
+            this.label52.Name = "label52";
+            this.label52.Size = new System.Drawing.Size(83, 13);
+            this.label52.TabIndex = 81;
+            this.label52.Text = "Selected Curve:";
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2461,6 +2579,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.udSwash0)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udGyro1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udGyro0)).EndInit();
+            this.tabCurves.ResumeLayout(false);
+            this.tabCurves.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.udCurve0)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udCurve1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udCurve2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udCurve3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udCurve4)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2629,6 +2754,14 @@
         private System.Windows.Forms.NumericUpDown udGyro1;
         private System.Windows.Forms.Label label51;
         private System.Windows.Forms.NumericUpDown udGyro0;
+        private System.Windows.Forms.TabPage tabCurves;
+        private System.Windows.Forms.Label label52;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.NumericUpDown udCurve0;
+        private System.Windows.Forms.NumericUpDown udCurve1;
+        private System.Windows.Forms.NumericUpDown udCurve2;
+        private System.Windows.Forms.NumericUpDown udCurve3;
+        private System.Windows.Forms.NumericUpDown udCurve4;
     }
 }
 
