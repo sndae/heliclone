@@ -164,6 +164,15 @@ namespace HelicloneMan
                 udM_expo_DR_1.Value = expo[1][1];
                 udM_expo_DR_2.Value = expo[2][1];
                 udM_expo_DR_3.Value = expo[3][1];
+
+                SByte[] swash = loadedEeprom.MC_SwashThrow;
+                udSwash0.Value = swash[0];
+                udSwash1.Value = swash[1];
+                udSwash2.Value = swash[2];
+
+                SByte[] gyro = loadedEeprom.MC_GyroGain;
+                udGyro0.Value = gyro[0];
+                udGyro1.Value = gyro[1];
             }
         }
 
