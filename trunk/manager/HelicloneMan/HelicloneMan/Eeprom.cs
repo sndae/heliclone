@@ -480,6 +480,39 @@ namespace HelicloneMan
             }
         }
 
+        public SByte[][] MC_curves
+        {
+            get
+            {
+                SByte[][] curves = new SByte[8][];
+                for (int i = 0; i < 8; i++)
+                {
+                    curves[i] = new SByte[5];
+                }
+
+                for (int i = 0; i < 8; i++)
+                {
+                    for (int p = 0; p < 5; p++)
+                    {
+                        curves[i][p] = (SByte)eepromData[Eeprom_Model_Offset() + 112 + i * 5 + p];
+                    }
+                }
+
+                return curves;
+            }
+            set
+            {
+                for (int i = 0; i < 8; i++)
+                {
+                    for (int p = 0; p < 5; p++)
+                    {
+                        eepromData[Eeprom_Model_Offset() + 112 + i * 5 + p] = (Byte)value[i][p];
+                    }
+                }
+            }
+        }
+
+
 
         // Containers
         Byte[] eepromData = new Byte[2048];
