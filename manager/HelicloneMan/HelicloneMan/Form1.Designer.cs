@@ -87,6 +87,18 @@
             this.udContrast = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.tabModelConfig = new System.Windows.Forms.TabPage();
+            this.label49 = new System.Windows.Forms.Label();
+            this.label50 = new System.Windows.Forms.Label();
+            this.udGyro1 = new System.Windows.Forms.NumericUpDown();
+            this.label51 = new System.Windows.Forms.Label();
+            this.udGyro0 = new System.Windows.Forms.NumericUpDown();
+            this.label43 = new System.Windows.Forms.Label();
+            this.label44 = new System.Windows.Forms.Label();
+            this.label48 = new System.Windows.Forms.Label();
+            this.udSwash2 = new System.Windows.Forms.NumericUpDown();
+            this.udSwash1 = new System.Windows.Forms.NumericUpDown();
+            this.label42 = new System.Windows.Forms.Label();
+            this.udSwash0 = new System.Windows.Forms.NumericUpDown();
             this.label41 = new System.Windows.Forms.Label();
             this.udM_expo_DR_3 = new System.Windows.Forms.NumericUpDown();
             this.udM_expo_DR_2 = new System.Windows.Forms.NumericUpDown();
@@ -162,6 +174,15 @@
             this.label27 = new System.Windows.Forms.Label();
             this.cbSelectedModel = new System.Windows.Forms.ComboBox();
             this.label10 = new System.Windows.Forms.Label();
+            this.tabCurves = new System.Windows.Forms.TabPage();
+            this.curvePanel = new System.Windows.Forms.Panel();
+            this.label52 = new System.Windows.Forms.Label();
+            this.cbSelectedCurve = new System.Windows.Forms.ComboBox();
+            this.udCurve0 = new System.Windows.Forms.NumericUpDown();
+            this.udCurve1 = new System.Windows.Forms.NumericUpDown();
+            this.udCurve2 = new System.Windows.Forms.NumericUpDown();
+            this.udCurve3 = new System.Windows.Forms.NumericUpDown();
+            this.udCurve4 = new System.Windows.Forms.NumericUpDown();
             this.tabSimulate = new System.Windows.Forms.TabPage();
             this.tabTemplate = new System.Windows.Forms.TabPage();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
@@ -178,26 +199,12 @@
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.btnLoadEeprom = new System.Windows.Forms.ToolStripButton();
             this.openFileDlg = new System.Windows.Forms.OpenFileDialog();
-            this.udSwash2 = new System.Windows.Forms.NumericUpDown();
-            this.udSwash1 = new System.Windows.Forms.NumericUpDown();
-            this.label42 = new System.Windows.Forms.Label();
-            this.udSwash0 = new System.Windows.Forms.NumericUpDown();
-            this.label43 = new System.Windows.Forms.Label();
-            this.label44 = new System.Windows.Forms.Label();
-            this.label48 = new System.Windows.Forms.Label();
-            this.label49 = new System.Windows.Forms.Label();
-            this.label50 = new System.Windows.Forms.Label();
-            this.udGyro1 = new System.Windows.Forms.NumericUpDown();
-            this.label51 = new System.Windows.Forms.Label();
-            this.udGyro0 = new System.Windows.Forms.NumericUpDown();
-            this.tabCurves = new System.Windows.Forms.TabPage();
-            this.udCurve0 = new System.Windows.Forms.NumericUpDown();
-            this.udCurve1 = new System.Windows.Forms.NumericUpDown();
-            this.udCurve2 = new System.Windows.Forms.NumericUpDown();
-            this.udCurve3 = new System.Windows.Forms.NumericUpDown();
-            this.udCurve4 = new System.Windows.Forms.NumericUpDown();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.label52 = new System.Windows.Forms.Label();
+            this.label53 = new System.Windows.Forms.Label();
+            this.label54 = new System.Windows.Forms.Label();
+            this.label55 = new System.Windows.Forms.Label();
+            this.label56 = new System.Windows.Forms.Label();
+            this.label57 = new System.Windows.Forms.Label();
+            this.label58 = new System.Windows.Forms.Label();
             this.tabSettings.SuspendLayout();
             this.tabRadioConfig.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udAdc_C_7_2)).BeginInit();
@@ -228,6 +235,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.udMboxTimeout)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udContrast)).BeginInit();
             this.tabModelConfig.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.udGyro1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udGyro0)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udSwash2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udSwash1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udSwash0)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udM_expo_DR_3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udM_expo_DR_2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udM_expo_DR_1)).BeginInit();
@@ -264,19 +276,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.udM_trim_2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udM_trim_1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udM_trim_0)).BeginInit();
-            this.toolStrip1.SuspendLayout();
-            this.toolStrip2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.udSwash2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udSwash1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udSwash0)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udGyro1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udGyro0)).BeginInit();
             this.tabCurves.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udCurve0)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udCurve1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udCurve2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udCurve3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udCurve4)).BeginInit();
+            this.toolStrip1.SuspendLayout();
+            this.toolStrip2.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabSettings
@@ -1054,6 +1061,156 @@
             this.tabModelConfig.TabIndex = 1;
             this.tabModelConfig.Text = "Model Config";
             this.tabModelConfig.UseVisualStyleBackColor = true;
+            // 
+            // label49
+            // 
+            this.label49.AutoSize = true;
+            this.label49.Location = new System.Drawing.Point(527, 280);
+            this.label49.Name = "label49";
+            this.label49.Size = new System.Drawing.Size(39, 13);
+            this.label49.TabIndex = 127;
+            this.label49.Text = "RATE:";
+            // 
+            // label50
+            // 
+            this.label50.AutoSize = true;
+            this.label50.Location = new System.Drawing.Point(461, 280);
+            this.label50.Name = "label50";
+            this.label50.Size = new System.Drawing.Size(38, 13);
+            this.label50.TabIndex = 126;
+            this.label50.Text = "AVCS:";
+            // 
+            // udGyro1
+            // 
+            this.udGyro1.Increment = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.udGyro1.Location = new System.Drawing.Point(530, 296);
+            this.udGyro1.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.udGyro1.Name = "udGyro1";
+            this.udGyro1.Size = new System.Drawing.Size(57, 20);
+            this.udGyro1.TabIndex = 125;
+            // 
+            // label51
+            // 
+            this.label51.AutoSize = true;
+            this.label51.Location = new System.Drawing.Point(382, 298);
+            this.label51.Name = "label51";
+            this.label51.Size = new System.Drawing.Size(57, 13);
+            this.label51.TabIndex = 124;
+            this.label51.Text = "Gyro Gain:";
+            // 
+            // udGyro0
+            // 
+            this.udGyro0.BackColor = System.Drawing.SystemColors.Window;
+            this.udGyro0.Increment = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.udGyro0.Location = new System.Drawing.Point(464, 296);
+            this.udGyro0.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.udGyro0.Name = "udGyro0";
+            this.udGyro0.Size = new System.Drawing.Size(57, 20);
+            this.udGyro0.TabIndex = 123;
+            // 
+            // label43
+            // 
+            this.label43.AutoSize = true;
+            this.label43.Location = new System.Drawing.Point(587, 236);
+            this.label43.Name = "label43";
+            this.label43.Size = new System.Drawing.Size(34, 13);
+            this.label43.TabIndex = 122;
+            this.label43.Text = "Pitch:";
+            // 
+            // label44
+            // 
+            this.label44.AutoSize = true;
+            this.label44.Location = new System.Drawing.Point(527, 236);
+            this.label44.Name = "label44";
+            this.label44.Size = new System.Drawing.Size(49, 13);
+            this.label44.TabIndex = 121;
+            this.label44.Text = "Elevator:";
+            // 
+            // label48
+            // 
+            this.label48.AutoSize = true;
+            this.label48.Location = new System.Drawing.Point(461, 236);
+            this.label48.Name = "label48";
+            this.label48.Size = new System.Drawing.Size(42, 13);
+            this.label48.TabIndex = 120;
+            this.label48.Text = "Aileron:";
+            // 
+            // udSwash2
+            // 
+            this.udSwash2.Increment = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.udSwash2.Location = new System.Drawing.Point(590, 252);
+            this.udSwash2.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.udSwash2.Name = "udSwash2";
+            this.udSwash2.Size = new System.Drawing.Size(57, 20);
+            this.udSwash2.TabIndex = 119;
+            // 
+            // udSwash1
+            // 
+            this.udSwash1.Increment = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.udSwash1.Location = new System.Drawing.Point(530, 252);
+            this.udSwash1.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.udSwash1.Name = "udSwash1";
+            this.udSwash1.Size = new System.Drawing.Size(57, 20);
+            this.udSwash1.TabIndex = 118;
+            // 
+            // label42
+            // 
+            this.label42.AutoSize = true;
+            this.label42.Location = new System.Drawing.Point(382, 254);
+            this.label42.Name = "label42";
+            this.label42.Size = new System.Drawing.Size(75, 13);
+            this.label42.TabIndex = 117;
+            this.label42.Text = "Swash Throw:";
+            // 
+            // udSwash0
+            // 
+            this.udSwash0.BackColor = System.Drawing.SystemColors.Window;
+            this.udSwash0.Increment = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.udSwash0.Location = new System.Drawing.Point(464, 252);
+            this.udSwash0.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.udSwash0.Name = "udSwash0";
+            this.udSwash0.Size = new System.Drawing.Size(57, 20);
+            this.udSwash0.TabIndex = 116;
             // 
             // label41
             // 
@@ -2103,6 +2260,151 @@
             this.label10.TabIndex = 4;
             this.label10.Text = "Selected Model:";
             // 
+            // tabCurves
+            // 
+            this.tabCurves.Controls.Add(this.label58);
+            this.tabCurves.Controls.Add(this.label57);
+            this.tabCurves.Controls.Add(this.label56);
+            this.tabCurves.Controls.Add(this.label55);
+            this.tabCurves.Controls.Add(this.label54);
+            this.tabCurves.Controls.Add(this.label53);
+            this.tabCurves.Controls.Add(this.curvePanel);
+            this.tabCurves.Controls.Add(this.label52);
+            this.tabCurves.Controls.Add(this.cbSelectedCurve);
+            this.tabCurves.Controls.Add(this.udCurve0);
+            this.tabCurves.Controls.Add(this.udCurve1);
+            this.tabCurves.Controls.Add(this.udCurve2);
+            this.tabCurves.Controls.Add(this.udCurve3);
+            this.tabCurves.Controls.Add(this.udCurve4);
+            this.tabCurves.Location = new System.Drawing.Point(4, 22);
+            this.tabCurves.Name = "tabCurves";
+            this.tabCurves.Size = new System.Drawing.Size(752, 332);
+            this.tabCurves.TabIndex = 4;
+            this.tabCurves.Text = "Model Curves";
+            this.tabCurves.UseVisualStyleBackColor = true;
+            // 
+            // curvePanel
+            // 
+            this.curvePanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.curvePanel.Location = new System.Drawing.Point(24, 49);
+            this.curvePanel.Name = "curvePanel";
+            this.curvePanel.Size = new System.Drawing.Size(230, 230);
+            this.curvePanel.TabIndex = 82;
+            this.curvePanel.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+            // 
+            // label52
+            // 
+            this.label52.AutoSize = true;
+            this.label52.Location = new System.Drawing.Point(21, 25);
+            this.label52.Name = "label52";
+            this.label52.Size = new System.Drawing.Size(83, 13);
+            this.label52.TabIndex = 81;
+            this.label52.Text = "Selected Curve:";
+            // 
+            // cbSelectedCurve
+            // 
+            this.cbSelectedCurve.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbSelectedCurve.FormattingEnabled = true;
+            this.cbSelectedCurve.Items.AddRange(new object[] {
+            "Throttle Curve - ID0",
+            "Throttle Curve - ID1",
+            "Throttle Curve - ID2",
+            "Throttle Curve - HOLD",
+            "Pitch Curve - ID0",
+            "Pitch Curve - ID1",
+            "Pitch Curve - ID2",
+            "Pitch Curve - HOLD"});
+            this.cbSelectedCurve.Location = new System.Drawing.Point(121, 22);
+            this.cbSelectedCurve.Name = "cbSelectedCurve";
+            this.cbSelectedCurve.Size = new System.Drawing.Size(133, 21);
+            this.cbSelectedCurve.TabIndex = 80;
+            this.cbSelectedCurve.SelectedIndexChanged += new System.EventHandler(this.cbSelectedCurve_SelectedIndexChanged);
+            // 
+            // udCurve0
+            // 
+            this.udCurve0.Location = new System.Drawing.Point(24, 308);
+            this.udCurve0.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.udCurve0.Name = "udCurve0";
+            this.udCurve0.Size = new System.Drawing.Size(45, 20);
+            this.udCurve0.TabIndex = 79;
+            this.udCurve0.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.udCurve0.ValueChanged += new System.EventHandler(this.anyCurve_ValueChanged);
+            // 
+            // udCurve1
+            // 
+            this.udCurve1.Location = new System.Drawing.Point(75, 308);
+            this.udCurve1.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.udCurve1.Name = "udCurve1";
+            this.udCurve1.Size = new System.Drawing.Size(45, 20);
+            this.udCurve1.TabIndex = 78;
+            this.udCurve1.Value = new decimal(new int[] {
+            50,
+            0,
+            0,
+            -2147483648});
+            this.udCurve1.ValueChanged += new System.EventHandler(this.anyCurve_ValueChanged);
+            // 
+            // udCurve2
+            // 
+            this.udCurve2.Location = new System.Drawing.Point(126, 308);
+            this.udCurve2.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.udCurve2.Name = "udCurve2";
+            this.udCurve2.Size = new System.Drawing.Size(45, 20);
+            this.udCurve2.TabIndex = 77;
+            this.udCurve2.ValueChanged += new System.EventHandler(this.anyCurve_ValueChanged);
+            // 
+            // udCurve3
+            // 
+            this.udCurve3.Location = new System.Drawing.Point(177, 308);
+            this.udCurve3.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.udCurve3.Name = "udCurve3";
+            this.udCurve3.Size = new System.Drawing.Size(45, 20);
+            this.udCurve3.TabIndex = 76;
+            this.udCurve3.Value = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.udCurve3.ValueChanged += new System.EventHandler(this.anyCurve_ValueChanged);
+            // 
+            // udCurve4
+            // 
+            this.udCurve4.Location = new System.Drawing.Point(228, 308);
+            this.udCurve4.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.udCurve4.Name = "udCurve4";
+            this.udCurve4.Size = new System.Drawing.Size(45, 20);
+            this.udCurve4.TabIndex = 75;
+            this.udCurve4.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.udCurve4.ValueChanged += new System.EventHandler(this.anyCurve_ValueChanged);
+            // 
             // tabSimulate
             // 
             this.tabSimulate.Location = new System.Drawing.Point(4, 22);
@@ -2238,258 +2540,59 @@
             // 
             this.openFileDlg.FileName = "openFileDialog1";
             // 
-            // udSwash2
+            // label53
             // 
-            this.udSwash2.Increment = new decimal(new int[] {
-            4,
-            0,
-            0,
-            0});
-            this.udSwash2.Location = new System.Drawing.Point(590, 252);
-            this.udSwash2.Minimum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            -2147483648});
-            this.udSwash2.Name = "udSwash2";
-            this.udSwash2.Size = new System.Drawing.Size(57, 20);
-            this.udSwash2.TabIndex = 119;
+            this.label53.AutoSize = true;
+            this.label53.Location = new System.Drawing.Point(260, 49);
+            this.label53.Name = "label53";
+            this.label53.Size = new System.Drawing.Size(33, 13);
+            this.label53.TabIndex = 83;
+            this.label53.Text = "100%";
             // 
-            // udSwash1
+            // label54
             // 
-            this.udSwash1.Increment = new decimal(new int[] {
-            4,
-            0,
-            0,
-            0});
-            this.udSwash1.Location = new System.Drawing.Point(530, 252);
-            this.udSwash1.Minimum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            -2147483648});
-            this.udSwash1.Name = "udSwash1";
-            this.udSwash1.Size = new System.Drawing.Size(57, 20);
-            this.udSwash1.TabIndex = 118;
+            this.label54.AutoSize = true;
+            this.label54.Location = new System.Drawing.Point(260, 266);
+            this.label54.Name = "label54";
+            this.label54.Size = new System.Drawing.Size(36, 13);
+            this.label54.TabIndex = 84;
+            this.label54.Text = "-100%";
             // 
-            // label42
+            // label55
             // 
-            this.label42.AutoSize = true;
-            this.label42.Location = new System.Drawing.Point(382, 254);
-            this.label42.Name = "label42";
-            this.label42.Size = new System.Drawing.Size(75, 13);
-            this.label42.TabIndex = 117;
-            this.label42.Text = "Swash Throw:";
+            this.label55.AutoSize = true;
+            this.label55.Location = new System.Drawing.Point(260, 163);
+            this.label55.Name = "label55";
+            this.label55.Size = new System.Drawing.Size(21, 13);
+            this.label55.TabIndex = 85;
+            this.label55.Text = "0%";
             // 
-            // udSwash0
+            // label56
             // 
-            this.udSwash0.BackColor = System.Drawing.SystemColors.Window;
-            this.udSwash0.Increment = new decimal(new int[] {
-            4,
-            0,
-            0,
-            0});
-            this.udSwash0.Location = new System.Drawing.Point(464, 252);
-            this.udSwash0.Minimum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            -2147483648});
-            this.udSwash0.Name = "udSwash0";
-            this.udSwash0.Size = new System.Drawing.Size(57, 20);
-            this.udSwash0.TabIndex = 116;
+            this.label56.AutoSize = true;
+            this.label56.Location = new System.Drawing.Point(242, 282);
+            this.label56.Name = "label56";
+            this.label56.Size = new System.Drawing.Size(33, 13);
+            this.label56.TabIndex = 86;
+            this.label56.Text = "100%";
             // 
-            // label43
+            // label57
             // 
-            this.label43.AutoSize = true;
-            this.label43.Location = new System.Drawing.Point(587, 236);
-            this.label43.Name = "label43";
-            this.label43.Size = new System.Drawing.Size(34, 13);
-            this.label43.TabIndex = 122;
-            this.label43.Text = "Pitch:";
+            this.label57.AutoSize = true;
+            this.label57.Location = new System.Drawing.Point(134, 282);
+            this.label57.Name = "label57";
+            this.label57.Size = new System.Drawing.Size(21, 13);
+            this.label57.TabIndex = 87;
+            this.label57.Text = "0%";
             // 
-            // label44
+            // label58
             // 
-            this.label44.AutoSize = true;
-            this.label44.Location = new System.Drawing.Point(527, 236);
-            this.label44.Name = "label44";
-            this.label44.Size = new System.Drawing.Size(49, 13);
-            this.label44.TabIndex = 121;
-            this.label44.Text = "Elevator:";
-            // 
-            // label48
-            // 
-            this.label48.AutoSize = true;
-            this.label48.Location = new System.Drawing.Point(461, 236);
-            this.label48.Name = "label48";
-            this.label48.Size = new System.Drawing.Size(42, 13);
-            this.label48.TabIndex = 120;
-            this.label48.Text = "Aileron:";
-            // 
-            // label49
-            // 
-            this.label49.AutoSize = true;
-            this.label49.Location = new System.Drawing.Point(527, 280);
-            this.label49.Name = "label49";
-            this.label49.Size = new System.Drawing.Size(39, 13);
-            this.label49.TabIndex = 127;
-            this.label49.Text = "RATE:";
-            // 
-            // label50
-            // 
-            this.label50.AutoSize = true;
-            this.label50.Location = new System.Drawing.Point(461, 280);
-            this.label50.Name = "label50";
-            this.label50.Size = new System.Drawing.Size(38, 13);
-            this.label50.TabIndex = 126;
-            this.label50.Text = "AVCS:";
-            // 
-            // udGyro1
-            // 
-            this.udGyro1.Increment = new decimal(new int[] {
-            4,
-            0,
-            0,
-            0});
-            this.udGyro1.Location = new System.Drawing.Point(530, 296);
-            this.udGyro1.Minimum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            -2147483648});
-            this.udGyro1.Name = "udGyro1";
-            this.udGyro1.Size = new System.Drawing.Size(57, 20);
-            this.udGyro1.TabIndex = 125;
-            // 
-            // label51
-            // 
-            this.label51.AutoSize = true;
-            this.label51.Location = new System.Drawing.Point(382, 298);
-            this.label51.Name = "label51";
-            this.label51.Size = new System.Drawing.Size(57, 13);
-            this.label51.TabIndex = 124;
-            this.label51.Text = "Gyro Gain:";
-            // 
-            // udGyro0
-            // 
-            this.udGyro0.BackColor = System.Drawing.SystemColors.Window;
-            this.udGyro0.Increment = new decimal(new int[] {
-            4,
-            0,
-            0,
-            0});
-            this.udGyro0.Location = new System.Drawing.Point(464, 296);
-            this.udGyro0.Minimum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            -2147483648});
-            this.udGyro0.Name = "udGyro0";
-            this.udGyro0.Size = new System.Drawing.Size(57, 20);
-            this.udGyro0.TabIndex = 123;
-            // 
-            // tabCurves
-            // 
-            this.tabCurves.Controls.Add(this.label52);
-            this.tabCurves.Controls.Add(this.comboBox1);
-            this.tabCurves.Controls.Add(this.udCurve0);
-            this.tabCurves.Controls.Add(this.udCurve1);
-            this.tabCurves.Controls.Add(this.udCurve2);
-            this.tabCurves.Controls.Add(this.udCurve3);
-            this.tabCurves.Controls.Add(this.udCurve4);
-            this.tabCurves.Location = new System.Drawing.Point(4, 22);
-            this.tabCurves.Name = "tabCurves";
-            this.tabCurves.Size = new System.Drawing.Size(752, 332);
-            this.tabCurves.TabIndex = 4;
-            this.tabCurves.Text = "Model Curves";
-            this.tabCurves.UseVisualStyleBackColor = true;
-            // 
-            // udCurve0
-            // 
-            this.udCurve0.Location = new System.Drawing.Point(24, 163);
-            this.udCurve0.Minimum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            -2147483648});
-            this.udCurve0.Name = "udCurve0";
-            this.udCurve0.Size = new System.Drawing.Size(57, 20);
-            this.udCurve0.TabIndex = 79;
-            // 
-            // udCurve1
-            // 
-            this.udCurve1.Location = new System.Drawing.Point(24, 137);
-            this.udCurve1.Minimum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            -2147483648});
-            this.udCurve1.Name = "udCurve1";
-            this.udCurve1.Size = new System.Drawing.Size(57, 20);
-            this.udCurve1.TabIndex = 78;
-            // 
-            // udCurve2
-            // 
-            this.udCurve2.Location = new System.Drawing.Point(24, 111);
-            this.udCurve2.Minimum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            -2147483648});
-            this.udCurve2.Name = "udCurve2";
-            this.udCurve2.Size = new System.Drawing.Size(57, 20);
-            this.udCurve2.TabIndex = 77;
-            // 
-            // udCurve3
-            // 
-            this.udCurve3.Location = new System.Drawing.Point(24, 84);
-            this.udCurve3.Minimum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            -2147483648});
-            this.udCurve3.Name = "udCurve3";
-            this.udCurve3.Size = new System.Drawing.Size(57, 20);
-            this.udCurve3.TabIndex = 76;
-            // 
-            // udCurve4
-            // 
-            this.udCurve4.Location = new System.Drawing.Point(24, 58);
-            this.udCurve4.Minimum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            -2147483648});
-            this.udCurve4.Name = "udCurve4";
-            this.udCurve4.Size = new System.Drawing.Size(57, 20);
-            this.udCurve4.TabIndex = 75;
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
-            "Throttle Curve - ID0",
-            "Throttle Curve - ID1",
-            "Throttle Curve - ID2",
-            "Throttle Curve - HOLD",
-            "Pitch Curve - ID0",
-            "Pitch Curve - ID1",
-            "Pitch Curve - ID2",
-            "Pitch Curve - HOLD"});
-            this.comboBox1.Location = new System.Drawing.Point(111, 22);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(133, 21);
-            this.comboBox1.TabIndex = 80;
-            // 
-            // label52
-            // 
-            this.label52.AutoSize = true;
-            this.label52.Location = new System.Drawing.Point(21, 25);
-            this.label52.Name = "label52";
-            this.label52.Size = new System.Drawing.Size(83, 13);
-            this.label52.TabIndex = 81;
-            this.label52.Text = "Selected Curve:";
+            this.label58.AutoSize = true;
+            this.label58.Location = new System.Drawing.Point(7, 282);
+            this.label58.Name = "label58";
+            this.label58.Size = new System.Drawing.Size(36, 13);
+            this.label58.TabIndex = 88;
+            this.label58.Text = "-100%";
             // 
             // frmMain
             // 
@@ -2534,6 +2637,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.udContrast)).EndInit();
             this.tabModelConfig.ResumeLayout(false);
             this.tabModelConfig.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.udGyro1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udGyro0)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udSwash2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udSwash1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udSwash0)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udM_expo_DR_3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udM_expo_DR_2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udM_expo_DR_1)).EndInit();
@@ -2570,15 +2678,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.udM_trim_2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udM_trim_1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udM_trim_0)).EndInit();
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
-            this.toolStrip2.ResumeLayout(false);
-            this.toolStrip2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.udSwash2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udSwash1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udSwash0)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udGyro1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udGyro0)).EndInit();
             this.tabCurves.ResumeLayout(false);
             this.tabCurves.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udCurve0)).EndInit();
@@ -2586,6 +2685,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.udCurve2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udCurve3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udCurve4)).EndInit();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
+            this.toolStrip2.ResumeLayout(false);
+            this.toolStrip2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2756,12 +2859,19 @@
         private System.Windows.Forms.NumericUpDown udGyro0;
         private System.Windows.Forms.TabPage tabCurves;
         private System.Windows.Forms.Label label52;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox cbSelectedCurve;
         private System.Windows.Forms.NumericUpDown udCurve0;
         private System.Windows.Forms.NumericUpDown udCurve1;
         private System.Windows.Forms.NumericUpDown udCurve2;
         private System.Windows.Forms.NumericUpDown udCurve3;
         private System.Windows.Forms.NumericUpDown udCurve4;
+        private System.Windows.Forms.Panel curvePanel;
+        private System.Windows.Forms.Label label58;
+        private System.Windows.Forms.Label label57;
+        private System.Windows.Forms.Label label56;
+        private System.Windows.Forms.Label label55;
+        private System.Windows.Forms.Label label54;
+        private System.Windows.Forms.Label label53;
     }
 }
 

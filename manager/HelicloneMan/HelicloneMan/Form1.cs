@@ -173,6 +173,16 @@ namespace HelicloneMan
                 SByte[] gyro = loadedEeprom.MC_GyroGain;
                 udGyro0.Value = gyro[0];
                 udGyro1.Value = gyro[1];
+
+                // Select one curve...
+                cbSelectedCurve.SelectedIndex = 0;
+                SByte[][] curves = loadedEeprom.MC_curves;
+                udCurve0.Value = curves[cbSelectedCurve.SelectedIndex][0];
+                udCurve1.Value = curves[cbSelectedCurve.SelectedIndex][1];
+                udCurve2.Value = curves[cbSelectedCurve.SelectedIndex][2];
+                udCurve3.Value = curves[cbSelectedCurve.SelectedIndex][3];
+                udCurve4.Value = curves[cbSelectedCurve.SelectedIndex][4];
+
             }
         }
 
@@ -344,6 +354,89 @@ namespace HelicloneMan
                 LoadRadioConfig();
                 tbLog.Text = "Loaded Eeprom from: " + openFileDlg.FileName;
             }
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+            // Draw the cross
+            Pen penCurrent = new Pen(Color.Blue);
+            penCurrent.Width = 2;
+            //Point[] line = { new Point(0,0), new Point(100,100)};
+
+            // DRAW X-AXIS
+            e.Graphics.DrawLine(penCurrent, new Point(0, curvePanel.Height/2), new Point(curvePanel.Width, curvePanel.Height / 2));
+
+            // DRAW Y-AXIS
+            e.Graphics.DrawLine(penCurrent, new Point(curvePanel.Width/2, 0), new Point(curvePanel.Width/2, curvePanel.Height));
+
+            Point x1y1, x2y2;
+            float dy,dx;
+            float scale = 0.96f;
+
+            penCurrent = new Pen(Color.Black);
+            penCurrent.Width = 2;
+            
+            // 1st segment...
+            dx = ((float)0.5f*curvePanel.Width)*-100.0f/100.0f;
+            dy = ((float)0.5f*curvePanel.Height*(float)(udCurve0.Value))/100.0f;
+            dx *= scale;
+            dy *= scale;
+            x1y1 = new Point(curvePanel.Width/2 + (int)dx, curvePanel.Height/2 - (int)dy);
+
+            dx = ((float)0.5f*curvePanel.Width)*-50.0f/100.0f;
+            dy = ((float)0.5f*curvePanel.Height*(float)(udCurve1.Value))/100.0f;
+            dx *= scale;
+            dy *= scale;
+            x2y2 = new Point(curvePanel.Width / 2 + (int)dx, curvePanel.Height / 2 - (int)dy);
+            e.Graphics.DrawLine(penCurrent, x1y1, x2y2);
+
+            // 2nd segment
+            x1y1 = x2y2;
+
+            dx = ((float)0.5f * curvePanel.Width) * 0.0f / 100.0f;
+            dy = ((float)0.5f * curvePanel.Height * (float)(udCurve2.Value)) / 100.0f;
+            dx *= scale;
+            dy *= scale;
+            x2y2 = new Point(curvePanel.Width / 2 + (int)dx, curvePanel.Height / 2 - (int)dy);
+            e.Graphics.DrawLine(penCurrent, x1y1, x2y2);
+
+            // 3rd segment
+            x1y1 = x2y2;
+
+            dx = ((float)0.5f * curvePanel.Width) * 50.0f / 100.0f;
+            dy = ((float)0.5f * curvePanel.Height * (float)(udCurve3.Value)) / 100.0f;
+            dx *= scale;
+            dy *= scale;
+            x2y2 = new Point(curvePanel.Width / 2 + (int)dx, curvePanel.Height / 2 - (int)dy);
+            e.Graphics.DrawLine(penCurrent, x1y1, x2y2);
+
+            // 4th segment
+            x1y1 = x2y2;
+
+            dx = ((float)0.5f * curvePanel.Width) * 100.0f / 100.0f;
+            dy = ((float)0.5f * curvePanel.Height * (float)(udCurve4.Value)) / 100.0f;
+            dx *= scale;
+            dy *= scale;
+            x2y2 = new Point(curvePanel.Width / 2 + (int)dx, curvePanel.Height / 2 - (int)dy);
+            e.Graphics.DrawLine(penCurrent, x1y1, x2y2);
+            
+        }
+
+        private void anyCurve_ValueChanged(object sender, EventArgs e)
+        {
+            curvePanel.Invalidate();
+        }
+
+        private void cbSelectedCurve_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SByte[][] curves = loadedEeprom.MC_curves;
+
+            udCurve0.Value = curves[cbSelectedCurve.SelectedIndex][0];
+            udCurve1.Value = curves[cbSelectedCurve.SelectedIndex][1];
+            udCurve2.Value = curves[cbSelectedCurve.SelectedIndex][2];
+            udCurve3.Value = curves[cbSelectedCurve.SelectedIndex][3];
+            udCurve4.Value = curves[cbSelectedCurve.SelectedIndex][4];
+
         }
     }
 }
