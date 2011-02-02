@@ -175,6 +175,12 @@
             this.cbSelectedModel = new System.Windows.Forms.ComboBox();
             this.label10 = new System.Windows.Forms.Label();
             this.tabCurves = new System.Windows.Forms.TabPage();
+            this.label58 = new System.Windows.Forms.Label();
+            this.label57 = new System.Windows.Forms.Label();
+            this.label56 = new System.Windows.Forms.Label();
+            this.label55 = new System.Windows.Forms.Label();
+            this.label54 = new System.Windows.Forms.Label();
+            this.label53 = new System.Windows.Forms.Label();
             this.curvePanel = new System.Windows.Forms.Panel();
             this.label52 = new System.Windows.Forms.Label();
             this.cbSelectedCurve = new System.Windows.Forms.ComboBox();
@@ -183,7 +189,6 @@
             this.udCurve2 = new System.Windows.Forms.NumericUpDown();
             this.udCurve3 = new System.Windows.Forms.NumericUpDown();
             this.udCurve4 = new System.Windows.Forms.NumericUpDown();
-            this.tabSimulate = new System.Windows.Forms.TabPage();
             this.tabTemplate = new System.Windows.Forms.TabPage();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btnReadEeprom = new System.Windows.Forms.ToolStripButton();
@@ -199,12 +204,11 @@
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.btnLoadEeprom = new System.Windows.Forms.ToolStripButton();
             this.openFileDlg = new System.Windows.Forms.OpenFileDialog();
-            this.label53 = new System.Windows.Forms.Label();
-            this.label54 = new System.Windows.Forms.Label();
-            this.label55 = new System.Windows.Forms.Label();
-            this.label56 = new System.Windows.Forms.Label();
-            this.label57 = new System.Windows.Forms.Label();
-            this.label58 = new System.Windows.Forms.Label();
+            this.cbReplaceModel = new System.Windows.Forms.ComboBox();
+            this.label59 = new System.Windows.Forms.Label();
+            this.cbTemplate = new System.Windows.Forms.ComboBox();
+            this.label60 = new System.Windows.Forms.Label();
+            this.btnReplace = new System.Windows.Forms.Button();
             this.tabSettings.SuspendLayout();
             this.tabRadioConfig.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udAdc_C_7_2)).BeginInit();
@@ -282,6 +286,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.udCurve2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udCurve3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udCurve4)).BeginInit();
+            this.tabTemplate.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.toolStrip2.SuspendLayout();
             this.SuspendLayout();
@@ -291,7 +296,6 @@
             this.tabSettings.Controls.Add(this.tabRadioConfig);
             this.tabSettings.Controls.Add(this.tabModelConfig);
             this.tabSettings.Controls.Add(this.tabCurves);
-            this.tabSettings.Controls.Add(this.tabSimulate);
             this.tabSettings.Controls.Add(this.tabTemplate);
             this.tabSettings.Location = new System.Drawing.Point(12, 53);
             this.tabSettings.Name = "tabSettings";
@@ -2283,6 +2287,60 @@
             this.tabCurves.Text = "Model Curves";
             this.tabCurves.UseVisualStyleBackColor = true;
             // 
+            // label58
+            // 
+            this.label58.AutoSize = true;
+            this.label58.Location = new System.Drawing.Point(7, 282);
+            this.label58.Name = "label58";
+            this.label58.Size = new System.Drawing.Size(36, 13);
+            this.label58.TabIndex = 88;
+            this.label58.Text = "-100%";
+            // 
+            // label57
+            // 
+            this.label57.AutoSize = true;
+            this.label57.Location = new System.Drawing.Point(134, 282);
+            this.label57.Name = "label57";
+            this.label57.Size = new System.Drawing.Size(21, 13);
+            this.label57.TabIndex = 87;
+            this.label57.Text = "0%";
+            // 
+            // label56
+            // 
+            this.label56.AutoSize = true;
+            this.label56.Location = new System.Drawing.Point(242, 282);
+            this.label56.Name = "label56";
+            this.label56.Size = new System.Drawing.Size(33, 13);
+            this.label56.TabIndex = 86;
+            this.label56.Text = "100%";
+            // 
+            // label55
+            // 
+            this.label55.AutoSize = true;
+            this.label55.Location = new System.Drawing.Point(260, 163);
+            this.label55.Name = "label55";
+            this.label55.Size = new System.Drawing.Size(21, 13);
+            this.label55.TabIndex = 85;
+            this.label55.Text = "0%";
+            // 
+            // label54
+            // 
+            this.label54.AutoSize = true;
+            this.label54.Location = new System.Drawing.Point(260, 266);
+            this.label54.Name = "label54";
+            this.label54.Size = new System.Drawing.Size(36, 13);
+            this.label54.TabIndex = 84;
+            this.label54.Text = "-100%";
+            // 
+            // label53
+            // 
+            this.label53.AutoSize = true;
+            this.label53.Location = new System.Drawing.Point(260, 49);
+            this.label53.Name = "label53";
+            this.label53.Size = new System.Drawing.Size(33, 13);
+            this.label53.TabIndex = 83;
+            this.label53.Text = "100%";
+            // 
             // curvePanel
             // 
             this.curvePanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -2405,18 +2463,13 @@
             0});
             this.udCurve4.ValueChanged += new System.EventHandler(this.anyCurve_ValueChanged);
             // 
-            // tabSimulate
-            // 
-            this.tabSimulate.Location = new System.Drawing.Point(4, 22);
-            this.tabSimulate.Name = "tabSimulate";
-            this.tabSimulate.Padding = new System.Windows.Forms.Padding(3);
-            this.tabSimulate.Size = new System.Drawing.Size(752, 332);
-            this.tabSimulate.TabIndex = 2;
-            this.tabSimulate.Text = "Simulate";
-            this.tabSimulate.UseVisualStyleBackColor = true;
-            // 
             // tabTemplate
             // 
+            this.tabTemplate.Controls.Add(this.btnReplace);
+            this.tabTemplate.Controls.Add(this.label60);
+            this.tabTemplate.Controls.Add(this.cbTemplate);
+            this.tabTemplate.Controls.Add(this.cbReplaceModel);
+            this.tabTemplate.Controls.Add(this.label59);
             this.tabTemplate.Location = new System.Drawing.Point(4, 22);
             this.tabTemplate.Name = "tabTemplate";
             this.tabTemplate.Size = new System.Drawing.Size(752, 332);
@@ -2540,59 +2593,65 @@
             // 
             this.openFileDlg.FileName = "openFileDialog1";
             // 
-            // label53
+            // cbReplaceModel
             // 
-            this.label53.AutoSize = true;
-            this.label53.Location = new System.Drawing.Point(260, 49);
-            this.label53.Name = "label53";
-            this.label53.Size = new System.Drawing.Size(33, 13);
-            this.label53.TabIndex = 83;
-            this.label53.Text = "100%";
+            this.cbReplaceModel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbReplaceModel.FormattingEnabled = true;
+            this.cbReplaceModel.Items.AddRange(new object[] {
+            "Model 1",
+            "Model 2",
+            "Model 3",
+            "Model 4",
+            "Model 5",
+            "Model 6",
+            "Model 7",
+            "Model 8"});
+            this.cbReplaceModel.Location = new System.Drawing.Point(134, 19);
+            this.cbReplaceModel.Name = "cbReplaceModel";
+            this.cbReplaceModel.Size = new System.Drawing.Size(81, 21);
+            this.cbReplaceModel.TabIndex = 7;
             // 
-            // label54
+            // label59
             // 
-            this.label54.AutoSize = true;
-            this.label54.Location = new System.Drawing.Point(260, 266);
-            this.label54.Name = "label54";
-            this.label54.Size = new System.Drawing.Size(36, 13);
-            this.label54.TabIndex = 84;
-            this.label54.Text = "-100%";
+            this.label59.AutoSize = true;
+            this.label59.Location = new System.Drawing.Point(22, 22);
+            this.label59.Name = "label59";
+            this.label59.Size = new System.Drawing.Size(82, 13);
+            this.label59.TabIndex = 6;
+            this.label59.Text = "Replace Model:";
             // 
-            // label55
+            // cbTemplate
             // 
-            this.label55.AutoSize = true;
-            this.label55.Location = new System.Drawing.Point(260, 163);
-            this.label55.Name = "label55";
-            this.label55.Size = new System.Drawing.Size(21, 13);
-            this.label55.TabIndex = 85;
-            this.label55.Text = "0%";
+            this.cbTemplate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbTemplate.FormattingEnabled = true;
+            this.cbTemplate.Items.AddRange(new object[] {
+            "Simulator",
+            "Flybarless",
+            "Swash 120 deg",
+            "Swash 140 deg"});
+            this.cbTemplate.Location = new System.Drawing.Point(134, 58);
+            this.cbTemplate.Name = "cbTemplate";
+            this.cbTemplate.Size = new System.Drawing.Size(81, 21);
+            this.cbTemplate.TabIndex = 8;
             // 
-            // label56
+            // label60
             // 
-            this.label56.AutoSize = true;
-            this.label56.Location = new System.Drawing.Point(242, 282);
-            this.label56.Name = "label56";
-            this.label56.Size = new System.Drawing.Size(33, 13);
-            this.label56.TabIndex = 86;
-            this.label56.Text = "100%";
+            this.label60.AutoSize = true;
+            this.label60.Location = new System.Drawing.Point(22, 61);
+            this.label60.Name = "label60";
+            this.label60.Size = new System.Drawing.Size(99, 13);
+            this.label60.TabIndex = 9;
+            this.label60.Text = "Selected Template:";
             // 
-            // label57
+            // btnReplace
             // 
-            this.label57.AutoSize = true;
-            this.label57.Location = new System.Drawing.Point(134, 282);
-            this.label57.Name = "label57";
-            this.label57.Size = new System.Drawing.Size(21, 13);
-            this.label57.TabIndex = 87;
-            this.label57.Text = "0%";
-            // 
-            // label58
-            // 
-            this.label58.AutoSize = true;
-            this.label58.Location = new System.Drawing.Point(7, 282);
-            this.label58.Name = "label58";
-            this.label58.Size = new System.Drawing.Size(36, 13);
-            this.label58.TabIndex = 88;
-            this.label58.Text = "-100%";
+            this.btnReplace.Location = new System.Drawing.Point(134, 98);
+            this.btnReplace.Name = "btnReplace";
+            this.btnReplace.Size = new System.Drawing.Size(81, 23);
+            this.btnReplace.TabIndex = 10;
+            this.btnReplace.Text = "Replace!";
+            this.btnReplace.UseVisualStyleBackColor = true;
+            this.btnReplace.Click += new System.EventHandler(this.btnReplace_Click);
             // 
             // frmMain
             // 
@@ -2685,6 +2744,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.udCurve2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udCurve3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udCurve4)).EndInit();
+            this.tabTemplate.ResumeLayout(false);
+            this.tabTemplate.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.toolStrip2.ResumeLayout(false);
@@ -2706,7 +2767,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton btnReadFlash;
         private System.Windows.Forms.ToolStripButton btnWriteFlash;
-        private System.Windows.Forms.TabPage tabSimulate;
         private System.Windows.Forms.TabPage tabTemplate;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton btnClose;
@@ -2872,6 +2932,11 @@
         private System.Windows.Forms.Label label55;
         private System.Windows.Forms.Label label54;
         private System.Windows.Forms.Label label53;
+        private System.Windows.Forms.Button btnReplace;
+        private System.Windows.Forms.Label label60;
+        private System.Windows.Forms.ComboBox cbTemplate;
+        private System.Windows.Forms.ComboBox cbReplaceModel;
+        private System.Windows.Forms.Label label59;
     }
 }
 

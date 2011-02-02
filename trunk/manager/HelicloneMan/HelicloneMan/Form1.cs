@@ -48,6 +48,10 @@ namespace HelicloneMan
 
         public void LoadRadioConfig()
         {
+            // Reset the templates...
+            cbReplaceModel.SelectedIndex = 0;
+            cbTemplate.SelectedIndex = 0;
+
             if (loadedEeprom != null)
             {
                 udContrast.Value = loadedEeprom.RC_Contrast;
@@ -437,6 +441,144 @@ namespace HelicloneMan
             udCurve3.Value = curves[cbSelectedCurve.SelectedIndex][3];
             udCurve4.Value = curves[cbSelectedCurve.SelectedIndex][4];
 
+        }
+
+        void template_common()
+        {
+            int s;
+
+            // All servos NORMAL
+            Byte[] servoDir = loadedEeprom.MC_servoDirection;
+            for (s=0; s<8; s++)
+            {
+                servoDir[s] = 0;
+            }
+            loadedEeprom.MC_servoDirection = servoDir;
+
+            // FUTABA
+            loadedEeprom.MC_servoMapping = 0;
+
+            // Curves
+            SByte[][] curves = loadedEeprom.MC_curves;
+
+            // THROTTLE CURVE ID0
+            curves[0][0] = -100;
+            curves[0][1] = -50;
+            curves[0][2] = 0;
+            curves[0][3] = 50;
+            curves[0][4] = 100;
+
+            // THROTTLE CURVE ID1
+            curves[1][0] = 100;
+            curves[1][1] = 75;
+            curves[1][2] = 50;
+            curves[1][3] = 75;
+            curves[1][4] = 100;
+
+            // THROTTLE CURVE ID2
+            curves[2][0] = -100;
+            curves[2][1] = -50;
+            curves[2][2] = 0;
+            curves[2][3] = 50;
+            curves[2][4] = 100;
+
+            // THROTTLE CURVE HOLD
+            curves[3][0] = -100;
+            curves[3][1] = -100;
+            curves[3][2] = -100;
+            curves[3][3] = -100;
+            curves[3][4] = -100;
+
+            // PITCH CURVE ID0
+            curves[4][0] = -15;
+            curves[4][1] = -7;
+            curves[4][2] = 0;
+            curves[4][3] = 50;
+            curves[4][4] = 100;
+
+            // PITCH CURVE ID1
+            curves[5][0] = -100;
+            curves[5][1] = -50;
+            curves[5][2] = 0;
+            curves[5][3] = 50;
+            curves[5][4] = 100;
+
+            // PITCH CURVE ID2
+            curves[6][0] = -100;
+            curves[6][1] = -50;
+            curves[6][2] = 0;
+            curves[6][3] = 50;
+            curves[6][4] = 100;
+
+            // PITCH CURVE HOLD
+            curves[6][0] = -100;
+            curves[6][1] = -50;
+            curves[6][2] = 0;
+            curves[6][3] = 50;
+            curves[6][4] = 100;
+
+            loadedEeprom.MC_curves = curves;
+
+            // Mixers
+
+
+            // Expo
+            SByte[][] expo = loadedEeprom.MC_expo;
+            for (s=0; s<4; s++)
+            {
+                expo[s][0] = 25;
+                expo[s][1] = 0;
+            }
+            loadedEeprom.MC_expo = expo;
+
+            // Gain
+            SByte[] gyro = loadedEeprom.MC_GyroGain;
+            gyro[0] = 50;
+            gyro[1] = -50;
+            loadedEeprom.MC_GyroGain = gyro;
+
+            // Swash throw
+            SByte[] swash = loadedEeprom.MC_SwashThrow;
+            swash[0] = -35;
+            swash[1] = -35;
+            swash[2] = -35;
+            loadedEeprom.MC_SwashThrow = swash;
+
+            // Endpoints
+            SByte[][] ep = loadedEeprom.MC_endPoints;
+            for (s = 0; s < 8; s++)
+            {
+                ep[0][s] = 100;
+                ep[1][s] = 100;
+            }
+            loadedEeprom.MC_endPoints = ep;
+
+        }
+
+        void template_simulator()
+        {
+            loadedEeprom.MC_Name = "Simulator";
+            template_common();
+        }
+
+        private void btnReplace_Click(object sender, EventArgs e)
+        {
+            DialogResult res = MessageBox.Show("Really replace: " + cbReplaceModel.SelectedItem + "?", "REPLACE MODEL!", MessageBoxButtons.YesNo);
+
+            if (res == DialogResult.Yes)
+            {
+                // Replace us...
+                loadedEeprom.RC_SelectedModel = (Byte)cbReplaceModel.SelectedIndex;
+
+                loadedEeprom.ClearCurrentModel();
+
+                if (cbTemplate.SelectedIndex == 0)
+                {
+                    template_simulator();
+                }
+
+                LoadRadioConfig();
+            }
         }
     }
 }
