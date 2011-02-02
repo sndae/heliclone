@@ -512,6 +512,13 @@ namespace HelicloneMan
             }
         }
 
+        public void ClearCurrentModel()
+        {
+            for (int i=0; i<200; i++)
+            {
+                eepromData[Eeprom_Model_Offset() + i] = 0;
+            }
+        }
 
 
         // Containers
